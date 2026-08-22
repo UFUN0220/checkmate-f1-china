@@ -1,0 +1,40 @@
+# Dependencies and build output
+node_modules/
+.next/
+out/
+coverage/
+dist/
+
+# Local configuration and secrets
+.env*
+!.env.example
+
+# Private source data and any raw/exported spreadsheet artifacts
+data/private/**
+*.xlsx
+*.xls
+*.xlsm
+*.csv
+*.tsv
+*.ods
+*.numbers
+data/**/tmp/
+data/**/temp/
+data/**/exports/
+data/**/cache/
+
+# Local analysis and test downloads
+.analysis-cache/
+.data-cache/
+test-results/
+playwright-report/
+downloads/
+*.har
+*.snap
+
+# Tooling caches and local OS files
+.npm-cache/
+.eslintcache
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
