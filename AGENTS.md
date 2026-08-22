@@ -64,6 +64,8 @@ Node.js 使用 `package.json` 中声明的最低版本。依赖安装必须提�
 - `CHECKEE_ACCESS_MODE` 默认必须是 `disabled`；`CheckeeHtmlAdapter` 在未授权时必须明确失败，不得发起网络请求。
 - `DemoFixtureAdapter`、`CheckeeExportAdapter` 与未来的 `CheckeeHtmlAdapter` 只能输出同一套 `NormalizedCase`，统计和页面不得依赖来源 HTML。
 - `DEMO_DATA` 必须在 manifest、页面来源提示和方法说明中持续可见；合成数据不能宣传为真实 Checkee 数据。
+- 阶段 3B 默认页面使用 `manual-html-static` 的本地脱敏公开快照，并持续显示 `STATIC SNAPSHOT`、非实时和来源关系说明；`DEMO_DATA` 仅作为显式 `demo-fixture` 回退。
+- `ManualCheckeeHtmlAdapter` 只接受本地 `2601.html`–`2608.html`，不得接受 URL、Cookie、代理或网络请求；原始 `dataset_*` 目录必须被 `.gitignore` 忽略。
 - 不接入数据库、登录、用户追踪、自动 CEAC 查询或未经授权的外部写操作。
 - 不提交原始数据，不 push，不部署生产，除非用户在对应阶段明确授权。
 

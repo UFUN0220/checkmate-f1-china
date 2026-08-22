@@ -65,3 +65,16 @@ export function normalizeMajorCategory(value: string | null | undefined) {
     return "Humanities & Social Science";
   return "Other";
 }
+
+export function normalizeMajorGroup(value: string | null | undefined) {
+  return normalizeMajorCategory(value);
+}
+
+export function normalizeDegree(value: string | null | undefined) {
+  const token = normalizeToken(value);
+  if (!token || ["unknown", "n/a", "na", "null"].includes(token)) return "Unknown";
+  if (/phd|doctor|doctoral|postdoc/.test(token)) return "Doctoral";
+  if (/master|mba|m\.s\.?|m\.a\.?|graduate/.test(token)) return "Master";
+  if (/bachelor|undergrad|b\.s\.?|b\.a\.?/.test(token)) return "Bachelor";
+  return "Unknown";
+}

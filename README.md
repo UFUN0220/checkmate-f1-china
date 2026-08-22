@@ -6,15 +6,30 @@
 
 ## 当前状态
 
-阶段 3A：离线数据基础、统计引擎与前端解耦已完成。页面使用 42 条合成候选记录生成 36 条公开 `DEMO_DATA`，覆盖五个地点、Pending/Clear/Reject、Initial/Renewal、当前月份、小样本和异常记录。它只用于开发与截图，不能解释为 Checkee 真实数据。
+阶段 3B：手工 HTML 静态快照接入与临时 Demo 已完成。默认页面读取 8 个本地保存的 Checkee 月份 HTML（2026-01 至 2026-08），经过 DOM 解析、归一化、质量门禁后生成 475 条公开静态案例。页面明确标记为 `STATIC SNAPSHOT`，不是实时数据，也不代表 Checkee 官方或总体样本。`DEMO_DATA` 仍可作为显式离线回退。
 
-Checkee 当前记录为 `CHECKEE_ACCESS_BLOCKED`，默认 `CHECKEE_ACCESS_MODE=disabled`。没有真实抓取器、定时任务或线上数据请求；未来只需把 CSV/JSON 或经授权的 HTML 接入 `CaseSourceAdapter`，统计和页面继续消费同一个 `PublicSnapshot`。
+Checkee 当前记录为 `CHECKEE_ACCESS_BLOCKED`，默认 `CHECKEE_ACCESS_MODE=disabled`。静态导入只接受本地文件路径，不接受 URL、Cookie 或网络请求；没有真实抓取器、定时任务或线上数据请求。未来只需把 CSV/JSON 或经授权的 HTML 接入 `CaseSourceAdapter`，统计和页面继续消费同一个 `PublicSnapshot`。
 
 ## 本地运行
 
 ```bash
 npm install
 npm run dev
+```
+
+数据模式可用环境变量显式切换：
+
+```text
+DATASET_MODE=checkee-static
+NEXT_PUBLIC_DATASET_MODE=checkee-static
+```
+
+重新解析本地 `dataset_260823/`（目录只在本机存在）可运行：
+
+```bash
+npm run data:checkee:inspect
+npm run data:checkee:import-static
+npm run data:checkee:validate
 ```
 
 然后打开 `http://localhost:3000`。提交前运行：
@@ -32,7 +47,7 @@ npm run audit
 
 运行 `npm run check:offline` 会执行格式检查、Lint、TypeScript、单元测试和生产构建；这些步骤不访问 Checkee。运行 `npm run data:checkee:fetch` 会明确退出并说明当前访问模式被禁用，避免误把开发环境当成真实同步环境。
 
-来源契约、最小公开字段、适配器边界和阶段记录见 [`docs/data/checkee-source-contract.md`](docs/data/checkee-source-contract.md)、[`docs/data/offline-data-architecture.md`](docs/data/offline-data-architecture.md) 与 [`docs/phase-reports/phase-3a-offline-data-foundation.md`](docs/phase-reports/phase-3a-offline-data-foundation.md)。
+来源契约、最小公开字段、静态 HTML 结构、适配器边界和阶段记录见 [`docs/data/checkee-source-contract.md`](docs/data/checkee-source-contract.md)、[`docs/data/checkee-static-html-contract.md`](docs/data/checkee-static-html-contract.md)、[`docs/data/offline-data-architecture.md`](docs/data/offline-data-architecture.md) 与 [`docs/phase-reports/phase-3b-static-html-demo.md`](docs/phase-reports/phase-3b-static-html-demo.md)。
 
 ## 隐私原则
 

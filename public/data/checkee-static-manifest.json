@@ -1,0 +1,60 @@
+{
+  "sourceName": "Checkee.info",
+  "sourceUrl": "https://www.checkee.info/",
+  "sourceMode": "manual-html-static",
+  "dataOrigin": "CHECKEE_HTML",
+  "accessStatus": "CHECKEE_ACCESS_BLOCKED",
+  "rangeStart": "2026-01-01",
+  "rangeEnd": "2026-08",
+  "coverageFrom": "2026-01",
+  "coverageThrough": "2026-08",
+  "sourceMonths": [
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08"
+  ],
+  "importedAt": "2026-08-23T00:00:00Z",
+  "fetchedAt": "2026-08-23T00:00:00Z",
+  "snapshotDate": "2026-08-31",
+  "parserVersion": "manual-checkee-html-v1",
+  "rawPageCount": 8,
+  "includedCount": 475,
+  "excludedCountByReason": {
+    "non_f1": 890,
+    "unknown_location": 30,
+    "duplicate_candidate": 76
+  },
+  "statusCounts": {
+    "pending": 262,
+    "clear": 209,
+    "reject": 4
+  },
+  "locationCounts": {
+    "beijing": 177,
+    "shanghai": 34,
+    "guangzhou": 158,
+    "shenyang": 55,
+    "wuhan": 51
+  },
+  "contentHash": "fnv1a-a102f6e7",
+  "currentMonthPartial": true,
+  "demoData": false,
+  "recordCount": 475,
+  "consulateCounts": {
+    "beijing": 177,
+    "shanghai": 34,
+    "guangzhou": 158,
+    "shenyang": 55,
+    "wuhan": 51
+  },
+  "excludedCount": 988,
+  "quarantinedCount": 0,
+  "schemaVersion": "3b-static-html-v1",
+  "snapshotChecksum": "fnv1a-a102f6e7",
+  "isLive": false
+}

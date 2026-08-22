@@ -19,6 +19,7 @@ export type DataQualityFlag =
   | "invalid_date_order"
   | "source_month_mismatch"
   | "waiting_days_mismatch"
+  | "missing_complete_date"
   | "duplicate_candidate"
   | "schema_guard_failed";
 
@@ -28,12 +29,14 @@ export type ExclusionReason =
   | "unknown_status"
   | "out_of_range_date"
   | "invalid_date"
+  | "incomplete_record"
   | "duplicate_candidate"
   | "schema_guard_failed";
 
 export interface NormalizedCase {
   sourceRecordKeyInternal: string;
   publicId: string;
+  sourceFileName: string | null;
   visaTypeRaw: string;
   visaType: "F1" | null;
   visaEntryRaw: string | null;
@@ -41,6 +44,8 @@ export interface NormalizedCase {
   consulateRaw: string;
   location: Location | null;
   majorRaw: string | null;
+  degree: string;
+  majorGroup: string;
   majorCategory: string;
   sourceStatusRaw: string;
   status: CaseStatus;
@@ -60,12 +65,15 @@ export interface PublicCase {
   publicId: string;
   visaType: "F1";
   visaEntry: VisaEntry;
+  degree: string;
+  majorGroup: string;
   location: Location;
   majorCategory: string;
   status: Exclude<CaseStatus, "unknown">;
   checkDate: string;
   completeDate: string | null;
   pendingAgeDays: number | null;
+  pendingAgeSource: "source_waiting_days" | "derived_snapshot_date" | null;
   resolvedDurationDays: number | null;
   sourceMonth: string;
   snapshotDate: string;
@@ -109,10 +117,16 @@ export interface CohortMetrics extends AggregateMetrics {
 
 export interface DatasetManifest {
   sourceName: string;
+  sourceUrl: string;
+  sourceMode: "manual-html-static" | "demo-fixture" | "checkee-export";
   dataOrigin: DataOrigin;
   accessStatus: "DEMO_DATA" | "CHECKEE_ACCESS_BLOCKED" | "CHECKEE_ACCESS_ENABLED";
   rangeStart: string;
   rangeEnd: string;
+  coverageFrom: string;
+  coverageThrough: string;
+  sourceMonths: string[];
+  importedAt: string;
   fetchedAt: string;
   snapshotDate: string;
   parserVersion: string;
@@ -124,6 +138,13 @@ export interface DatasetManifest {
   contentHash: string;
   currentMonthPartial: boolean;
   demoData: boolean;
+  recordCount: number;
+  consulateCounts: Record<Location, number>;
+  excludedCount: number;
+  quarantinedCount: number;
+  schemaVersion: string;
+  snapshotChecksum: string;
+  isLive: boolean;
 }
 
 export interface DataQualityReport {
@@ -135,6 +156,9 @@ export interface DataQualityReport {
   waitingDayMismatchCount: number;
   monthConflictCount: number;
   duplicateCandidateCount: number;
+  exactDuplicateCount: number;
+  possibleDuplicateCount: number;
+  quarantinedCount: number;
   schemaGuardPassed: boolean;
   sensitiveFieldHits: string[];
 }

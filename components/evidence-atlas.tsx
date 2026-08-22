@@ -11,7 +11,14 @@ import {
   MapPin,
 } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
-import { demoSnapshot } from "../lib/demo-data";
+import { activeDatasetMode, activeSnapshot } from "../lib/demo-data";
+import { calculateMetrics } from "../lib/analytics/metrics";
+import {
+  filterPublicCases,
+  filtersFromSearchParams,
+  filtersToSearchParams,
+  type CaseFilters,
+} from "../lib/data/query";
 import { LOCATIONS, type CaseStatus, type Location, type VisaEntry } from "../lib/data/models";
 
 type AtlasView = "overview" | "location" | "cases";
@@ -38,36 +45,56 @@ const ENTRY_NAMES: Record<Exclude<VisaEntry, "unknown">, string> = {
 
 type AtlasState = {
   view: AtlasView;
-  location: Location | null;
+  location: FilterValue;
   status: FilterValue;
   month: FilterValue;
+  degree: FilterValue;
+  majorGroup: FilterValue;
   entry: FilterValue;
-  major: FilterValue;
 };
 
 const defaultState: AtlasState = {
   view: "overview",
-  location: null,
+  location: "all",
   status: "all",
   month: "all",
+  degree: "all",
+  majorGroup: "all",
   entry: "all",
-  major: "all",
 };
+
+function filterValue(values: string[]) {
+  return values.length ? values.join(",") : "all";
+}
+
+function valuesFromFilter(value: FilterValue) {
+  return value === "all" ? [] : value.split(",").filter(Boolean);
+}
+
+function filtersFromState(state: AtlasState): CaseFilters {
+  return {
+    locations: valuesFromFilter(state.location) as Location[],
+    statuses: valuesFromFilter(state.status) as CaseFilters["statuses"],
+    months: valuesFromFilter(state.month),
+    degrees: valuesFromFilter(state.degree),
+    majorGroups: valuesFromFilter(state.majorGroup),
+    entries: valuesFromFilter(state.entry) as VisaEntry[],
+  };
+}
 
 function readUrlState(): AtlasState {
   if (typeof window === "undefined") return defaultState;
   const params = new URLSearchParams(window.location.search);
-  const location = LOCATIONS.includes(params.get("location") as Location)
-    ? (params.get("location") as Location)
-    : null;
+  const filters = filtersFromSearchParams(params);
   const view = params.get("view");
   return {
     view: view === "location" || view === "cases" ? view : "overview",
-    location,
-    status: params.get("status") || "all",
-    month: params.get("month") || "all",
-    entry: params.get("entry") || "all",
-    major: params.get("major") || "all",
+    location: filterValue(filters.locations),
+    status: filterValue(filters.statuses),
+    month: filterValue(filters.months),
+    degree: filterValue(filters.degrees),
+    majorGroup: filterValue(filters.majorGroups),
+    entry: filterValue(filters.entries),
   };
 }
 
@@ -100,12 +127,9 @@ export function EvidenceAtlas() {
   const updateUrl = (next: Partial<AtlasState>) => {
     const nextState = { ...state, ...next };
     const params = new URLSearchParams();
-    if (nextState.location) params.set("location", nextState.location);
+    const filters = filtersToSearchParams(filtersFromState(nextState));
+    filters.forEach((value, key) => params.set(key, value));
     if (nextState.view !== "overview") params.set("view", nextState.view);
-    if (nextState.status !== "all") params.set("status", nextState.status);
-    if (nextState.month !== "all") params.set("month", nextState.month);
-    if (nextState.entry !== "all") params.set("entry", nextState.entry);
-    if (nextState.major !== "all") params.set("major", nextState.major);
     const query = params.toString();
     window.history.pushState({}, "", query ? `/?${query}` : "/");
     setState(nextState);
@@ -115,15 +139,13 @@ export function EvidenceAtlas() {
   const openCases = (location = state.location) => updateUrl({ view: "cases", location });
   const goBack = () =>
     state.view === "cases"
-      ? updateUrl({ view: state.location ? "location" : "overview" })
-      : updateUrl({
-          view: "overview",
-          location: null,
-          status: "all",
-          month: "all",
-          entry: "all",
-          major: "all",
-        });
+      ? updateUrl({ view: state.location !== "all" ? "location" : "overview" })
+      : updateUrl({ ...defaultState });
+
+  const selectedLocations = valuesFromFilter(state.location) as Location[];
+  const singleLocation = selectedLocations.length === 1 ? selectedLocations[0] : null;
+  const snapshot = activeSnapshot;
+  const isStatic = activeDatasetMode === "checkee-static";
 
   return (
     <div className="atlas-app">
@@ -134,10 +156,12 @@ export function EvidenceAtlas() {
           </span>
           <span>CheckMate F1 China</span>
           <span className="atlas-header__divider" aria-hidden="true" />
-          <span className="atlas-header__descriptor">DEMO DATA</span>
+          <span className="atlas-header__descriptor">
+            {isStatic ? "STATIC SNAPSHOT" : "DEMO DATA"}
+          </span>
         </div>
         <div className="atlas-header__meta">
-          <span>快照：{demoSnapshot.manifest.snapshotDate}</span>
+          <span>覆盖至：{snapshot.manifest.coverageThrough}</span>
           <a href="#methods">关于口径</a>
         </div>
       </header>
@@ -145,18 +169,24 @@ export function EvidenceAtlas() {
       <main className="atlas-layout">
         <aside className="atlas-sidebar">
           <div className="atlas-sidebar__intro">
-            <p className="eyebrow">F-1 Checkee 数据观察 · DEMO_DATA</p>
+            <p className="eyebrow">
+              F-1 Checkee 数据观察 · {isStatic ? "STATIC SNAPSHOT" : "DEMO_DATA"}
+            </p>
             <h1>证据图谱</h1>
-            <p>这是来源无关的数据产品演示。当前页面使用合成 DEMO_DATA，不代表真实 Checkee 样本。</p>
+            <p>
+              {isStatic
+                ? "数据来源：Checkee.info。当前为 2026 年 1 月至 8 月手工保存页面生成的静态快照，不是实时数据。"
+                : "这是来源无关的数据产品演示。当前页面使用合成 DEMO_DATA，不代表真实 Checkee 样本。"}
+            </p>
           </div>
 
-          <div className="atlas-sidebar__summary" aria-label="演示数据快照概览">
-            <span>演示快照 · 2026 年以来</span>
+          <div className="atlas-sidebar__summary" aria-label="数据快照概览">
+            <span>{isStatic ? "静态快照 · 2026 年 1–8 月" : "演示快照 · 2026 年以来"}</span>
             <div className="atlas-summary-values atlas-summary-values--four">
-              <SummaryValue label="总样本" value={demoSnapshot.national.sampleCount} />
-              <SummaryValue label="Pending" value={demoSnapshot.national.pendingCount} />
-              <SummaryValue label="Clear" value={demoSnapshot.national.clearCount} />
-              <SummaryValue label="Reject" value={demoSnapshot.national.rejectCount} />
+              <SummaryValue label="总样本" value={snapshot.national.sampleCount} />
+              <SummaryValue label="Pending" value={snapshot.national.pendingCount} />
+              <SummaryValue label="Clear" value={snapshot.national.clearCount} />
+              <SummaryValue label="Reject" value={snapshot.national.rejectCount} />
             </div>
           </div>
 
@@ -166,8 +196,9 @@ export function EvidenceAtlas() {
               <span>来源状态</span>
             </div>
             <p>
-              Checkee 访问状态为 CHECKEE_ACCESS_BLOCKED；真实来源 Adapter 保持
-              disabled，本页面仅用于离线开发和截图。
+              {isStatic
+                ? "Checkee 为用户自报数据，本站与 Checkee.info 不存在隶属关系；当前快照非实时。"
+                : "Checkee 访问状态为 CHECKEE_ACCESS_BLOCKED；真实来源 Adapter 保持 disabled，本页面仅用于离线开发和截图。"}
             </p>
             <a href="#methods">
               查看数据口径 <ArrowRight size={14} />
@@ -186,7 +217,7 @@ export function EvidenceAtlas() {
             <CaretRight size={14} aria-hidden="true" />
             <button
               className={state.view === "location" ? "is-current" : ""}
-              disabled={!state.location}
+              disabled={!singleLocation}
               onClick={() => updateUrl({ view: "location" })}
             >
               地点指标
@@ -209,18 +240,27 @@ export function EvidenceAtlas() {
           <div className="source-banner" role="status">
             <Info size={17} />
             <span>
-              当前为 <strong>DEMO_DATA</strong>，快照日期 {demoSnapshot.manifest.snapshotDate}；真实
-              Checkee 数据尚未接入。
+              {isStatic ? (
+                <>
+                  <strong>数据来源：Checkee.info</strong>；当前为 2026 年 1 月至 8
+                  月手工保存页面生成的静态快照，不是实时数据。Checkee 为用户自报数据，本站与
+                  Checkee.info 不存在隶属关系。
+                </>
+              ) : (
+                <>
+                  当前为 <strong>DEMO_DATA</strong>，真实 Checkee 数据尚未接入。
+                </>
+              )}
             </span>
           </div>
 
           {state.view === "overview" && (
             <OverviewPanel onOpenCases={() => openCases()} onOpenLocation={openLocation} />
           )}
-          {state.view === "location" && state.location && (
+          {state.view === "location" && singleLocation && (
             <LocationPanel
-              location={state.location}
-              onOpenCases={() => openCases(state.location)}
+              location={singleLocation}
+              onOpenCases={() => openCases(singleLocation)}
             />
           )}
           {state.view === "cases" && (
@@ -234,9 +274,13 @@ export function EvidenceAtlas() {
       </main>
 
       <footer id="methods" className="atlas-footer">
-        <span>数据来源：DEMO_DATA（合成开发数据）</span>
-        <span>范围：2026-01-01 起 · 当前月标记为尚未完整</span>
-        <span>仅供开发和截图，不构成真实 Checkee 结论或个案预测。</span>
+        <span>
+          {isStatic
+            ? "数据来源：Checkee.info · 2026 年 1–8 月手工保存页面静态快照"
+            : "数据来源：DEMO_DATA（合成开发数据）"}
+        </span>
+        <span>Checkee 为用户自报数据 · 当前快照不是实时数据</span>
+        <span>不代表总体概率，不提供个人出签时间预测。</span>
       </footer>
     </div>
   );
@@ -262,10 +306,12 @@ function OverviewPanel({
     <>
       <div className="atlas-overview-head">
         <div>
-          <p className="eyebrow">全国概览 · DEMO_DATA</p>
+          <p className="eyebrow">
+            全国概览 · {activeDatasetMode === "checkee-static" ? "STATIC SNAPSHOT" : "DEMO_DATA"}
+          </p>
           <h2>从样本范围开始，逐层了解数据。</h2>
           <p className="atlas-lede">
-            先看全国状态构成和五个地点的演示分布，再进入地点指标或标准化案例列表。所有数值来自同一份合成快照。
+            先看全国状态构成和五个地点的静态分布，再进入地点指标或标准化案例列表。所有数值来自同一份快照。
           </p>
         </div>
         <div className="atlas-actions">
@@ -282,20 +328,22 @@ function OverviewPanel({
         <div className="atlas-trajectory__header">
           <div>
             <p className="section-kicker" id="trajectory-title">
-              <MapPin size={16} weight="bold" /> Checkee F-1 公开样本分布（演示）
+              <MapPin size={16} weight="bold" /> Checkee F-1 公开样本分布
             </p>
             <p className="muted">
-              按申请地点 · 共 {demoSnapshot.national.sampleCount} 条 DEMO_DATA
+              按申请地点 · 共 {activeSnapshot.national.sampleCount} 条公开案例
             </p>
           </div>
-          <span className="selection-readout">来源：DEMO_DATA</span>
+          <span className="selection-readout">
+            来源：{activeDatasetMode === "checkee-static" ? "Checkee.info" : "DEMO_DATA"}
+          </span>
         </div>
         <div className="atlas-map-strip">
           <div className="atlas-map-strip__background" aria-hidden="true" />
           <div className="atlas-route" aria-label="五个地点的演示样本数量">
             <span className="atlas-route__origin">
               <span className="atlas-route__origin-label">全国</span>
-              <strong>{demoSnapshot.national.sampleCount}</strong>
+              <strong>{activeSnapshot.national.sampleCount}</strong>
             </span>
             <span className="atlas-route__line" aria-hidden="true" />
             {LOCATIONS.map((location) => (
@@ -306,7 +354,7 @@ function OverviewPanel({
               >
                 <span className="atlas-node__dot" aria-hidden="true" />
                 <span>{LOCATION_NAMES[location]}</span>
-                <strong>{demoSnapshot.locations[location].sampleCount}</strong>
+                <strong>{activeSnapshot.locations[location].sampleCount}</strong>
               </button>
             ))}
           </div>
@@ -321,7 +369,9 @@ function OverviewPanel({
             </p>
             <p className="muted">选择地点，查看 Pending/Clear/Reject 和等待时间。</p>
           </div>
-          <span className="data-status">DEMO_DATA</span>
+          <span className="data-status">
+            {activeDatasetMode === "checkee-static" ? "STATIC" : "DEMO_DATA"}
+          </span>
         </div>
         <div className="atlas-table-wrap">
           <table className="atlas-table">
@@ -337,7 +387,7 @@ function OverviewPanel({
             </thead>
             <tbody>
               {LOCATIONS.map((location) => {
-                const metrics = demoSnapshot.locations[location];
+                const metrics = activeSnapshot.locations[location];
                 return (
                   <tr key={location}>
                     <th scope="row">
@@ -366,7 +416,7 @@ function OverviewPanel({
           </table>
         </div>
         <p className="table-footnote">
-          <Info size={14} /> 地点占比是 DEMO_DATA 的样本分布，不是领馆比例或风险。
+          <Info size={14} /> 地点占比是公开快照的样本分布，不是领馆比例或风险。
         </p>
       </section>
 
@@ -376,7 +426,7 @@ function OverviewPanel({
 }
 
 function TrendSection() {
-  const max = Math.max(...demoSnapshot.cohorts.map((cohort) => cohort.sampleCount));
+  const max = Math.max(...activeSnapshot.cohorts.map((cohort) => cohort.sampleCount));
   return (
     <section className="trend-section" aria-labelledby="trend-title">
       <div className="section-heading-row">
@@ -389,7 +439,7 @@ function TrendSection() {
         <span className="data-status">2026-01 → 2026-08</span>
       </div>
       <div className="trend-list">
-        {demoSnapshot.cohorts.map((cohort) => (
+        {activeSnapshot.cohorts.map((cohort) => (
           <div className="trend-row" key={cohort.month}>
             <span>
               {cohort.month}
@@ -407,12 +457,15 @@ function TrendSection() {
 }
 
 function LocationPanel({ location, onOpenCases }: { location: Location; onOpenCases: () => void }) {
-  const metrics = demoSnapshot.locations[location];
+  const metrics = activeSnapshot.locations[location];
   return (
     <section className="detail-panel" aria-labelledby="location-title">
       <div className="detail-panel__heading">
         <div>
-          <p className="eyebrow">地点指标 · {LOCATION_NAMES[location]} · DEMO_DATA</p>
+          <p className="eyebrow">
+            地点指标 · {LOCATION_NAMES[location]} ·{" "}
+            {activeDatasetMode === "checkee-static" ? "STATIC SNAPSHOT" : "DEMO_DATA"}
+          </p>
           <h2 id="location-title">{LOCATION_NAMES[location]} 的公开样本</h2>
           <p className="atlas-lede">
             本页严格区分 Pending 等待年龄与 Clear 已完成时长；小样本只做描述性展示。
@@ -426,7 +479,7 @@ function LocationPanel({ location, onOpenCases }: { location: Location; onOpenCa
         <Stat
           label="样本数"
           value={countLabel(metrics.sampleCount)}
-          note={`${(metrics.sampleShare * 100).toFixed(1)}% of demo snapshot`}
+          note={`${(metrics.sampleShare * 100).toFixed(1)}% of snapshot`}
         />
         <Stat
           label="Pending"
@@ -463,15 +516,15 @@ function LocationPanel({ location, onOpenCases }: { location: Location; onOpenCa
       <div className="detail-empty">
         <Info size={22} />
         <div>
-          <strong>DEMO_DATA 状态说明</strong>
+          <strong>快照状态说明</strong>
           <p>
             {metrics.sampleBand === "insufficient"
               ? "当前地点样本少于 5 条，因此隐藏等待和完成时长的描述性分位数；仅保留样本数和日期范围。"
               : metrics.sampleBand === "small"
                 ? "当前地点为小样本（5–9 条），指标仅作描述性参考，不作地点间结论。"
                 : "当前地点达到标准描述性样本量。"}
-            以上指标由离线合成数据驱动。真实 Checkee 快照接入后，页面消费同一 PublicSnapshot
-            模型，不需要改写统计或展示组件。
+            以上指标由离线快照驱动。Pending 使用来源页面的静态 Waiting
+            Day(s)，不会随页面打开自动增加；Clear 时长使用 Check Date 与 Complete Date 的日期差。
           </p>
         </div>
       </div>
@@ -498,83 +551,99 @@ function CasesPanel({
   onChange: (next: Partial<AtlasState>) => void;
   onClear: () => void;
 }) {
-  const majors = [...new Set(demoSnapshot.cases.map((item) => item.majorCategory))].sort();
-  const months = demoSnapshot.cohorts.map((cohort) => cohort.month);
+  const majorGroups = [...new Set(activeSnapshot.cases.map((item) => item.majorGroup))].sort();
+  const degrees = [...new Set(activeSnapshot.cases.map((item) => item.degree))].sort();
+  const months = activeSnapshot.cohorts.map((cohort) => cohort.month);
   const filteredCases = useMemo(
-    () =>
-      demoSnapshot.cases.filter(
-        (item) =>
-          (!state.location || item.location === state.location) &&
-          (state.status === "all" || item.status === state.status) &&
-          (state.month === "all" || item.checkDate.startsWith(state.month)) &&
-          (state.entry === "all" || item.visaEntry === state.entry) &&
-          (state.major === "all" || item.majorCategory === state.major),
-      ),
+    () => filterPublicCases(activeSnapshot.cases, filtersFromState(state)),
     [state],
   );
-  const hasFilters = [state.location, state.status, state.month, state.entry, state.major].some(
-    (value) => value && value !== "all",
-  );
+  const filteredMetrics = calculateMetrics(filteredCases);
+  const hasFilters = [
+    state.location,
+    state.status,
+    state.month,
+    state.degree,
+    state.majorGroup,
+    state.entry,
+  ].some((value) => value !== "all");
+  const selectedLocationValues = valuesFromFilter(state.location);
+  const locationLabel =
+    selectedLocationValues.length === 1
+      ? LOCATION_NAMES[selectedLocationValues[0] as Location]
+      : selectedLocationValues.length > 1
+        ? "多地点"
+        : "全国";
+  const changeMulti = (
+    key: keyof Pick<
+      AtlasState,
+      "location" | "status" | "month" | "degree" | "majorGroup" | "entry"
+    >,
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const values = [...event.target.selectedOptions].map((option) => option.value);
+    onChange({ [key]: values.length ? values.join(",") : "all" });
+  };
   return (
     <section className="detail-panel" aria-labelledby="cases-title">
       <div className="detail-panel__heading">
         <div>
           <p className="eyebrow">
-            标准化案例 · {state.location ? LOCATION_NAMES[state.location] : "全国"} · DEMO_DATA
+            标准化案例 · {locationLabel} ·{" "}
+            {activeDatasetMode === "checkee-static" ? "STATIC SNAPSHOT" : "DEMO_DATA"}
           </p>
           <h2 id="cases-title">Checkee F-1 标准化案例</h2>
           <p className="atlas-lede">
-            仅展示 PublicCase 允许字段。当前数据明确标记为 DEMO_DATA，不代表真实 Checkee 记录。
+            仅展示 PublicCase 允许字段。同一字段多选为 OR，不同字段之间为
+            AND；当前结果只作描述性展示。
           </p>
         </div>
-        <span className="data-status">{filteredCases.length} 条结果</span>
+        <span className="data-status">
+          {filteredCases.length} 条结果 · P{filteredMetrics.pendingCount} / C
+          {filteredMetrics.clearCount} / R{filteredMetrics.rejectCount}
+        </span>
       </div>
       <div className="filter-bar" aria-label="案例筛选">
-        <label>
-          状态
-          <select
-            value={state.status}
-            onChange={(event) => onChange({ status: event.target.value })}
-          >
-            <option value="all">全部</option>
-            {Object.entries(STATUS_NAMES).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Check 月份
-          <select value={state.month} onChange={(event) => onChange({ month: event.target.value })}>
-            <option value="all">全部月份</option>
-            {months.map((month) => (
-              <option key={month} value={month}>
-                {month}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          签证入口
-          <select value={state.entry} onChange={(event) => onChange({ entry: event.target.value })}>
-            <option value="all">全部</option>
-            <option value="initial">Initial</option>
-            <option value="renewal">Renewal</option>
-            <option value="unknown">Unknown</option>
-          </select>
-        </label>
-        <label>
-          专业分类
-          <select value={state.major} onChange={(event) => onChange({ major: event.target.value })}>
-            <option value="all">全部分类</option>
-            {majors.map((major) => (
-              <option key={major} value={major}>
-                {major}
-              </option>
-            ))}
-          </select>
-        </label>
+        <MultiSelectField
+          label="地点"
+          value={state.location}
+          options={LOCATIONS.map((location) => [location, LOCATION_NAMES[location]])}
+          onChange={(event) => changeMulti("location", event)}
+        />
+        <MultiSelectField
+          label="状态"
+          value={state.status}
+          options={Object.entries(STATUS_NAMES)}
+          onChange={(event) => changeMulti("status", event)}
+        />
+        <MultiSelectField
+          label="Check 月份"
+          value={state.month}
+          options={months.map((month) => [month, month])}
+          onChange={(event) => changeMulti("month", event)}
+        />
+        <MultiSelectField
+          label="Degree"
+          value={state.degree}
+          options={degrees.map((degree) => [degree, degree])}
+          onChange={(event) => changeMulti("degree", event)}
+        />
+        <MultiSelectField
+          label="Major Group"
+          value={state.majorGroup}
+          options={majorGroups.map((majorGroup) => [majorGroup, majorGroup])}
+          onChange={(event) => changeMulti("majorGroup", event)}
+        />
+        <MultiSelectField
+          label="签证入口"
+          value={state.entry}
+          options={[
+            ["initial", "Initial"],
+            ["renewal", "Renewal"],
+            ["unknown", "Unknown"],
+          ]}
+          onChange={(event) => changeMulti("entry", event)}
+        />
         {hasFilters && (
           <button className="filter-clear" onClick={onClear}>
             清除筛选
@@ -585,8 +654,8 @@ function CasesPanel({
         <div className="detail-empty detail-empty--large">
           <FileText size={28} />
           <div>
-            <strong>没有匹配的 DEMO_DATA</strong>
-            <p>清除筛选后查看全部合成案例。真实数据接入前不会用旧快照填充结果。</p>
+            <strong>没有匹配的结果</strong>
+            <p>清除筛选后查看全部静态案例；不会用合成数据补齐空结果。</p>
           </div>
         </div>
       ) : (
@@ -596,7 +665,7 @@ function CasesPanel({
               <div>
                 <strong>{LOCATION_NAMES[item.location]}</strong>
                 <span>
-                  {item.majorCategory} ·{" "}
+                  {item.majorGroup} · {item.degree} ·{" "}
                   {item.visaEntry === "unknown" ? "Unknown" : ENTRY_NAMES[item.visaEntry]}
                 </span>
               </div>
@@ -611,11 +680,14 @@ function CasesPanel({
                   {item.status === "pending"
                     ? `等待 ${item.pendingAgeDays} 天`
                     : item.status === "clear"
-                      ? `完成 ${item.resolvedDurationDays} 天`
+                      ? `完成 ${item.resolvedDurationDays ?? "—"} 天`
                       : "无完成时长"}
                 </span>
                 <small>
-                  {item.sourceMonth} · {item.dataOrigin}
+                  {item.sourceMonth} ·{" "}
+                  {item.pendingAgeSource === "source_waiting_days"
+                    ? "静态等待天数"
+                    : item.dataOrigin}
                 </small>
               </div>
             </article>
@@ -623,5 +695,36 @@ function CasesPanel({
         </div>
       )}
     </section>
+  );
+}
+
+function MultiSelectField({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: FilterValue;
+  options: string[][];
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+}) {
+  const selectedValues = value === "all" ? [] : value.split(",");
+  return (
+    <label>
+      {label}
+      <select
+        multiple
+        value={selectedValues}
+        size={Math.min(Math.max(options.length, 2), 4)}
+        onChange={onChange}
+      >
+        {options.map(([optionValue, optionLabel]) => (
+          <option key={optionValue} value={optionValue}>
+            {optionLabel}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }

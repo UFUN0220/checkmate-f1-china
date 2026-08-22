@@ -8,16 +8,27 @@ import type { NormalizedCase, PublicCase, PublicSnapshot } from "./models";
 
 export interface SnapshotBuildOptions {
   sourceName: string;
+  sourceUrl: string;
+  sourceMode: "manual-html-static" | "demo-fixture" | "checkee-export";
   dataOrigin: NormalizedCase["origin"];
   accessStatus: PublicSnapshot["manifest"]["accessStatus"];
   rangeStart: string;
   rangeEnd: string;
+  coverageFrom: string;
+  coverageThrough: string;
+  sourceMonths: string[];
+  importedAt: string;
   fetchedAt: string;
   snapshotDate: string;
   parserVersion: string;
   rawPageCount: number;
   currentMonthPartial: boolean;
   demoData: boolean;
+  schemaVersion: string;
+  isLive: boolean;
+  quarantinedCount?: number;
+  exactDuplicateCount?: number;
+  possibleDuplicateCount?: number;
 }
 
 function dateDifference(start: string, end: string) {
@@ -35,7 +46,11 @@ function simpleHash(value: string) {
   return `fnv1a-${(hash >>> 0).toString(16).padStart(8, "0")}`;
 }
 
-function toPublicCase(item: NormalizedCase, snapshotDate: string): PublicCase | null {
+function toPublicCase(
+  item: NormalizedCase,
+  snapshotDate: string,
+  publicId: string,
+): PublicCase | null {
   if (
     !item.eligible ||
     item.visaType !== "F1" ||
@@ -45,8 +60,18 @@ function toPublicCase(item: NormalizedCase, snapshotDate: string): PublicCase | 
   ) {
     return null;
   }
+  const pendingAgeSource =
+    item.status === "pending"
+      ? item.origin === "CHECKEE_HTML" && item.waitingDaysReported !== null
+        ? "source_waiting_days"
+        : "derived_snapshot_date"
+      : null;
   const pendingAgeDays =
-    item.status === "pending" ? dateDifference(item.checkDate, snapshotDate) : null;
+    item.status === "pending"
+      ? pendingAgeSource === "source_waiting_days"
+        ? item.waitingDaysReported
+        : dateDifference(item.checkDate, snapshotDate)
+      : null;
   const resolvedDurationDays =
     item.status === "clear" && item.completeDate
       ? dateDifference(item.checkDate, item.completeDate)
@@ -54,15 +79,18 @@ function toPublicCase(item: NormalizedCase, snapshotDate: string): PublicCase | 
   if (pendingAgeDays !== null && pendingAgeDays < 0) return null;
   if (resolvedDurationDays !== null && resolvedDurationDays < 0) return null;
   return {
-    publicId: item.publicId,
+    publicId,
     visaType: "F1",
     visaEntry: item.visaEntry,
+    degree: item.degree,
+    majorGroup: item.majorGroup,
     location: item.location,
     majorCategory: item.majorCategory,
     status: item.status,
     checkDate: item.checkDate,
     completeDate: item.completeDate,
     pendingAgeDays,
+    pendingAgeSource,
     resolvedDurationDays,
     sourceMonth: item.sourceMonth,
     snapshotDate,
@@ -111,7 +139,9 @@ export function buildPublicSnapshot(
       emittedKeys.add(item.sourceRecordKeyInternal);
       return true;
     })
-    .map((item) => toPublicCase(item, options.snapshotDate))
+    .map((item, index) =>
+      toPublicCase(item, options.snapshotDate, `case-${String(index + 1).padStart(4, "0")}`),
+    )
     .filter((item): item is PublicCase => item !== null)
     .sort((left, right) => right.checkDate.localeCompare(left.checkDate));
   const excludedCountByReason = countByReason(normalizedCases);
@@ -138,10 +168,16 @@ export function buildPublicSnapshot(
   return {
     manifest: {
       sourceName: options.sourceName,
+      sourceUrl: options.sourceUrl,
+      sourceMode: options.sourceMode,
       dataOrigin: options.dataOrigin,
       accessStatus: options.accessStatus,
       rangeStart: options.rangeStart,
       rangeEnd: options.rangeEnd,
+      coverageFrom: options.coverageFrom,
+      coverageThrough: options.coverageThrough,
+      sourceMonths: options.sourceMonths,
+      importedAt: options.importedAt,
       fetchedAt: options.fetchedAt,
       snapshotDate: options.snapshotDate,
       parserVersion: options.parserVersion,
@@ -153,6 +189,13 @@ export function buildPublicSnapshot(
       contentHash: simpleHash(serializedCases),
       currentMonthPartial: options.currentMonthPartial,
       demoData: options.demoData,
+      recordCount: cases.length,
+      consulateCounts: locationCounts,
+      excludedCount: normalizedCases.length - cases.length,
+      quarantinedCount: options.quarantinedCount ?? 0,
+      schemaVersion: options.schemaVersion,
+      snapshotChecksum: simpleHash(serializedCases),
+      isLive: options.isLive,
     },
     national,
     locations,
@@ -171,6 +214,9 @@ export function buildPublicSnapshot(
         item.dataQualityFlags.includes("source_month_mismatch"),
       ).length,
       duplicateCandidateCount: duplicateKeys.size,
+      exactDuplicateCount: options.exactDuplicateCount ?? duplicateKeys.size,
+      possibleDuplicateCount: options.possibleDuplicateCount ?? 0,
+      quarantinedCount: options.quarantinedCount ?? 0,
       schemaGuardPassed: true,
       sensitiveFieldHits,
     },

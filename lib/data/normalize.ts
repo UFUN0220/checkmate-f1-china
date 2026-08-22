@@ -1,6 +1,8 @@
 import {
+  normalizeDegree,
   normalizeLocation,
   normalizeMajorCategory,
+  normalizeMajorGroup,
   normalizeStatus,
   normalizeVisaEntry,
   normalizeVisaType,
@@ -10,6 +12,7 @@ import type { DataOrigin, DataQualityFlag, ExclusionReason, NormalizedCase } fro
 export interface RawCaseInput {
   sourceRecordKeyInternal: string;
   publicId: string;
+  sourceFileName?: string | null;
   visaTypeRaw: string;
   visaEntryRaw?: string | null;
   consulateRaw: string;
@@ -26,10 +29,12 @@ export interface NormalizeContext {
   fetchedAt: string;
   snapshotDate: string;
   rangeStart: string;
+  waitingDaysReferenceDate?: string | null;
 }
 
 function parseIsoDate(value: string | null | undefined) {
-  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  if (!value || /^(?:0000-00-00|n\/a|na|null|unknown)$/i.test(value.trim())) return null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
   const date = new Date(`${value}T00:00:00Z`);
   return Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== value ? null : value;
 }
@@ -57,7 +62,12 @@ export function normalizeRawCase(raw: RawCaseInput, context: NormalizeContext): 
   if (!location) addFlag(dataQualityFlags, "unknown_location");
   if (status === "unknown") addFlag(dataQualityFlags, "unknown_status");
   if (raw.checkDate && !checkDate) addFlag(dataQualityFlags, "invalid_check_date");
-  if (raw.completeDate && !completeDate) addFlag(dataQualityFlags, "invalid_complete_date");
+  if (
+    raw.completeDate &&
+    !completeDate &&
+    !/^(?:0000-00-00|n\/a|na|null|unknown)$/i.test(raw.completeDate.trim())
+  )
+    addFlag(dataQualityFlags, "invalid_complete_date");
   if (checkDate && checkDate > context.snapshotDate) addFlag(dataQualityFlags, "future_check_date");
   if (checkDate && completeDate && completeDate < checkDate) {
     addFlag(dataQualityFlags, "invalid_date_order");
@@ -66,9 +76,13 @@ export function normalizeRawCase(raw: RawCaseInput, context: NormalizeContext): 
     addFlag(dataQualityFlags, "source_month_mismatch");
   }
 
+  const waitingReferenceDate =
+    context.waitingDaysReferenceDate === undefined
+      ? context.snapshotDate
+      : context.waitingDaysReferenceDate;
   const expectedDays =
-    checkDate && status === "pending"
-      ? differenceInDays(checkDate, context.snapshotDate)
+    checkDate && status === "pending" && waitingReferenceDate
+      ? differenceInDays(checkDate, waitingReferenceDate)
       : checkDate && status === "clear" && completeDate
         ? differenceInDays(checkDate, completeDate)
         : null;
@@ -85,17 +99,25 @@ export function normalizeRawCase(raw: RawCaseInput, context: NormalizeContext): 
   if (!visaType) exclusionReason = "non_f1";
   else if (!location) exclusionReason = "unknown_location";
   else if (status === "unknown") exclusionReason = "unknown_status";
-  else if (!checkDate || (raw.checkDate && !checkDate) || (raw.completeDate && !completeDate)) {
+  else if (
+    !checkDate ||
+    dataQualityFlags.includes("invalid_check_date") ||
+    dataQualityFlags.includes("invalid_complete_date")
+  ) {
     exclusionReason = "invalid_date";
   } else if (checkDate < context.rangeStart || checkDate > context.snapshotDate) {
     exclusionReason = "out_of_range_date";
   } else if (dataQualityFlags.includes("invalid_date_order")) {
     exclusionReason = "invalid_date";
+  } else if (status === "clear" && !completeDate) {
+    addFlag(dataQualityFlags, "missing_complete_date");
+    exclusionReason = "incomplete_record";
   }
 
   return {
     sourceRecordKeyInternal: raw.sourceRecordKeyInternal,
     publicId: raw.publicId,
+    sourceFileName: raw.sourceFileName ?? null,
     visaTypeRaw: raw.visaTypeRaw,
     visaType,
     visaEntryRaw: raw.visaEntryRaw ?? null,
@@ -103,6 +125,8 @@ export function normalizeRawCase(raw: RawCaseInput, context: NormalizeContext): 
     consulateRaw: raw.consulateRaw,
     location,
     majorRaw: raw.majorRaw ?? null,
+    degree: normalizeDegree(raw.majorRaw),
+    majorGroup: normalizeMajorGroup(raw.majorRaw),
     majorCategory: normalizeMajorCategory(raw.majorRaw),
     sourceStatusRaw: raw.sourceStatusRaw,
     status,

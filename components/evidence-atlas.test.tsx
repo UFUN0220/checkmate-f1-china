@@ -5,15 +5,15 @@ import { describe, expect, it } from "vitest";
 import { EvidenceAtlas } from "./evidence-atlas";
 
 describe("EvidenceAtlas", () => {
-  it("renders the demo snapshot and drills into a location", () => {
+  it("renders the static snapshot and drills into a location", () => {
     window.history.replaceState({}, "", "/");
     render(<EvidenceAtlas />);
 
     expect(screen.getByRole("heading", { name: "证据图谱" })).toBeTruthy();
-    expect(screen.getAllByText("DEMO_DATA").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("36", { selector: "strong" })).toHaveLength(2);
+    expect(screen.getAllByText("STATIC SNAPSHOT").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("475", { selector: "strong" })).toHaveLength(2);
 
-    fireEvent.click(screen.getByRole("button", { name: /广州 12/ }));
+    fireEvent.click(screen.getByRole("button", { name: /广州 158/ }));
     expect(screen.getByRole("heading", { name: "广州 的公开样本" })).toBeTruthy();
 
     fireEvent.click(screen.getByRole("button", { name: /查看标准化案例/ }));
