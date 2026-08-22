@@ -33,6 +33,17 @@ export type ExclusionReason =
   | "duplicate_candidate"
   | "schema_guard_failed";
 
+export type ExclusiveDisposition =
+  | "included"
+  | "non_f1"
+  | "out_of_range_date"
+  | "unknown_location"
+  | "unknown_status"
+  | "invalid_date"
+  | "incomplete_record"
+  | "duplicate"
+  | "other_exclusion";
+
 export interface NormalizedCase {
   sourceRecordKeyInternal: string;
   publicId: string;
@@ -107,6 +118,8 @@ export interface AggregateMetrics {
   resolvedDurationP75Days: number | null;
   checkDateRange: DateRange | null;
   majorDistribution: DistributionItem[];
+  degreeDistribution: DistributionItem[];
+  majorGroupDistribution: DistributionItem[];
   visaEntryDistribution: DistributionItem[];
 }
 
@@ -156,8 +169,11 @@ export interface DataQualityReport {
   waitingDayMismatchCount: number;
   monthConflictCount: number;
   duplicateCandidateCount: number;
+  duplicateKeyGroupCount: number;
+  duplicateRemovalCount: number;
   exactDuplicateCount: number;
   possibleDuplicateCount: number;
+  exclusiveDispositionCounts: Record<ExclusiveDisposition, number>;
   quarantinedCount: number;
   schemaGuardPassed: boolean;
   sensitiveFieldHits: string[];

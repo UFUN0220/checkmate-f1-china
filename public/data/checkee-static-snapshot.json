@@ -42,7 +42,7 @@
       "shenyang": 55,
       "wuhan": 51
     },
-    "contentHash": "fnv1a-a102f6e7",
+    "contentHash": "fnv1a-89c23d32",
     "currentMonthPartial": true,
     "demoData": false,
     "recordCount": 475,
@@ -56,7 +56,7 @@
     "excludedCount": 988,
     "quarantinedCount": 0,
     "schemaVersion": "3b-static-html-v1",
-    "snapshotChecksum": "fnv1a-a102f6e7",
+    "snapshotChecksum": "fnv1a-89c23d32",
     "isLive": false
   },
   "national": {
@@ -78,6 +78,55 @@
       "end": "2026-08-21"
     },
     "majorDistribution": [
+      {
+        "key": "Business",
+        "count": 9,
+        "share": 0.0189
+      },
+      {
+        "key": "Humanities & Social Science",
+        "count": 5,
+        "share": 0.0105
+      },
+      {
+        "key": "Other",
+        "count": 326,
+        "share": 0.6863
+      },
+      {
+        "key": "STEM",
+        "count": 127,
+        "share": 0.2674
+      },
+      {
+        "key": "Unknown",
+        "count": 8,
+        "share": 0.0168
+      }
+    ],
+    "degreeDistribution": [
+      {
+        "key": "Bachelor",
+        "count": 1,
+        "share": 0.0021
+      },
+      {
+        "key": "Doctoral",
+        "count": 80,
+        "share": 0.1684
+      },
+      {
+        "key": "Master",
+        "count": 7,
+        "share": 0.0147
+      },
+      {
+        "key": "Unknown",
+        "count": 387,
+        "share": 0.8147
+      }
+    ],
+    "majorGroupDistribution": [
       {
         "key": "Business",
         "count": 9,
@@ -163,6 +212,50 @@
           "share": 0.0226
         }
       ],
+      "degreeDistribution": [
+        {
+          "key": "Doctoral",
+          "count": 21,
+          "share": 0.1186
+        },
+        {
+          "key": "Master",
+          "count": 4,
+          "share": 0.0226
+        },
+        {
+          "key": "Unknown",
+          "count": 152,
+          "share": 0.8588
+        }
+      ],
+      "majorGroupDistribution": [
+        {
+          "key": "Business",
+          "count": 3,
+          "share": 0.0169
+        },
+        {
+          "key": "Humanities & Social Science",
+          "count": 3,
+          "share": 0.0169
+        },
+        {
+          "key": "Other",
+          "count": 123,
+          "share": 0.6949
+        },
+        {
+          "key": "STEM",
+          "count": 44,
+          "share": 0.2486
+        },
+        {
+          "key": "Unknown",
+          "count": 4,
+          "share": 0.0226
+        }
+      ],
       "visaEntryDistribution": [
         {
           "key": "initial",
@@ -195,6 +288,45 @@
         "end": "2026-08-07"
       },
       "majorDistribution": [
+        {
+          "key": "Business",
+          "count": 1,
+          "share": 0.0294
+        },
+        {
+          "key": "Other",
+          "count": 20,
+          "share": 0.5882
+        },
+        {
+          "key": "STEM",
+          "count": 12,
+          "share": 0.3529
+        },
+        {
+          "key": "Unknown",
+          "count": 1,
+          "share": 0.0294
+        }
+      ],
+      "degreeDistribution": [
+        {
+          "key": "Bachelor",
+          "count": 1,
+          "share": 0.0294
+        },
+        {
+          "key": "Doctoral",
+          "count": 3,
+          "share": 0.0882
+        },
+        {
+          "key": "Unknown",
+          "count": 30,
+          "share": 0.8824
+        }
+      ],
+      "majorGroupDistribution": [
         {
           "key": "Business",
           "count": 1,
@@ -274,6 +406,50 @@
           "share": 0.0063
         }
       ],
+      "degreeDistribution": [
+        {
+          "key": "Doctoral",
+          "count": 39,
+          "share": 0.2468
+        },
+        {
+          "key": "Master",
+          "count": 1,
+          "share": 0.0063
+        },
+        {
+          "key": "Unknown",
+          "count": 118,
+          "share": 0.7468
+        }
+      ],
+      "majorGroupDistribution": [
+        {
+          "key": "Business",
+          "count": 2,
+          "share": 0.0127
+        },
+        {
+          "key": "Humanities & Social Science",
+          "count": 2,
+          "share": 0.0127
+        },
+        {
+          "key": "Other",
+          "count": 107,
+          "share": 0.6772
+        },
+        {
+          "key": "STEM",
+          "count": 46,
+          "share": 0.2911
+        },
+        {
+          "key": "Unknown",
+          "count": 1,
+          "share": 0.0063
+        }
+      ],
       "visaEntryDistribution": [
         {
           "key": "initial",
@@ -306,6 +482,45 @@
         "end": "2026-08-20"
       },
       "majorDistribution": [
+        {
+          "key": "Business",
+          "count": 1,
+          "share": 0.0182
+        },
+        {
+          "key": "Other",
+          "count": 41,
+          "share": 0.7455
+        },
+        {
+          "key": "STEM",
+          "count": 11,
+          "share": 0.2
+        },
+        {
+          "key": "Unknown",
+          "count": 2,
+          "share": 0.0364
+        }
+      ],
+      "degreeDistribution": [
+        {
+          "key": "Doctoral",
+          "count": 10,
+          "share": 0.1818
+        },
+        {
+          "key": "Master",
+          "count": 1,
+          "share": 0.0182
+        },
+        {
+          "key": "Unknown",
+          "count": 44,
+          "share": 0.8
+        }
+      ],
+      "majorGroupDistribution": [
         {
           "key": "Business",
           "count": 1,
@@ -375,6 +590,40 @@
           "share": 0.2745
         }
       ],
+      "degreeDistribution": [
+        {
+          "key": "Doctoral",
+          "count": 7,
+          "share": 0.1373
+        },
+        {
+          "key": "Master",
+          "count": 1,
+          "share": 0.0196
+        },
+        {
+          "key": "Unknown",
+          "count": 43,
+          "share": 0.8431
+        }
+      ],
+      "majorGroupDistribution": [
+        {
+          "key": "Business",
+          "count": 2,
+          "share": 0.0392
+        },
+        {
+          "key": "Other",
+          "count": 35,
+          "share": 0.6863
+        },
+        {
+          "key": "STEM",
+          "count": 14,
+          "share": 0.2745
+        }
+      ],
       "visaEntryDistribution": [
         {
           "key": "initial",
@@ -422,6 +671,25 @@
           "share": 0.3043
         }
       ],
+      "degreeDistribution": [
+        {
+          "key": "Unknown",
+          "count": 23,
+          "share": 1
+        }
+      ],
+      "majorGroupDistribution": [
+        {
+          "key": "Other",
+          "count": 16,
+          "share": 0.6957
+        },
+        {
+          "key": "STEM",
+          "count": 7,
+          "share": 0.3043
+        }
+      ],
       "visaEntryDistribution": [
         {
           "key": "initial",
@@ -456,6 +724,40 @@
         "end": "2026-02-26"
       },
       "majorDistribution": [
+        {
+          "key": "Other",
+          "count": 15,
+          "share": 0.7895
+        },
+        {
+          "key": "STEM",
+          "count": 3,
+          "share": 0.1579
+        },
+        {
+          "key": "Unknown",
+          "count": 1,
+          "share": 0.0526
+        }
+      ],
+      "degreeDistribution": [
+        {
+          "key": "Doctoral",
+          "count": 1,
+          "share": 0.0526
+        },
+        {
+          "key": "Master",
+          "count": 2,
+          "share": 0.1053
+        },
+        {
+          "key": "Unknown",
+          "count": 16,
+          "share": 0.8421
+        }
+      ],
+      "majorGroupDistribution": [
         {
           "key": "Other",
           "count": 15,
@@ -527,6 +829,45 @@
           "share": 0.0714
         }
       ],
+      "degreeDistribution": [
+        {
+          "key": "Doctoral",
+          "count": 3,
+          "share": 0.1071
+        },
+        {
+          "key": "Master",
+          "count": 2,
+          "share": 0.0714
+        },
+        {
+          "key": "Unknown",
+          "count": 23,
+          "share": 0.8214
+        }
+      ],
+      "majorGroupDistribution": [
+        {
+          "key": "Business",
+          "count": 2,
+          "share": 0.0714
+        },
+        {
+          "key": "Other",
+          "count": 19,
+          "share": 0.6786
+        },
+        {
+          "key": "STEM",
+          "count": 5,
+          "share": 0.1786
+        },
+        {
+          "key": "Unknown",
+          "count": 2,
+          "share": 0.0714
+        }
+      ],
       "visaEntryDistribution": [
         {
           "key": "initial",
@@ -561,6 +902,45 @@
         "end": "2026-04-30"
       },
       "majorDistribution": [
+        {
+          "key": "Business",
+          "count": 1,
+          "share": 0.0233
+        },
+        {
+          "key": "Humanities & Social Science",
+          "count": 1,
+          "share": 0.0233
+        },
+        {
+          "key": "Other",
+          "count": 29,
+          "share": 0.6744
+        },
+        {
+          "key": "STEM",
+          "count": 11,
+          "share": 0.2558
+        },
+        {
+          "key": "Unknown",
+          "count": 1,
+          "share": 0.0233
+        }
+      ],
+      "degreeDistribution": [
+        {
+          "key": "Doctoral",
+          "count": 7,
+          "share": 0.1628
+        },
+        {
+          "key": "Unknown",
+          "count": 36,
+          "share": 0.8372
+        }
+      ],
+      "majorGroupDistribution": [
         {
           "key": "Business",
           "count": 1,
@@ -647,6 +1027,50 @@
           "share": 0.0086
         }
       ],
+      "degreeDistribution": [
+        {
+          "key": "Bachelor",
+          "count": 1,
+          "share": 0.0086
+        },
+        {
+          "key": "Doctoral",
+          "count": 22,
+          "share": 0.1897
+        },
+        {
+          "key": "Unknown",
+          "count": 93,
+          "share": 0.8017
+        }
+      ],
+      "majorGroupDistribution": [
+        {
+          "key": "Business",
+          "count": 4,
+          "share": 0.0345
+        },
+        {
+          "key": "Humanities & Social Science",
+          "count": 1,
+          "share": 0.0086
+        },
+        {
+          "key": "Other",
+          "count": 76,
+          "share": 0.6552
+        },
+        {
+          "key": "STEM",
+          "count": 34,
+          "share": 0.2931
+        },
+        {
+          "key": "Unknown",
+          "count": 1,
+          "share": 0.0086
+        }
+      ],
       "visaEntryDistribution": [
         {
           "key": "initial",
@@ -681,6 +1105,50 @@
         "end": "2026-06-30"
       },
       "majorDistribution": [
+        {
+          "key": "Business",
+          "count": 1,
+          "share": 0.0069
+        },
+        {
+          "key": "Humanities & Social Science",
+          "count": 2,
+          "share": 0.0139
+        },
+        {
+          "key": "Other",
+          "count": 97,
+          "share": 0.6736
+        },
+        {
+          "key": "STEM",
+          "count": 42,
+          "share": 0.2917
+        },
+        {
+          "key": "Unknown",
+          "count": 2,
+          "share": 0.0139
+        }
+      ],
+      "degreeDistribution": [
+        {
+          "key": "Doctoral",
+          "count": 34,
+          "share": 0.2361
+        },
+        {
+          "key": "Master",
+          "count": 1,
+          "share": 0.0069
+        },
+        {
+          "key": "Unknown",
+          "count": 109,
+          "share": 0.7569
+        }
+      ],
+      "majorGroupDistribution": [
         {
           "key": "Business",
           "count": 1,
@@ -762,6 +1230,45 @@
           "share": 0.2418
         }
       ],
+      "degreeDistribution": [
+        {
+          "key": "Doctoral",
+          "count": 12,
+          "share": 0.1319
+        },
+        {
+          "key": "Master",
+          "count": 2,
+          "share": 0.022
+        },
+        {
+          "key": "Unknown",
+          "count": 77,
+          "share": 0.8462
+        }
+      ],
+      "majorGroupDistribution": [
+        {
+          "key": "Business",
+          "count": 1,
+          "share": 0.011
+        },
+        {
+          "key": "Humanities & Social Science",
+          "count": 1,
+          "share": 0.011
+        },
+        {
+          "key": "Other",
+          "count": 67,
+          "share": 0.7363
+        },
+        {
+          "key": "STEM",
+          "count": 22,
+          "share": 0.2418
+        }
+      ],
       "visaEntryDistribution": [
         {
           "key": "initial",
@@ -812,6 +1319,35 @@
           "share": 0.0909
         }
       ],
+      "degreeDistribution": [
+        {
+          "key": "Doctoral",
+          "count": 1,
+          "share": 0.0909
+        },
+        {
+          "key": "Unknown",
+          "count": 10,
+          "share": 0.9091
+        }
+      ],
+      "majorGroupDistribution": [
+        {
+          "key": "Other",
+          "count": 7,
+          "share": 0.6364
+        },
+        {
+          "key": "STEM",
+          "count": 3,
+          "share": 0.2727
+        },
+        {
+          "key": "Unknown",
+          "count": 1,
+          "share": 0.0909
+        }
+      ],
       "visaEntryDistribution": [
         {
           "key": "initial",
@@ -828,7 +1364,7 @@
   ],
   "cases": [
     {
-      "publicId": "case-1337",
+      "publicId": "case-0475",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -846,7 +1382,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1335",
+      "publicId": "case-0474",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -864,7 +1400,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1332",
+      "publicId": "case-0473",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -882,7 +1418,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1330",
+      "publicId": "case-0471",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -900,7 +1436,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1331",
+      "publicId": "case-0472",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -918,7 +1454,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1328",
+      "publicId": "case-0470",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -936,7 +1472,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1323",
+      "publicId": "case-0469",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -954,7 +1490,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1321",
+      "publicId": "case-0468",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -972,7 +1508,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1319",
+      "publicId": "case-0467",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -990,7 +1526,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1318",
+      "publicId": "case-0466",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1008,7 +1544,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1310",
+      "publicId": "case-0465",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1026,7 +1562,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1309",
+      "publicId": "case-0464",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1044,7 +1580,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1305",
+      "publicId": "case-0461",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -1062,7 +1598,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1307",
+      "publicId": "case-0462",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1080,7 +1616,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1308",
+      "publicId": "case-0463",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1098,7 +1634,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1302",
+      "publicId": "case-0459",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1116,7 +1652,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1303",
+      "publicId": "case-0460",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1134,7 +1670,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1299",
+      "publicId": "case-0457",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1152,7 +1688,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1300",
+      "publicId": "case-0458",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1170,7 +1706,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1292",
+      "publicId": "case-0452",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -1188,7 +1724,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1293",
+      "publicId": "case-0453",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1206,7 +1742,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1294",
+      "publicId": "case-0454",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1224,7 +1760,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1297",
+      "publicId": "case-0455",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1242,7 +1778,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1298",
+      "publicId": "case-0456",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1260,7 +1796,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1283",
+      "publicId": "case-0449",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1278,7 +1814,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1286",
+      "publicId": "case-0450",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1296,7 +1832,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1289",
+      "publicId": "case-0451",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1314,7 +1850,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1271",
+      "publicId": "case-0445",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1332,7 +1868,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1274",
+      "publicId": "case-0446",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -1350,7 +1886,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1276",
+      "publicId": "case-0447",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1368,7 +1904,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1277",
+      "publicId": "case-0448",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1386,7 +1922,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1267",
+      "publicId": "case-0443",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1404,7 +1940,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1268",
+      "publicId": "case-0444",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1422,7 +1958,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1261",
+      "publicId": "case-0439",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1440,7 +1976,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1263",
+      "publicId": "case-0440",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1458,7 +1994,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1264",
+      "publicId": "case-0441",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1476,7 +2012,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1265",
+      "publicId": "case-0442",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1494,7 +2030,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1256",
+      "publicId": "case-0437",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1512,7 +2048,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1258",
+      "publicId": "case-0438",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1530,7 +2066,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1250",
+      "publicId": "case-0432",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1548,7 +2084,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1251",
+      "publicId": "case-0433",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1566,7 +2102,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1253",
+      "publicId": "case-0434",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -1584,7 +2120,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1254",
+      "publicId": "case-0435",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1602,7 +2138,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1255",
+      "publicId": "case-0436",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1620,7 +2156,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1242",
+      "publicId": "case-0425",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1638,7 +2174,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1244",
+      "publicId": "case-0426",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1656,7 +2192,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1245",
+      "publicId": "case-0427",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1674,7 +2210,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1246",
+      "publicId": "case-0428",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1692,7 +2228,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1247",
+      "publicId": "case-0429",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1710,7 +2246,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1248",
+      "publicId": "case-0430",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1728,7 +2264,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1249",
+      "publicId": "case-0431",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -1746,7 +2282,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1232",
+      "publicId": "case-0418",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1764,7 +2300,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1233",
+      "publicId": "case-0419",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1782,7 +2318,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1234",
+      "publicId": "case-0420",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Master",
@@ -1800,7 +2336,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1236",
+      "publicId": "case-0421",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1818,7 +2354,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1237",
+      "publicId": "case-0422",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1836,7 +2372,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1239",
+      "publicId": "case-0423",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -1854,7 +2390,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1241",
+      "publicId": "case-0424",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1872,7 +2408,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1222",
+      "publicId": "case-0410",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1890,7 +2426,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1223",
+      "publicId": "case-0411",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1908,7 +2444,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1224",
+      "publicId": "case-0412",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1926,7 +2462,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1225",
+      "publicId": "case-0413",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1944,7 +2480,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1226",
+      "publicId": "case-0414",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -1962,7 +2498,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1227",
+      "publicId": "case-0415",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1980,7 +2516,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1229",
+      "publicId": "case-0416",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -1998,7 +2534,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1230",
+      "publicId": "case-0417",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -2016,7 +2552,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1209",
+      "publicId": "case-0402",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2034,7 +2570,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1212",
+      "publicId": "case-0403",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2052,7 +2588,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1213",
+      "publicId": "case-0404",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2070,7 +2606,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1215",
+      "publicId": "case-0405",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -2088,7 +2624,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1217",
+      "publicId": "case-0406",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2106,7 +2642,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1218",
+      "publicId": "case-0407",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2124,7 +2660,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1219",
+      "publicId": "case-0408",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2142,7 +2678,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1221",
+      "publicId": "case-0409",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2160,7 +2696,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1200",
+      "publicId": "case-0396",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2178,7 +2714,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1201",
+      "publicId": "case-0397",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2196,7 +2732,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1202",
+      "publicId": "case-0398",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2214,7 +2750,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1204",
+      "publicId": "case-0399",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2232,7 +2768,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1205",
+      "publicId": "case-0400",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2250,7 +2786,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1207",
+      "publicId": "case-0401",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2268,7 +2804,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1189",
+      "publicId": "case-0386",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2286,7 +2822,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1191",
+      "publicId": "case-0387",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2304,7 +2840,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1192",
+      "publicId": "case-0388",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2322,7 +2858,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1193",
+      "publicId": "case-0389",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2340,7 +2876,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1194",
+      "publicId": "case-0390",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -2358,7 +2894,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1195",
+      "publicId": "case-0391",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2376,7 +2912,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1196",
+      "publicId": "case-0392",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Master",
@@ -2394,7 +2930,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1197",
+      "publicId": "case-0393",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2412,7 +2948,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1198",
+      "publicId": "case-0394",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2430,7 +2966,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1199",
+      "publicId": "case-0395",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2448,7 +2984,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1179",
+      "publicId": "case-0380",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2466,7 +3002,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1181",
+      "publicId": "case-0381",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -2484,7 +3020,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1183",
+      "publicId": "case-0382",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -2502,7 +3038,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1185",
+      "publicId": "case-0383",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2520,7 +3056,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1186",
+      "publicId": "case-0384",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2538,7 +3074,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1187",
+      "publicId": "case-0385",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -2556,7 +3092,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1168",
+      "publicId": "case-0374",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2574,7 +3110,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1171",
+      "publicId": "case-0375",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2592,7 +3128,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1173",
+      "publicId": "case-0376",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2610,7 +3146,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1175",
+      "publicId": "case-0377",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2628,7 +3164,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1176",
+      "publicId": "case-0378",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2646,7 +3182,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1177",
+      "publicId": "case-0379",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2664,7 +3200,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1157",
+      "publicId": "case-0369",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2682,7 +3218,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1158",
+      "publicId": "case-0370",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -2700,7 +3236,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1160",
+      "publicId": "case-0371",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -2718,7 +3254,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1162",
+      "publicId": "case-0372",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2736,7 +3272,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1164",
+      "publicId": "case-0373",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2754,7 +3290,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1146",
+      "publicId": "case-0363",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2772,7 +3308,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1148",
+      "publicId": "case-0364",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2790,7 +3326,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1149",
+      "publicId": "case-0365",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2808,7 +3344,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1150",
+      "publicId": "case-0366",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2826,7 +3362,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1151",
+      "publicId": "case-0367",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2844,7 +3380,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1153",
+      "publicId": "case-0368",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -2862,7 +3398,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1133",
+      "publicId": "case-0355",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2880,7 +3416,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1134",
+      "publicId": "case-0356",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2898,7 +3434,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1136",
+      "publicId": "case-0357",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2916,7 +3452,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1137",
+      "publicId": "case-0358",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2934,7 +3470,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1138",
+      "publicId": "case-0359",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -2952,7 +3488,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1139",
+      "publicId": "case-0360",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2970,7 +3506,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1140",
+      "publicId": "case-0361",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -2988,7 +3524,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1141",
+      "publicId": "case-0362",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3006,7 +3542,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1124",
+      "publicId": "case-0347",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3024,7 +3560,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1125",
+      "publicId": "case-0348",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3042,7 +3578,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1126",
+      "publicId": "case-0349",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3060,7 +3596,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1127",
+      "publicId": "case-0350",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3078,7 +3614,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1128",
+      "publicId": "case-0351",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3096,7 +3632,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1129",
+      "publicId": "case-0352",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -3114,7 +3650,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1130",
+      "publicId": "case-0353",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3132,7 +3668,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1131",
+      "publicId": "case-0354",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3150,7 +3686,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1116",
+      "publicId": "case-0341",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3168,7 +3704,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1117",
+      "publicId": "case-0342",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3186,7 +3722,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1119",
+      "publicId": "case-0343",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3204,7 +3740,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1120",
+      "publicId": "case-0344",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -3222,7 +3758,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1121",
+      "publicId": "case-0345",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -3240,7 +3776,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1123",
+      "publicId": "case-0346",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -3258,7 +3794,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1102",
+      "publicId": "case-0333",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3276,7 +3812,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1103",
+      "publicId": "case-0334",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3294,7 +3830,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1106",
+      "publicId": "case-0335",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -3312,7 +3848,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1108",
+      "publicId": "case-0336",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3330,7 +3866,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1109",
+      "publicId": "case-0337",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -3348,7 +3884,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1112",
+      "publicId": "case-0338",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3366,7 +3902,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1113",
+      "publicId": "case-0339",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3384,7 +3920,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1114",
+      "publicId": "case-0340",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3402,7 +3938,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1088",
+      "publicId": "case-0324",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -3420,7 +3956,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1090",
+      "publicId": "case-0325",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3438,7 +3974,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1091",
+      "publicId": "case-0326",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3456,7 +3992,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1093",
+      "publicId": "case-0327",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3474,7 +4010,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1095",
+      "publicId": "case-0328",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -3492,7 +4028,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1096",
+      "publicId": "case-0329",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3510,7 +4046,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1097",
+      "publicId": "case-0330",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -3528,7 +4064,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1099",
+      "publicId": "case-0331",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3546,7 +4082,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1101",
+      "publicId": "case-0332",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3564,7 +4100,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1086",
+      "publicId": "case-0322",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3582,7 +4118,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1087",
+      "publicId": "case-0323",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3600,7 +4136,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1074",
+      "publicId": "case-0313",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -3618,7 +4154,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1075",
+      "publicId": "case-0314",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3636,7 +4172,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1076",
+      "publicId": "case-0315",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -3654,7 +4190,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1077",
+      "publicId": "case-0316",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -3672,7 +4208,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1078",
+      "publicId": "case-0317",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -3690,7 +4226,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1079",
+      "publicId": "case-0318",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3708,7 +4244,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1080",
+      "publicId": "case-0319",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -3726,7 +4262,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1081",
+      "publicId": "case-0320",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3744,7 +4280,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1082",
+      "publicId": "case-0321",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -3762,7 +4298,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1062",
+      "publicId": "case-0307",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3780,7 +4316,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1063",
+      "publicId": "case-0308",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3798,7 +4334,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1066",
+      "publicId": "case-0309",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -3816,7 +4352,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1067",
+      "publicId": "case-0310",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3834,7 +4370,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1068",
+      "publicId": "case-0311",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3852,7 +4388,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1069",
+      "publicId": "case-0312",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3870,7 +4406,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1046",
+      "publicId": "case-0297",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3888,7 +4424,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1049",
+      "publicId": "case-0298",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3906,7 +4442,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1051",
+      "publicId": "case-0299",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3924,7 +4460,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1052",
+      "publicId": "case-0300",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3942,7 +4478,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1053",
+      "publicId": "case-0301",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3960,7 +4496,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1054",
+      "publicId": "case-0302",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -3978,7 +4514,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1056",
+      "publicId": "case-0303",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -3996,7 +4532,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1058",
+      "publicId": "case-0304",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4014,7 +4550,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1060",
+      "publicId": "case-0305",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4032,7 +4568,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1061",
+      "publicId": "case-0306",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4050,7 +4586,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1033",
+      "publicId": "case-0288",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4068,7 +4604,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1036",
+      "publicId": "case-0289",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4086,7 +4622,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1037",
+      "publicId": "case-0290",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4104,7 +4640,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1040",
+      "publicId": "case-0291",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4122,7 +4658,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1041",
+      "publicId": "case-0292",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4140,7 +4676,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1042",
+      "publicId": "case-0293",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4158,7 +4694,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1043",
+      "publicId": "case-0294",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4176,7 +4712,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1044",
+      "publicId": "case-0295",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4194,7 +4730,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1045",
+      "publicId": "case-0296",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4212,7 +4748,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1021",
+      "publicId": "case-0279",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4230,7 +4766,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1023",
+      "publicId": "case-0280",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4248,7 +4784,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1024",
+      "publicId": "case-0281",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4266,7 +4802,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1026",
+      "publicId": "case-0282",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4284,7 +4820,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1027",
+      "publicId": "case-0283",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -4302,7 +4838,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1028",
+      "publicId": "case-0284",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4320,7 +4856,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1029",
+      "publicId": "case-0285",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4338,7 +4874,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1030",
+      "publicId": "case-0286",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4356,7 +4892,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1031",
+      "publicId": "case-0287",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4374,7 +4910,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1009",
+      "publicId": "case-0272",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4392,7 +4928,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1010",
+      "publicId": "case-0273",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4410,7 +4946,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1011",
+      "publicId": "case-0274",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4428,7 +4964,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1013",
+      "publicId": "case-0275",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4446,7 +4982,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1016",
+      "publicId": "case-0276",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4464,7 +5000,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1017",
+      "publicId": "case-0277",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4482,7 +5018,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1019",
+      "publicId": "case-0278",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -4500,7 +5036,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1000",
+      "publicId": "case-0268",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4518,7 +5054,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1001",
+      "publicId": "case-0269",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4536,7 +5072,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1005",
+      "publicId": "case-0270",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4554,7 +5090,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-1008",
+      "publicId": "case-0271",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4572,7 +5108,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0985",
+      "publicId": "case-0264",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4590,7 +5126,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0986",
+      "publicId": "case-0265",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4608,7 +5144,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0993",
+      "publicId": "case-0266",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4626,7 +5162,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0995",
+      "publicId": "case-0267",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4644,7 +5180,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0974",
+      "publicId": "case-0253",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4662,7 +5198,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0975",
+      "publicId": "case-0254",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4680,7 +5216,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0976",
+      "publicId": "case-0255",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4698,7 +5234,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0977",
+      "publicId": "case-0256",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4716,7 +5252,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0978",
+      "publicId": "case-0257",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4734,7 +5270,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0979",
+      "publicId": "case-0258",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4752,7 +5288,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0980",
+      "publicId": "case-0259",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4770,7 +5306,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0981",
+      "publicId": "case-0260",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -4788,7 +5324,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0982",
+      "publicId": "case-0261",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Master",
@@ -4806,7 +5342,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0983",
+      "publicId": "case-0262",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4824,7 +5360,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0984",
+      "publicId": "case-0263",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4842,7 +5378,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0962",
+      "publicId": "case-0245",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4860,7 +5396,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0963",
+      "publicId": "case-0246",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4878,7 +5414,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0965",
+      "publicId": "case-0247",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -4896,7 +5432,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0966",
+      "publicId": "case-0248",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -4914,7 +5450,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0967",
+      "publicId": "case-0249",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4932,7 +5468,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0968",
+      "publicId": "case-0250",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4950,7 +5486,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0970",
+      "publicId": "case-0251",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4968,7 +5504,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0971",
+      "publicId": "case-0252",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -4986,7 +5522,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0952",
+      "publicId": "case-0240",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5004,7 +5540,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0955",
+      "publicId": "case-0241",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5022,7 +5558,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0956",
+      "publicId": "case-0242",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5040,7 +5576,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0960",
+      "publicId": "case-0243",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5058,7 +5594,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0961",
+      "publicId": "case-0244",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5076,7 +5612,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0938",
+      "publicId": "case-0230",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5094,7 +5630,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0940",
+      "publicId": "case-0231",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5112,7 +5648,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0941",
+      "publicId": "case-0232",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5130,7 +5666,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0943",
+      "publicId": "case-0233",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5148,7 +5684,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0944",
+      "publicId": "case-0234",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5166,7 +5702,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0945",
+      "publicId": "case-0235",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5184,7 +5720,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0946",
+      "publicId": "case-0236",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5202,7 +5738,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0947",
+      "publicId": "case-0237",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5220,7 +5756,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0950",
+      "publicId": "case-0238",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -5238,7 +5774,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0951",
+      "publicId": "case-0239",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5256,7 +5792,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0920",
+      "publicId": "case-0219",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5274,7 +5810,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0922",
+      "publicId": "case-0220",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -5292,7 +5828,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0923",
+      "publicId": "case-0221",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5310,7 +5846,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0925",
+      "publicId": "case-0222",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -5328,7 +5864,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0928",
+      "publicId": "case-0223",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5346,7 +5882,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0929",
+      "publicId": "case-0224",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5364,7 +5900,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0930",
+      "publicId": "case-0225",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5382,7 +5918,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0931",
+      "publicId": "case-0226",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -5400,7 +5936,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0932",
+      "publicId": "case-0227",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5418,7 +5954,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0933",
+      "publicId": "case-0228",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5436,7 +5972,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0934",
+      "publicId": "case-0229",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5454,7 +5990,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0904",
+      "publicId": "case-0211",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -5472,7 +6008,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0905",
+      "publicId": "case-0212",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5490,7 +6026,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0912",
+      "publicId": "case-0213",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -5508,7 +6044,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0913",
+      "publicId": "case-0214",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5526,7 +6062,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0914",
+      "publicId": "case-0215",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5544,7 +6080,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0915",
+      "publicId": "case-0216",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5562,7 +6098,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0916",
+      "publicId": "case-0217",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -5580,7 +6116,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0919",
+      "publicId": "case-0218",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5598,7 +6134,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0893",
+      "publicId": "case-0204",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5616,7 +6152,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0894",
+      "publicId": "case-0205",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5634,7 +6170,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0895",
+      "publicId": "case-0206",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5652,7 +6188,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0896",
+      "publicId": "case-0207",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5670,7 +6206,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0897",
+      "publicId": "case-0208",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5688,7 +6224,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0902",
+      "publicId": "case-0209",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5706,7 +6242,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0903",
+      "publicId": "case-0210",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5724,7 +6260,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0880",
+      "publicId": "case-0199",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -5742,7 +6278,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0881",
+      "publicId": "case-0200",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5760,7 +6296,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0883",
+      "publicId": "case-0201",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5778,7 +6314,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0890",
+      "publicId": "case-0202",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5796,7 +6332,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0892",
+      "publicId": "case-0203",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5814,7 +6350,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0865",
+      "publicId": "case-0190",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5832,7 +6368,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0869",
+      "publicId": "case-0191",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5850,7 +6386,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0872",
+      "publicId": "case-0192",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5868,7 +6404,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0873",
+      "publicId": "case-0193",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5886,7 +6422,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0874",
+      "publicId": "case-0194",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5904,7 +6440,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0876",
+      "publicId": "case-0195",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5922,7 +6458,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0877",
+      "publicId": "case-0196",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -5940,7 +6476,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0878",
+      "publicId": "case-0197",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5958,7 +6494,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0879",
+      "publicId": "case-0198",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5976,7 +6512,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0857",
+      "publicId": "case-0184",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -5994,7 +6530,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0858",
+      "publicId": "case-0185",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6012,7 +6548,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0859",
+      "publicId": "case-0186",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -6030,7 +6566,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0860",
+      "publicId": "case-0187",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6048,7 +6584,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0861",
+      "publicId": "case-0188",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6066,7 +6602,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0863",
+      "publicId": "case-0189",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6084,7 +6620,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0845",
+      "publicId": "case-0175",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6102,7 +6638,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0846",
+      "publicId": "case-0176",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6120,7 +6656,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0847",
+      "publicId": "case-0177",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6138,7 +6674,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0848",
+      "publicId": "case-0178",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6156,7 +6692,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0851",
+      "publicId": "case-0179",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6174,7 +6710,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0853",
+      "publicId": "case-0180",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6192,7 +6728,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0854",
+      "publicId": "case-0181",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6210,7 +6746,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0855",
+      "publicId": "case-0182",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6228,7 +6764,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0856",
+      "publicId": "case-0183",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6246,7 +6782,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0829",
+      "publicId": "case-0171",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6264,7 +6800,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0830",
+      "publicId": "case-0172",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6282,7 +6818,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0831",
+      "publicId": "case-0173",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6300,7 +6836,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0843",
+      "publicId": "case-0174",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6318,7 +6854,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0819",
+      "publicId": "case-0165",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6336,7 +6872,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0821",
+      "publicId": "case-0166",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6354,7 +6890,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0822",
+      "publicId": "case-0167",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -6372,7 +6908,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0823",
+      "publicId": "case-0168",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -6390,7 +6926,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0827",
+      "publicId": "case-0169",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -6408,7 +6944,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0828",
+      "publicId": "case-0170",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6426,7 +6962,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0809",
+      "publicId": "case-0157",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6444,7 +6980,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0811",
+      "publicId": "case-0158",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6462,7 +6998,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0812",
+      "publicId": "case-0159",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -6480,7 +7016,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0813",
+      "publicId": "case-0160",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6498,7 +7034,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0814",
+      "publicId": "case-0161",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6516,7 +7052,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0816",
+      "publicId": "case-0162",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6534,7 +7070,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0817",
+      "publicId": "case-0163",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6552,7 +7088,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0818",
+      "publicId": "case-0164",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6570,7 +7106,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0793",
+      "publicId": "case-0147",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -6588,7 +7124,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0794",
+      "publicId": "case-0148",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6606,7 +7142,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0797",
+      "publicId": "case-0149",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6624,7 +7160,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0798",
+      "publicId": "case-0150",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6642,7 +7178,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0802",
+      "publicId": "case-0151",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6660,7 +7196,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0803",
+      "publicId": "case-0152",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6678,7 +7214,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0804",
+      "publicId": "case-0153",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6696,7 +7232,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0805",
+      "publicId": "case-0154",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6714,7 +7250,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0806",
+      "publicId": "case-0155",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6732,7 +7268,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0807",
+      "publicId": "case-0156",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6750,7 +7286,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0781",
+      "publicId": "case-0143",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6768,7 +7304,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0782",
+      "publicId": "case-0144",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -6786,7 +7322,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0786",
+      "publicId": "case-0145",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6804,7 +7340,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0789",
+      "publicId": "case-0146",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6822,7 +7358,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0764",
+      "publicId": "case-0137",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6840,7 +7376,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0768",
+      "publicId": "case-0138",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6858,7 +7394,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0770",
+      "publicId": "case-0139",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6876,7 +7412,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0774",
+      "publicId": "case-0140",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6894,7 +7430,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0775",
+      "publicId": "case-0141",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6912,7 +7448,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0776",
+      "publicId": "case-0142",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -6930,7 +7466,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0756",
+      "publicId": "case-0135",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6948,7 +7484,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0758",
+      "publicId": "case-0136",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -6966,7 +7502,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0732",
+      "publicId": "case-0128",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -6984,7 +7520,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0733",
+      "publicId": "case-0129",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -7002,7 +7538,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0735",
+      "publicId": "case-0130",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Bachelor",
@@ -7020,7 +7556,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0736",
+      "publicId": "case-0131",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -7038,7 +7574,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0737",
+      "publicId": "case-0132",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -7056,7 +7592,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0742",
+      "publicId": "case-0133",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -7074,7 +7610,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0745",
+      "publicId": "case-0134",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7092,7 +7628,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0720",
+      "publicId": "case-0121",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7110,7 +7646,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0722",
+      "publicId": "case-0122",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -7128,7 +7664,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0723",
+      "publicId": "case-0123",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7146,7 +7682,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0724",
+      "publicId": "case-0124",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7164,7 +7700,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0725",
+      "publicId": "case-0125",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7182,7 +7718,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0729",
+      "publicId": "case-0126",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7200,7 +7736,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0730",
+      "publicId": "case-0127",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7218,7 +7754,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0706",
+      "publicId": "case-0114",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7236,7 +7772,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0707",
+      "publicId": "case-0115",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -7254,7 +7790,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0708",
+      "publicId": "case-0116",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -7272,7 +7808,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0709",
+      "publicId": "case-0117",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7290,7 +7826,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0710",
+      "publicId": "case-0118",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7308,7 +7844,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0711",
+      "publicId": "case-0119",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7326,7 +7862,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0715",
+      "publicId": "case-0120",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7344,7 +7880,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0687",
+      "publicId": "case-0109",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7362,7 +7898,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0690",
+      "publicId": "case-0110",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -7380,7 +7916,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0692",
+      "publicId": "case-0111",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7398,7 +7934,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0694",
+      "publicId": "case-0112",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -7416,7 +7952,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0696",
+      "publicId": "case-0113",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -7434,7 +7970,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0686",
+      "publicId": "case-0108",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7452,7 +7988,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0672",
+      "publicId": "case-0103",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7470,7 +8006,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0673",
+      "publicId": "case-0104",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -7488,7 +8024,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0680",
+      "publicId": "case-0105",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -7506,7 +8042,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0681",
+      "publicId": "case-0106",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7524,7 +8060,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0682",
+      "publicId": "case-0107",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7542,7 +8078,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0667",
+      "publicId": "case-0102",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7560,7 +8096,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0659",
+      "publicId": "case-0098",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7578,7 +8114,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0660",
+      "publicId": "case-0099",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7596,7 +8132,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0661",
+      "publicId": "case-0100",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7614,7 +8150,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0662",
+      "publicId": "case-0101",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7632,7 +8168,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0650",
+      "publicId": "case-0094",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7650,7 +8186,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0652",
+      "publicId": "case-0095",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7668,7 +8204,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0653",
+      "publicId": "case-0096",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7686,7 +8222,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0656",
+      "publicId": "case-0097",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7704,7 +8240,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0643",
+      "publicId": "case-0092",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7722,7 +8258,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0648",
+      "publicId": "case-0093",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7740,7 +8276,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0623",
+      "publicId": "case-0088",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7758,7 +8294,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0624",
+      "publicId": "case-0089",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -7776,7 +8312,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0625",
+      "publicId": "case-0090",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7794,7 +8330,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0626",
+      "publicId": "case-0091",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7812,7 +8348,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0616",
+      "publicId": "case-0086",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7830,7 +8366,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0618",
+      "publicId": "case-0087",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7848,7 +8384,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0585",
+      "publicId": "case-0084",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7866,7 +8402,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0587",
+      "publicId": "case-0085",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -7884,7 +8420,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0579",
+      "publicId": "case-0082",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7902,7 +8438,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0582",
+      "publicId": "case-0083",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7920,7 +8456,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0574",
+      "publicId": "case-0078",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7938,7 +8474,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0575",
+      "publicId": "case-0079",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7956,7 +8492,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0576",
+      "publicId": "case-0080",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -7974,7 +8510,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0577",
+      "publicId": "case-0081",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -7992,7 +8528,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0560",
+      "publicId": "case-0075",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8010,7 +8546,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0561",
+      "publicId": "case-0076",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8028,7 +8564,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0563",
+      "publicId": "case-0077",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8046,7 +8582,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0552",
+      "publicId": "case-0072",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8064,7 +8600,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0553",
+      "publicId": "case-0073",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8082,7 +8618,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0558",
+      "publicId": "case-0074",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8100,7 +8636,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0538",
+      "publicId": "case-0071",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8118,7 +8654,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0528",
+      "publicId": "case-0069",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Doctoral",
@@ -8136,7 +8672,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0529",
+      "publicId": "case-0070",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8154,7 +8690,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0513",
+      "publicId": "case-0067",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8172,7 +8708,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0516",
+      "publicId": "case-0068",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8190,7 +8726,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0501",
+      "publicId": "case-0065",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8208,7 +8744,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0504",
+      "publicId": "case-0066",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8226,7 +8762,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0495",
+      "publicId": "case-0062",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8244,7 +8780,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0497",
+      "publicId": "case-0063",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8262,7 +8798,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0499",
+      "publicId": "case-0064",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8280,7 +8816,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0482",
+      "publicId": "case-0061",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8298,7 +8834,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0475",
+      "publicId": "case-0059",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8316,7 +8852,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0478",
+      "publicId": "case-0060",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8334,7 +8870,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0470",
+      "publicId": "case-0057",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8352,7 +8888,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0474",
+      "publicId": "case-0058",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8370,7 +8906,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0462",
+      "publicId": "case-0056",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8388,7 +8924,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0454",
+      "publicId": "case-0055",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8406,7 +8942,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0439",
+      "publicId": "case-0054",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -8424,7 +8960,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0427",
+      "publicId": "case-0052",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -8442,7 +8978,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0428",
+      "publicId": "case-0053",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8460,7 +8996,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0413",
+      "publicId": "case-0050",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8478,7 +9014,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0417",
+      "publicId": "case-0051",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8496,7 +9032,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0387",
+      "publicId": "case-0047",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8514,7 +9050,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0388",
+      "publicId": "case-0048",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8532,7 +9068,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0396",
+      "publicId": "case-0049",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8550,7 +9086,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0374",
+      "publicId": "case-0043",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8568,7 +9104,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0375",
+      "publicId": "case-0044",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Master",
@@ -8586,7 +9122,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0376",
+      "publicId": "case-0045",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8604,7 +9140,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0378",
+      "publicId": "case-0046",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Master",
@@ -8622,7 +9158,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0352",
+      "publicId": "case-0042",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8640,7 +9176,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0332",
+      "publicId": "case-0039",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Doctoral",
@@ -8658,7 +9194,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0333",
+      "publicId": "case-0040",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8676,7 +9212,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0336",
+      "publicId": "case-0041",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8694,7 +9230,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0328",
+      "publicId": "case-0037",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8712,7 +9248,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0330",
+      "publicId": "case-0038",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Master",
@@ -8730,7 +9266,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0320",
+      "publicId": "case-0036",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8748,7 +9284,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0310",
+      "publicId": "case-0033",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8766,7 +9302,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0311",
+      "publicId": "case-0034",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8784,7 +9320,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0316",
+      "publicId": "case-0035",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8802,7 +9338,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0305",
+      "publicId": "case-0030",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8820,7 +9356,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0308",
+      "publicId": "case-0031",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8838,7 +9374,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0309",
+      "publicId": "case-0032",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8856,7 +9392,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0286",
+      "publicId": "case-0028",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Master",
@@ -8874,7 +9410,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0293",
+      "publicId": "case-0029",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8892,7 +9428,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0262",
+      "publicId": "case-0025",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8910,7 +9446,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0264",
+      "publicId": "case-0026",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8928,7 +9464,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0270",
+      "publicId": "case-0027",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8946,7 +9482,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0239",
+      "publicId": "case-0024",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -8964,7 +9500,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0213",
+      "publicId": "case-0022",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -8982,7 +9518,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0219",
+      "publicId": "case-0023",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9000,7 +9536,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0201",
+      "publicId": "case-0021",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -9018,7 +9554,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0175",
+      "publicId": "case-0020",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9036,7 +9572,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0172",
+      "publicId": "case-0019",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9054,7 +9590,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0150",
+      "publicId": "case-0018",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9072,7 +9608,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0148",
+      "publicId": "case-0017",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9090,7 +9626,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0135",
+      "publicId": "case-0015",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9108,7 +9644,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0136",
+      "publicId": "case-0016",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9126,7 +9662,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0117",
+      "publicId": "case-0014",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9144,7 +9680,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0104",
+      "publicId": "case-0012",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9162,7 +9698,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0105",
+      "publicId": "case-0013",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9180,7 +9716,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0090",
+      "publicId": "case-0011",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -9198,7 +9734,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0079",
+      "publicId": "case-0010",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9216,7 +9752,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0054",
+      "publicId": "case-0006",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9234,7 +9770,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0056",
+      "publicId": "case-0007",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -9252,7 +9788,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0058",
+      "publicId": "case-0008",
       "visaType": "F1",
       "visaEntry": "initial",
       "degree": "Unknown",
@@ -9270,7 +9806,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0059",
+      "publicId": "case-0009",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9288,7 +9824,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0050",
+      "publicId": "case-0005",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9306,7 +9842,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0027",
+      "publicId": "case-0002",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9324,7 +9860,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0028",
+      "publicId": "case-0003",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9342,7 +9878,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0031",
+      "publicId": "case-0004",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9360,7 +9896,7 @@
       "dataOrigin": "CHECKEE_HTML"
     },
     {
-      "publicId": "case-0009",
+      "publicId": "case-0001",
       "visaType": "F1",
       "visaEntry": "renewal",
       "degree": "Unknown",
@@ -9393,9 +9929,22 @@
     },
     "waitingDayMismatchCount": 0,
     "monthConflictCount": 0,
-    "duplicateCandidateCount": 76,
+    "duplicateCandidateCount": 125,
+    "duplicateKeyGroupCount": 76,
+    "duplicateRemovalCount": 125,
     "exactDuplicateCount": 5,
     "possibleDuplicateCount": 10,
+    "exclusiveDispositionCounts": {
+      "included": 475,
+      "non_f1": 835,
+      "out_of_range_date": 0,
+      "unknown_location": 28,
+      "unknown_status": 0,
+      "invalid_date": 0,
+      "incomplete_record": 0,
+      "duplicate": 125,
+      "other_exclusion": 0
+    },
     "quarantinedCount": 0,
     "schemaGuardPassed": true,
     "sensitiveFieldHits": []

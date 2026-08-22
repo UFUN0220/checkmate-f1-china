@@ -4,7 +4,7 @@ import {
   calculateMetrics,
   reconcileCounts,
 } from "../analytics/metrics";
-import type { NormalizedCase, PublicCase, PublicSnapshot } from "./models";
+import type { ExclusiveDisposition, NormalizedCase, PublicCase, PublicSnapshot } from "./models";
 
 export interface SnapshotBuildOptions {
   sourceName: string;
@@ -121,6 +121,28 @@ function containsSensitiveField(value: string) {
   );
 }
 
+const EMPTY_DISPOSITION_COUNTS: Record<ExclusiveDisposition, number> = {
+  included: 0,
+  non_f1: 0,
+  out_of_range_date: 0,
+  unknown_location: 0,
+  unknown_status: 0,
+  invalid_date: 0,
+  incomplete_record: 0,
+  duplicate: 0,
+  other_exclusion: 0,
+};
+
+function exclusiveDisposition(item: NormalizedCase): ExclusiveDisposition {
+  if (item.exclusionReason === "non_f1") return "non_f1";
+  if (item.exclusionReason === "out_of_range_date") return "out_of_range_date";
+  if (item.exclusionReason === "unknown_location") return "unknown_location";
+  if (item.exclusionReason === "unknown_status") return "unknown_status";
+  if (item.exclusionReason === "invalid_date") return "invalid_date";
+  if (item.exclusionReason === "incomplete_record") return "incomplete_record";
+  return "other_exclusion";
+}
+
 export function buildPublicSnapshot(
   normalizedCases: NormalizedCase[],
   options: SnapshotBuildOptions,
@@ -133,12 +155,27 @@ export function buildPublicSnapshot(
   }
 
   const emittedKeys = new Set<string>();
-  const cases = normalizedCases
-    .filter((item) => {
-      if (emittedKeys.has(item.sourceRecordKeyInternal)) return false;
-      emittedKeys.add(item.sourceRecordKeyInternal);
-      return true;
-    })
+  const exclusiveDispositionCounts = { ...EMPTY_DISPOSITION_COUNTS };
+  const publicCandidates: NormalizedCase[] = [];
+  for (const item of normalizedCases) {
+    if (emittedKeys.has(item.sourceRecordKeyInternal)) {
+      exclusiveDispositionCounts.duplicate += 1;
+      continue;
+    }
+    emittedKeys.add(item.sourceRecordKeyInternal);
+    if (!item.eligible) {
+      exclusiveDispositionCounts[exclusiveDisposition(item)] += 1;
+      continue;
+    }
+    const candidate = toPublicCase(item, options.snapshotDate, "");
+    if (!candidate) {
+      exclusiveDispositionCounts.invalid_date += 1;
+      continue;
+    }
+    exclusiveDispositionCounts.included += 1;
+    publicCandidates.push(item);
+  }
+  const cases = publicCandidates
     .map((item, index) =>
       toPublicCase(item, options.snapshotDate, `case-${String(index + 1).padStart(4, "0")}`),
     )
@@ -213,9 +250,12 @@ export function buildPublicSnapshot(
       monthConflictCount: normalizedCases.filter((item) =>
         item.dataQualityFlags.includes("source_month_mismatch"),
       ).length,
-      duplicateCandidateCount: duplicateKeys.size,
+      duplicateCandidateCount: exclusiveDispositionCounts.duplicate,
+      duplicateKeyGroupCount: duplicateKeys.size,
+      duplicateRemovalCount: exclusiveDispositionCounts.duplicate,
       exactDuplicateCount: options.exactDuplicateCount ?? duplicateKeys.size,
       possibleDuplicateCount: options.possibleDuplicateCount ?? 0,
+      exclusiveDispositionCounts,
       quarantinedCount: options.quarantinedCount ?? 0,
       schemaGuardPassed: true,
       sensitiveFieldHits,

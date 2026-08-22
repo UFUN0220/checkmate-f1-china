@@ -25,6 +25,13 @@ describe("ManualCheckeeHtmlAdapter", () => {
     ]);
     expect(result.exactDuplicateCount).toBe(1);
     expect(result.possibleDuplicateCount).toBe(1);
+    expect(result.duplicateKeyGroupCount).toBe(1);
+    expect(result.duplicateGroups[0]).toMatchObject({
+      candidateCount: 2,
+      sourceKeyCount: 1,
+      exactDuplicateRows: 1,
+      verdict: "CONFIRMED_DUPLICATE",
+    });
     expect(result.fileReports[0]).toMatchObject({
       sourceMonth: "2026-01",
       tableCount: 2,

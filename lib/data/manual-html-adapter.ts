@@ -2,6 +2,13 @@ import { createHash } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { JSDOM } from "jsdom";
+import {
+  normalizeLocation,
+  normalizeStatus,
+  normalizeVisaEntry,
+  normalizeVisaType,
+  normalizeMajorGroup,
+} from "./allowlists";
 import { normalizeRawCase, type RawCaseInput } from "./normalize";
 import type { NormalizedCase } from "./models";
 import type { CaseSourceAdapter } from "./adapters";
@@ -65,6 +72,25 @@ export interface HtmlIsolationReport {
     "wrong_cell_count" | "missing_source_id" | "invalid_waiting_days" | "missing_required_value";
 }
 
+export interface DuplicateGroupAudit {
+  fingerprint: string;
+  candidateCount: number;
+  sourceMonthCount: number;
+  fileCount: number;
+  statuses: string[];
+  locations: string[];
+  visaTypes: string[];
+  entries: string[];
+  majorGroups: string[];
+  majorValueCount: number;
+  checkDates: string[];
+  completeDates: string[];
+  waitingDays: number[];
+  sourceKeyCount: number;
+  exactDuplicateRows: number;
+  verdict: "CONFIRMED_DUPLICATE" | "UNRESOLVED_KEEP_BOTH";
+}
+
 export interface ManualHtmlLoadResult {
   cases: NormalizedCase[];
   fileReports: HtmlFileParseReport[];
@@ -72,6 +98,8 @@ export interface ManualHtmlLoadResult {
   rawRowCount: number;
   exactDuplicateCount: number;
   possibleDuplicateCount: number;
+  duplicateKeyGroupCount: number;
+  duplicateGroups: DuplicateGroupAudit[];
 }
 
 export interface ManualHtmlAdapterOptions {
@@ -205,6 +233,10 @@ function fingerprint(item: NormalizedCase) {
   ]);
 }
 
+function fingerprintHash(value: string) {
+  return `sha256-${createHash("sha256").update(value).digest("hex")}`;
+}
+
 export class ManualCheckeeHtmlAdapter implements CaseSourceAdapter {
   readonly name = "ManualCheckeeHtmlAdapter";
   private readonly filePaths: readonly string[];
@@ -318,10 +350,57 @@ export class ManualCheckeeHtmlAdapter implements CaseSourceAdapter {
         seen.set(item.sourceRecordKeyInternal, item);
       }
     }
-    const fingerprints = new Map<string, number>();
+    const sourceKeyCounts = new Map<string, number>();
     for (const item of cases)
-      fingerprints.set(fingerprint(item), (fingerprints.get(fingerprint(item)) ?? 0) + 1);
-    const possibleDuplicateCount = [...fingerprints.values()].filter((count) => count > 1).length;
+      sourceKeyCounts.set(
+        item.sourceRecordKeyInternal,
+        (sourceKeyCounts.get(item.sourceRecordKeyInternal) ?? 0) + 1,
+      );
+    const duplicateKeyGroups = new Set(
+      [...sourceKeyCounts.entries()]
+        .filter(([, count]) => count > 1)
+        .map(([sourceKey]) => sourceKey),
+    );
+    const fingerprintGroups = new Map<string, NormalizedCase[]>();
+    for (const item of cases) {
+      const key = fingerprint(item);
+      fingerprintGroups.set(key, [...(fingerprintGroups.get(key) ?? []), item]);
+    }
+    const duplicateGroups: DuplicateGroupAudit[] = [...fingerprintGroups.entries()]
+      .filter(([, group]) => group.length > 1)
+      .map(([key, group]) => {
+        const unique = <T>(values: T[]) => [...new Set(values)];
+        const sourceKeyCount = unique(group.map((item) => item.sourceRecordKeyInternal)).length;
+        return {
+          fingerprint: fingerprintHash(key),
+          candidateCount: group.length,
+          sourceMonthCount: unique(group.map((item) => item.sourceMonth)).length,
+          fileCount: unique(group.map((item) => item.sourceFileName ?? "unknown")).length,
+          statuses: unique(group.map((item) => normalizeStatus(item.sourceStatusRaw))).sort(),
+          locations: unique(
+            group.map((item) => normalizeLocation(item.consulateRaw) ?? "outside-five"),
+          ).sort(),
+          visaTypes: unique(
+            group.map((item) => normalizeVisaType(item.visaTypeRaw) ?? "other"),
+          ).sort(),
+          entries: unique(group.map((item) => normalizeVisaEntry(item.visaEntryRaw))).sort(),
+          majorGroups: unique(group.map((item) => normalizeMajorGroup(item.majorRaw))).sort(),
+          majorValueCount: unique(group.map((item) => item.majorRaw ?? "")).length,
+          checkDates: unique(group.map((item) => item.checkDate ?? "")).sort(),
+          completeDates: unique(group.map((item) => item.completeDate ?? "")).sort(),
+          waitingDays: unique(group.map((item) => item.waitingDaysReported ?? -1)).sort(
+            (a, b) => a - b,
+          ),
+          sourceKeyCount,
+          exactDuplicateRows: sourceKeyCount === 1 ? group.length - 1 : 0,
+          verdict:
+            sourceKeyCount === 1
+              ? ("CONFIRMED_DUPLICATE" as const)
+              : ("UNRESOLVED_KEEP_BOTH" as const),
+        };
+      })
+      .sort((left, right) => left.fingerprint.localeCompare(right.fingerprint));
+    const possibleDuplicateCount = duplicateGroups.length;
     return {
       cases,
       fileReports,
@@ -329,6 +408,8 @@ export class ManualCheckeeHtmlAdapter implements CaseSourceAdapter {
       rawRowCount: fileReports.reduce((sum, report) => sum + report.dataTableRowCount, 0),
       exactDuplicateCount,
       possibleDuplicateCount,
+      duplicateKeyGroupCount: duplicateKeyGroups.size,
+      duplicateGroups,
     };
   }
 }

@@ -1,0 +1,8 @@
+{
+  "DATA_SOURCE_MODE": "manual-static",
+  "DATASET_STATUS": "STATIC_SNAPSHOT_DEMO",
+  "CHECKEE_ACCESS_MODE": "disabled",
+  "isLive": false,
+  "coverage": "2026-01–2026-08",
+  "snapshotDate": "2026-08-31"
+}

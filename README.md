@@ -6,9 +6,15 @@
 
 ## 当前状态
 
-阶段 3B：手工 HTML 静态快照接入与临时 Demo 已完成。默认页面读取 8 个本地保存的 Checkee 月份 HTML（2026-01 至 2026-08），经过 DOM 解析、归一化、质量门禁后生成 475 条公开静态案例。页面明确标记为 `STATIC SNAPSHOT`，不是实时数据，也不代表 Checkee 官方或总体样本。`DEMO_DATA` 仍可作为显式离线回退。
+```text
+DATA_SOURCE_MODE=manual-static
+DATASET_STATUS=STATIC_SNAPSHOT_DEMO
+CHECKEE_ACCESS_MODE=disabled
+```
 
-Checkee 当前记录为 `CHECKEE_ACCESS_BLOCKED`，默认 `CHECKEE_ACCESS_MODE=disabled`。静态导入只接受本地文件路径，不接受 URL、Cookie 或网络请求；没有真实抓取器、定时任务或线上数据请求。未来只需把 CSV/JSON 或经授权的 HTML 接入 `CaseSourceAdapter`，统计和页面继续消费同一个 `PublicSnapshot`。
+阶段 3C：真实静态数据 Demo 产品化与视觉验收。默认页面读取 8 个本地保存的 Checkee 月份 HTML（2026-01 至 2026-08），经过 DOM 解析、归一化、质量门禁后生成 475 条公开静态案例。`CHECKEE_ACCESS_MODE=disabled` 仅表示没有启用网络接入；当前产品使用正式认可的手工静态数据路线。`DEMO_DATA` 仍可作为显式离线回退。
+
+静态导入只接受本地文件路径，不接受 URL、Cookie 或网络请求；没有自动刷新或线上数据请求。未来若出现 API 或规范数据文档，再增加新的 Adapter，统计和页面继续消费同一个 `PublicSnapshot`。
 
 ## 本地运行
 
@@ -47,7 +53,7 @@ npm run audit
 
 运行 `npm run check:offline` 会执行格式检查、Lint、TypeScript、单元测试和生产构建；这些步骤不访问 Checkee。运行 `npm run data:checkee:fetch` 会明确退出并说明当前访问模式被禁用，避免误把开发环境当成真实同步环境。
 
-来源契约、最小公开字段、静态 HTML 结构、适配器边界和阶段记录见 [`docs/data/checkee-source-contract.md`](docs/data/checkee-source-contract.md)、[`docs/data/checkee-static-html-contract.md`](docs/data/checkee-static-html-contract.md)、[`docs/data/offline-data-architecture.md`](docs/data/offline-data-architecture.md) 与 [`docs/phase-reports/phase-3b-static-html-demo.md`](docs/phase-reports/phase-3b-static-html-demo.md)。
+来源契约、最小公开字段、静态 HTML 结构、适配器边界和阶段记录见 [`docs/data/checkee-source-contract.md`](docs/data/checkee-source-contract.md)、[`docs/data/checkee-static-html-contract.md`](docs/data/checkee-static-html-contract.md)、[`docs/data/offline-data-architecture.md`](docs/data/offline-data-architecture.md)、[`docs/phase-reports/phase-3b-static-html-demo.md`](docs/phase-reports/phase-3b-static-html-demo.md) 与 [`docs/phase-reports/phase-3c-static-demo-product-review.md`](docs/phase-reports/phase-3c-static-demo-product-review.md)。
 
 ## 隐私原则
 

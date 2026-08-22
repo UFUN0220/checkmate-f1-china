@@ -13,6 +13,7 @@ import {
 } from "./allowlists";
 import { normalizeRawCase } from "./normalize";
 import { DEMO_SNAPSHOT } from "./demo-snapshot";
+import { CHECKEE_STATIC_SNAPSHOT } from "./static-snapshot";
 
 const context = {
   origin: "CHECKEE_EXPORT" as const,
@@ -91,5 +92,38 @@ describe("source-independent data foundation", () => {
     await expect(new CheckeeHtmlAdapter("disabled").load()).rejects.toBeInstanceOf(
       CheckeeAccessDisabledError,
     );
+  });
+
+  it("locks the static snapshot to an exclusive disposition equation", () => {
+    const quality = CHECKEE_STATIC_SNAPSHOT.qualityReport;
+    const dispositionTotal = Object.values(quality.exclusiveDispositionCounts).reduce(
+      (sum, count) => sum + count,
+      0,
+    );
+    expect(dispositionTotal).toBe(quality.totalCandidates);
+    expect(quality.exclusiveDispositionCounts).toMatchObject({
+      included: 475,
+      non_f1: 835,
+      unknown_location: 28,
+      duplicate: 125,
+    });
+    expect(quality.includedCount + quality.duplicateRemovalCount + 835 + 28).toBe(1463);
+    expect(quality.exactDuplicateCount).toBe(5);
+    expect(quality.possibleDuplicateCount).toBe(10);
+    expect(quality.duplicateKeyGroupCount).toBe(76);
+  });
+
+  it("reconciles monthly cohorts with the national snapshot", () => {
+    expect(
+      CHECKEE_STATIC_SNAPSHOT.cohorts.reduce((sum, cohort) => sum + cohort.sampleCount, 0),
+    ).toBe(CHECKEE_STATIC_SNAPSHOT.national.sampleCount);
+    expect(CHECKEE_STATIC_SNAPSHOT.cohorts.at(-1)?.partial).toBe(true);
+    expect(
+      CHECKEE_STATIC_SNAPSHOT.locations.beijing.sampleCount +
+        CHECKEE_STATIC_SNAPSHOT.locations.shanghai.sampleCount +
+        CHECKEE_STATIC_SNAPSHOT.locations.guangzhou.sampleCount +
+        CHECKEE_STATIC_SNAPSHOT.locations.shenyang.sampleCount +
+        CHECKEE_STATIC_SNAPSHOT.locations.wuhan.sampleCount,
+    ).toBe(CHECKEE_STATIC_SNAPSHOT.national.sampleCount);
   });
 });

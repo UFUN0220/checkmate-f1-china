@@ -20,6 +20,7 @@ import {
   type CaseFilters,
 } from "../lib/data/query";
 import { LOCATIONS, type CaseStatus, type Location, type VisaEntry } from "../lib/data/models";
+import { DISPLAY_FIELD_CONFIG } from "../lib/data/display-config";
 
 type AtlasView = "overview" | "location" | "cases";
 type FilterValue = "all" | string;
@@ -41,6 +42,23 @@ const STATUS_NAMES: Record<Exclude<CaseStatus, "unknown">, string> = {
 const ENTRY_NAMES: Record<Exclude<VisaEntry, "unknown">, string> = {
   initial: "Initial",
   renewal: "Renewal",
+};
+
+const DISTRIBUTION_NAMES: Record<string, string> = {
+  pending: "Pending",
+  clear: "Clear",
+  reject: "Reject",
+  initial: "Initial",
+  renewal: "Renewal",
+  unknown: "Unknown",
+  STEM: "STEM",
+  Business: "Business",
+  "Humanities & Social Science": "人文社科",
+  Other: "Other",
+  Unknown: "Unknown",
+  Doctoral: "Doctoral",
+  Master: "Master",
+  Bachelor: "Bachelor",
 };
 
 type AtlasState = {
@@ -175,18 +193,20 @@ export function EvidenceAtlas() {
             <h1>证据图谱</h1>
             <p>
               {isStatic
-                ? "数据来源：Checkee.info。当前为 2026 年 1 月至 8 月手工保存页面生成的静态快照，不是实时数据。"
-                : "这是来源无关的数据产品演示。当前页面使用合成 DEMO_DATA，不代表真实 Checkee 样本。"}
+                ? "Checkee.info 公开列表样本 · 2026.01–2026.08"
+                : "离线数据产品演示 · fixture snapshot"}
             </p>
           </div>
 
           <div className="atlas-sidebar__summary" aria-label="数据快照概览">
-            <span>{isStatic ? "静态快照 · 2026 年 1–8 月" : "演示快照 · 2026 年以来"}</span>
-            <div className="atlas-summary-values atlas-summary-values--four">
-              <SummaryValue label="总样本" value={snapshot.national.sampleCount} />
-              <SummaryValue label="Pending" value={snapshot.national.pendingCount} />
-              <SummaryValue label="Clear" value={snapshot.national.clearCount} />
-              <SummaryValue label="Reject" value={snapshot.national.rejectCount} />
+            <span>{isStatic ? "公开静态快照" : "离线演示快照"}</span>
+            <div className="atlas-sidebar__sample">
+              <strong>{snapshot.national.sampleCount}</strong>
+              <span>
+                F-1 cases
+                <br />
+                2026.01–2026.08
+              </span>
             </div>
           </div>
 
@@ -197,8 +217,8 @@ export function EvidenceAtlas() {
             </div>
             <p>
               {isStatic
-                ? "Checkee 为用户自报数据，本站与 Checkee.info 不存在隶属关系；当前快照非实时。"
-                : "Checkee 访问状态为 CHECKEE_ACCESS_BLOCKED；真实来源 Adapter 保持 disabled，本页面仅用于离线开发和截图。"}
+                ? "Checkee.info · 用户公开列表信息 · 2026.01–2026.08"
+                : "离线合成数据 · 仅用于界面演示"}
             </p>
             <a href="#methods">
               查看数据口径 <ArrowRight size={14} />
@@ -237,23 +257,6 @@ export function EvidenceAtlas() {
             </button>
           )}
 
-          <div className="source-banner" role="status">
-            <Info size={17} />
-            <span>
-              {isStatic ? (
-                <>
-                  <strong>数据来源：Checkee.info</strong>；当前为 2026 年 1 月至 8
-                  月手工保存页面生成的静态快照，不是实时数据。Checkee 为用户自报数据，本站与
-                  Checkee.info 不存在隶属关系。
-                </>
-              ) : (
-                <>
-                  当前为 <strong>DEMO_DATA</strong>，真实 Checkee 数据尚未接入。
-                </>
-              )}
-            </span>
-          </div>
-
           {state.view === "overview" && (
             <OverviewPanel onOpenCases={() => openCases()} onOpenLocation={openLocation} />
           )}
@@ -276,21 +279,31 @@ export function EvidenceAtlas() {
       <footer id="methods" className="atlas-footer">
         <span>
           {isStatic
-            ? "数据来源：Checkee.info · 2026 年 1–8 月手工保存页面静态快照"
-            : "数据来源：DEMO_DATA（合成开发数据）"}
+            ? "Checkee.info · 2026.01–2026.08 · static snapshot"
+            : "Offline fixture · demo snapshot"}
         </span>
-        <span>Checkee 为用户自报数据 · 当前快照不是实时数据</span>
-        <span>不代表总体概率，不提供个人出签时间预测。</span>
+        <span>Snapshot 2026-08-23 · 2026-08 PARTIAL_MONTH</span>
       </footer>
     </div>
   );
 }
 
-function SummaryValue({ label, value }: { label: string; value: number }) {
+function MetricCard({
+  label,
+  value,
+  note,
+  tone,
+}: {
+  label: string;
+  value: number | string;
+  note: string;
+  tone: "blue" | "amber" | "teal" | "violet";
+}) {
   return (
-    <div>
+    <div className={`metric-card metric-card--${tone}`}>
+      <span>{label}</span>
       <strong>{value}</strong>
-      <small>{label}</small>
+      <small>{note}</small>
     </div>
   );
 }
@@ -309,7 +322,11 @@ function OverviewPanel({
           <p className="eyebrow">
             全国概览 · {activeDatasetMode === "checkee-static" ? "STATIC SNAPSHOT" : "DEMO_DATA"}
           </p>
-          <h2>从样本范围开始，逐层了解数据。</h2>
+          <h2>
+            从样本范围开始，逐层
+            <br className="mobile-only-break" />
+            了解数据。
+          </h2>
           <p className="atlas-lede">
             先看全国状态构成和五个地点的静态分布，再进入地点指标或标准化案例列表。所有数值来自同一份快照。
           </p>
@@ -323,6 +340,32 @@ function OverviewPanel({
           </a>
         </div>
       </div>
+
+      <section
+        className="core-metrics"
+        aria-label="首屏核心指标"
+        data-primary-fields={DISPLAY_FIELD_CONFIG.primaryMetrics.join(",")}
+      >
+        <MetricCard
+          label="公开案例"
+          value={activeSnapshot.national.sampleCount}
+          note="F-1 public cases"
+          tone="blue"
+        />
+        <MetricCard
+          label="Pending"
+          value={activeSnapshot.national.pendingCount}
+          note={`占 ${((activeSnapshot.national.pendingCount / activeSnapshot.national.sampleCount) * 100).toFixed(1)}% · 中位 ${activeSnapshot.national.pendingAgeMedianDays} 天`}
+          tone="amber"
+        />
+        <MetricCard
+          label="Clear"
+          value={activeSnapshot.national.clearCount}
+          note={`占 ${((activeSnapshot.national.clearCount / activeSnapshot.national.sampleCount) * 100).toFixed(1)}% · 中位 ${activeSnapshot.national.resolvedDurationMedianDays} 天`}
+          tone="teal"
+        />
+        <MetricCard label="覆盖月份" value="8" note="2026.01–2026.08 · 8月不完整" tone="violet" />
+      </section>
 
       <section className="atlas-trajectory" aria-labelledby="trajectory-title">
         <div className="atlas-trajectory__header">
@@ -340,7 +383,7 @@ function OverviewPanel({
         </div>
         <div className="atlas-map-strip">
           <div className="atlas-map-strip__background" aria-hidden="true" />
-          <div className="atlas-route" aria-label="五个地点的演示样本数量">
+          <div className="atlas-route" aria-label="五个地点的公开样本数量">
             <span className="atlas-route__origin">
               <span className="atlas-route__origin-label">全国</span>
               <strong>{activeSnapshot.national.sampleCount}</strong>
@@ -391,7 +434,10 @@ function OverviewPanel({
                 return (
                   <tr key={location}>
                     <th scope="row">
-                      <button className="table-location" onClick={() => onOpenLocation(location)}>
+                      <button
+                        className={`table-location table-location--${location}`}
+                        onClick={() => onOpenLocation(location)}
+                      >
                         <span className="table-location__dot" aria-hidden="true" />
                         {LOCATION_NAMES[location]}
                       </button>
@@ -440,15 +486,23 @@ function TrendSection() {
       </div>
       <div className="trend-list">
         {activeSnapshot.cohorts.map((cohort) => (
-          <div className="trend-row" key={cohort.month}>
+          <div
+            className={`trend-row${cohort.partial ? " trend-row--partial" : ""}`}
+            key={cohort.month}
+          >
             <span>
               {cohort.month}
-              {cohort.partial ? " · 尚未完整" : ""}
+              {cohort.partial && <em>PARTIAL_MONTH</em>}
             </span>
             <div className="trend-row__track">
               <span style={{ width: `${max ? (cohort.sampleCount / max) * 100 : 0}%` }} />
             </div>
-            <strong>{cohort.sampleCount}</strong>
+            <strong>
+              {cohort.sampleCount}
+              <small>
+                P{cohort.pendingCount} · C{cohort.clearCount} · R{cohort.rejectCount}
+              </small>
+            </strong>
           </div>
         ))}
       </div>
@@ -513,6 +567,20 @@ function LocationPanel({ location, onOpenCases }: { location: Location; onOpenCa
           note="来源快照字段"
         />
       </div>
+      <div className="location-breakdown">
+        <DistributionList
+          title="状态构成"
+          items={[
+            { key: "pending", count: metrics.pendingCount },
+            { key: "clear", count: metrics.clearCount },
+            { key: "reject", count: metrics.rejectCount },
+          ]}
+        />
+        <DistributionList title="Initial / Renewal" items={metrics.visaEntryDistribution} />
+        <DistributionList title="Degree" items={metrics.degreeDistribution} />
+        <DistributionList title="Major Group" items={metrics.majorGroupDistribution} />
+        <DistributionList title="按 Check 月份" items={monthDistribution(location)} compact />
+      </div>
       <div className="detail-empty">
         <Info size={22} />
         <div>
@@ -538,6 +606,46 @@ function Stat({ label, value, note }: { label: string; value: string | number; n
       <span>{label}</span>
       <strong>{value}</strong>
       <small>{note}</small>
+    </div>
+  );
+}
+
+function monthDistribution(location: Location) {
+  const locationCases = activeSnapshot.cases.filter((item) => item.location === location);
+  const counts = new Map<string, number>();
+  for (const item of locationCases) {
+    const month = item.checkDate.slice(0, 7);
+    counts.set(month, (counts.get(month) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([key, count]) => ({ key, count }));
+}
+
+function DistributionList({
+  title,
+  items,
+  compact = false,
+}: {
+  title: string;
+  items: Array<{ key: string; count: number; share?: number }>;
+  compact?: boolean;
+}) {
+  const max = Math.max(...items.map((item) => item.count), 1);
+  return (
+    <div className={`distribution-list${compact ? " distribution-list--compact" : ""}`}>
+      <h3>{title}</h3>
+      <div className="distribution-list__items">
+        {items.map((item) => (
+          <div className="distribution-row" key={item.key}>
+            <span>{DISTRIBUTION_NAMES[item.key] ?? item.key}</span>
+            <div className="distribution-row__track">
+              <i style={{ width: `${(item.count / max) * 100}%` }} />
+            </div>
+            <strong>{item.count}</strong>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -585,7 +693,11 @@ function CasesPanel({
     onChange({ [key]: values.length ? values.join(",") : "all" });
   };
   return (
-    <section className="detail-panel" aria-labelledby="cases-title">
+    <section
+      className="detail-panel"
+      aria-labelledby="cases-title"
+      data-case-fields={DISPLAY_FIELD_CONFIG.caseListFields.join(",")}
+    >
       <div className="detail-panel__heading">
         <div>
           <p className="eyebrow">
@@ -603,53 +715,59 @@ function CasesPanel({
           {filteredMetrics.clearCount} / R{filteredMetrics.rejectCount}
         </span>
       </div>
-      <div className="filter-bar" aria-label="案例筛选">
-        <MultiSelectField
-          label="地点"
-          value={state.location}
-          options={LOCATIONS.map((location) => [location, LOCATION_NAMES[location]])}
-          onChange={(event) => changeMulti("location", event)}
-        />
-        <MultiSelectField
-          label="状态"
-          value={state.status}
-          options={Object.entries(STATUS_NAMES)}
-          onChange={(event) => changeMulti("status", event)}
-        />
-        <MultiSelectField
-          label="Check 月份"
-          value={state.month}
-          options={months.map((month) => [month, month])}
-          onChange={(event) => changeMulti("month", event)}
-        />
-        <MultiSelectField
-          label="Degree"
-          value={state.degree}
-          options={degrees.map((degree) => [degree, degree])}
-          onChange={(event) => changeMulti("degree", event)}
-        />
-        <MultiSelectField
-          label="Major Group"
-          value={state.majorGroup}
-          options={majorGroups.map((majorGroup) => [majorGroup, majorGroup])}
-          onChange={(event) => changeMulti("majorGroup", event)}
-        />
-        <MultiSelectField
-          label="签证入口"
-          value={state.entry}
-          options={[
-            ["initial", "Initial"],
-            ["renewal", "Renewal"],
-            ["unknown", "Unknown"],
-          ]}
-          onChange={(event) => changeMulti("entry", event)}
-        />
-        {hasFilters && (
-          <button className="filter-clear" onClick={onClear}>
-            清除筛选
-          </button>
-        )}
-      </div>
+      <details className="filter-drawer" open>
+        <summary>
+          <span>筛选案例</span>
+          <strong>{filteredCases.length} 条结果</strong>
+        </summary>
+        <div className="filter-bar" aria-label="案例筛选">
+          <MultiSelectField
+            label="地点"
+            value={state.location}
+            options={LOCATIONS.map((location) => [location, LOCATION_NAMES[location]])}
+            onChange={(event) => changeMulti("location", event)}
+          />
+          <MultiSelectField
+            label="状态"
+            value={state.status}
+            options={Object.entries(STATUS_NAMES)}
+            onChange={(event) => changeMulti("status", event)}
+          />
+          <MultiSelectField
+            label="Check 月份"
+            value={state.month}
+            options={months.map((month) => [month, month])}
+            onChange={(event) => changeMulti("month", event)}
+          />
+          <MultiSelectField
+            label="Degree"
+            value={state.degree}
+            options={degrees.map((degree) => [degree, degree])}
+            onChange={(event) => changeMulti("degree", event)}
+          />
+          <MultiSelectField
+            label="Major Group"
+            value={state.majorGroup}
+            options={majorGroups.map((majorGroup) => [majorGroup, majorGroup])}
+            onChange={(event) => changeMulti("majorGroup", event)}
+          />
+          <MultiSelectField
+            label="签证入口"
+            value={state.entry}
+            options={[
+              ["initial", "Initial"],
+              ["renewal", "Renewal"],
+              ["unknown", "Unknown"],
+            ]}
+            onChange={(event) => changeMulti("entry", event)}
+          />
+          {hasFilters && (
+            <button className="filter-clear" onClick={onClear}>
+              清除筛选
+            </button>
+          )}
+        </div>
+      </details>
       {filteredCases.length === 0 ? (
         <div className="detail-empty detail-empty--large">
           <FileText size={28} />

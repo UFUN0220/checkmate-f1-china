@@ -77,6 +77,14 @@ export function calculateMetrics(
       cases.map((item) => item.majorCategory),
       cases.length,
     ),
+    degreeDistribution: distribution(
+      cases.map((item) => item.degree),
+      cases.length,
+    ),
+    majorGroupDistribution: distribution(
+      cases.map((item) => item.majorGroup),
+      cases.length,
+    ),
     visaEntryDistribution: distribution(
       cases.map((item) => item.visaEntry),
       cases.length,

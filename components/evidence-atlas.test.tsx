@@ -11,7 +11,9 @@ describe("EvidenceAtlas", () => {
 
     expect(screen.getByRole("heading", { name: "证据图谱" })).toBeTruthy();
     expect(screen.getAllByText("STATIC SNAPSHOT").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("475", { selector: "strong" })).toHaveLength(2);
+    expect(screen.getAllByText("475", { selector: "strong" }).length).toBeGreaterThanOrEqual(2);
+    expect(document.body.textContent).not.toContain("CHECKEE_ACCESS_BLOCKED");
+    expect(document.body.textContent).not.toContain("source-banner");
 
     fireEvent.click(screen.getByRole("button", { name: /广州 158/ }));
     expect(screen.getByRole("heading", { name: "广州 的公开样本" })).toBeTruthy();

@@ -24,6 +24,17 @@ if (snapshot.cases.length !== snapshot.manifest.recordCount)
   throw new Error("Static record count mismatch.");
 if (manifest.snapshotChecksum !== snapshot.manifest.snapshotChecksum)
   throw new Error("Manifest checksum mismatch.");
+const dispositionTotal = Object.values(snapshot.qualityReport.exclusiveDispositionCounts).reduce(
+  (sum, count) => sum + count,
+  0,
+);
+if (dispositionTotal !== snapshot.qualityReport.totalCandidates)
+  throw new Error("Exclusive disposition reconciliation failed.");
+if (
+  snapshot.qualityReport.exclusiveDispositionCounts.included !== snapshot.cases.length ||
+  snapshot.qualityReport.duplicateRemovalCount < snapshot.qualityReport.exactDuplicateCount
+)
+  throw new Error("Static duplicate or inclusion reconciliation failed.");
 console.log(
   JSON.stringify({
     valid: true,
