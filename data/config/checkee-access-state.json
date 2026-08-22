@@ -1,0 +1,11 @@
+{
+  "source": "checkee.info",
+  "status": "CHECKEE_ACCESS_BLOCKED",
+  "mode": "disabled",
+  "checkedAt": "2026-08-22",
+  "blockedTargets": [
+    "https://www.checkee.info/main.php?dispdate=2026-01",
+    "https://www.checkee.info/main.php?dispdate=2026-08"
+  ],
+  "reason": "Required public month pages returned HTTP 403; no retry or bypass is permitted."
+}
