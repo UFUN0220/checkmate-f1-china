@@ -1,5 +1,7 @@
 # 产品简述
 
+> 状态：`superseded`。本文件保留阶段 1 历史证据；新版动机、范围和唯一数据来源以 [`product-rationale.md`](product-rationale.md) 及 [`data/checkee-source-contract.md`](data/checkee-source-contract.md) 为准。文中的旧 Excel、80 条基线、人工审核和本地投稿路线不再属于当前产品。
+
 ## 产品定位
 
 CheckMate F1 China 是一个独立的、移动端优先的 F-1 Check 众包数据 Demo。它先让用户看懂中国大陆申请地点的本站样本分布，再下钻到地点指标和人工审核后的案例记录，帮助用户在信息不完整时形成更清晰、不过度预测的判断。

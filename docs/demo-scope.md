@@ -1,5 +1,7 @@
 # Demo 范围
 
+> 状态：`superseded`。本文件是阶段 1 的旧 Demo 范围，保留供历史追溯；新版范围以 [`product-rationale.md`](product-rationale.md) 为准，不再使用旧 Excel、人工审核或本地投稿路线。
+
 ## 目标
 
 本阶段为 CheckMate F1 China 落盘一个可比较、可实现的 Demo 目标，不实现完整页面。Demo 只关注中国大陆申请地点的 F-1 Check 案例，使用当前 80 条样本作为结构基线。

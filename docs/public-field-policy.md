@@ -1,5 +1,7 @@
 # 公开字段策略
 
+> 状态：`superseded`。新版公开字段以 [`data/checkee-data-dictionary.md`](data/checkee-data-dictionary.md) 为准；旧版允许学校、精确面签日期、Case Update、备注和 `verified_for_publish` 的规则不再适用于 Checkee 公开数据。本文件保留阶段 1 历史证据。
+
 ## 适用范围
 
 本策略适用于 Demo 的三级下钻。只有 `reviewStatus = verified_for_publish` 的记录可以进入公开统计和案例列表；内部原始字段、审核记录和源表行号永不公开。

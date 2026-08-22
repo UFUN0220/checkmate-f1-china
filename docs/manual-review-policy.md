@@ -1,5 +1,7 @@
 # 人工审核策略
 
+> 状态：`superseded`。新版不再使用本站人工审核或本地投稿流程；请以 [`data/checkee-source-contract.md`](data/checkee-source-contract.md) 和 [`data/checkee-data-dictionary.md`](data/checkee-data-dictionary.md) 为准。本文件保留阶段 1 的历史决策，不作为 Checkee 数据处理授权或当前公开字段契约。
+
 ## 审核目的
 
 人工审核用于检查格式、逻辑、重复和隐私，决定一条记录是否可以进入 Demo。审核不代表美国政府认证、案件真实性保证或法律意见。

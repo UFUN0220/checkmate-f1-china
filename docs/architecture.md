@@ -1,5 +1,7 @@
 # 架构说明（阶段 0）
 
+> 状态：阶段 3 已更新来源边界。旧版 Excel 流程仅保留为历史说明；当前唯一计划来源为 Checkee.info，且在月份页返回 403 期间不生成新快照。
+
 ## 运行时
 
 - Next.js App Router + TypeScript：页面与后续静态数据展示。
@@ -10,25 +12,25 @@
 ## 数据流边界
 
 ```text
-data/private/*.xlsx
-        │ 仅脚本/开发阶段读取
+Checkee.info public month pages
+        │ 仅在 source contract 允许时低频读取
         ▼
-审计 → 规范化 → schema 校验 → PII 扫描 → 统计
-        │
+data/private/checkee-cache/*
+        │ 解析 → 规范化 → schema 校验 → 隐私扫描 → 统计
         ▼
 data/generated/*.json  ──> app/components 浏览器端
 ```
 
-阶段 1 仍不实现数据流，只固定 Demo 的产品边界。原始 Excel、内部模型和同步凭证不得被 `app/` 或浏览器 bundle 引用；后续只有 `verified_for_publish` 的安全公开字段可以进入前端。
+阶段 3 只建立来源和字段契约，不实现生产抓取器。Checkee 原始 HTML、内部模型和同步凭证不得被 `app/` 或浏览器 bundle 引用；只有数据字典定义的安全公开字段可以进入前端。
 
 ## 目录职责
 
-目录约定见根目录 `AGENTS.md`。阶段 1 已建立 Demo 范围、三级信息架构、人工审核政策和公开字段政策；后续数据层再建立内部模型和公开模型，统计模块与正式视觉方案仍待后续阶段。
+目录约定见根目录 `AGENTS.md`。阶段 3 已建立 Checkee 来源契约、数据字典和阻断 fixture；后续数据层再建立内部模型和公开模型，统计模块与正式视觉方案仍待后续阶段。
 
 ## 依赖与构建原则
 
 - 使用执行时仍受支持的包版本，并通过 `npm audit` 检查已知漏洞。
-- Excel 解析依赖只在脚本侧使用，不进入生产浏览器包。
+- Checkee HTML 解析依赖只在脚本侧使用，不进入生产浏览器包。
 - 首版不引入数据库、登录、用户追踪或外部同步。
 - 每阶段运行 lint、format check、typecheck、test、build 以及与改动相关的额外验证。
 

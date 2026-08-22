@@ -1,5 +1,7 @@
 # 数据伦理与隐私约束
 
+> 状态：部分 superseded。阶段 3 起唯一来源为 Checkee.info；Checkee 原始 HTML、Comments、Details、来源记录 ID 和内部 key 均不得进入公开层。新版字段细则以 [`data/checkee-data-dictionary.md`](data/checkee-data-dictionary.md) 为准。
+
 ## 数据最小化
 
 当前 Demo 允许在人工审核和敏感信息清洗后公开学校、精确面签日期、Case Update 和备注；但原始自由文本、联系方式、案件标识、审核人员信息和源表行号永不进入公开产物。具体字段以 [`public-field-policy.md`](public-field-policy.md) 为准。

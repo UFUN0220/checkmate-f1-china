@@ -6,7 +6,7 @@
 
 ## 当前状态
 
-阶段 1：已完成现有仓库基线复验，并将 Demo 优先、三级下钻、人工审核和公开字段边界落到文档。完整页面、数据层和看板交互尚未实现；当前首页仍是项目占位页。
+阶段 3：已完成新版需求迁移和 Checkee 来源边界验证。Checkee 首页与 `robots.txt` 可读取，但 `2026-01` 与当前 `2026-08` 月份页返回 HTTP 403；项目已按 fail-closed 规则停止来源结构解析，不使用旧 Excel 或旧 80 条基线生成数据。
 
 ## 本地运行
 
@@ -26,14 +26,14 @@ npm run build
 npm run audit
 ```
 
-## 数据更新（占位）
+## 数据更新（阶段 3 暂停）
 
-原始 Excel 只能放在本地 `data/private/`，该目录和原始表格扩展名已被 `.gitignore` 排除。后续数据层必须先经过人工审核、敏感信息清洗和公开字段策略门禁；本阶段不实现导入或公开 JSON 生成。
+唯一计划来源为 Checkee.info 自 2026-01-01 起的公开页面。当前月份页访问被 403 阻断，因此没有生产抓取器、线上数据快照或前端实时请求；后续必须先获得合规可访问的来源页面，再按 [`docs/data/checkee-source-contract.md`](docs/data/checkee-source-contract.md) 实现阶段 4。
 
 ## 隐私原则
 
-- 不提交原始 Excel、未审核自由文本、联系方式、案件标识、审核人员信息或源表行号。
-- 学校、精确面签日期、Case Update 和备注只有在人工审核清洗后才允许进入公开产物。
+- 不提交 Checkee 原始 HTML、Comments/Details、联系方式、来源记录 ID、身份字段或内部 key。
+- 公开产物只允许使用 [`docs/data/checkee-data-dictionary.md`](docs/data/checkee-data-dictionary.md) 定义的最小字段。
 - 不收集姓名、护照号、DS-160、SEVIS ID、Case Number、邮箱、微信号或 QQ。
 - 公开统计始终展示样本量和限制；pending 等待天数与已完成时长严格分开。
 

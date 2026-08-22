@@ -1,11 +1,13 @@
 # 信息架构与导航状态
 
+> 状态：部分 superseded。三级下钻的结构仍可复用，但“人工审核案例”和旧 URL 示例已被新版“Checkee F-1 标准化案例”与数据驱动筛选替代。阶段 6 实现时以新版总需求文档为准。
+
 ## 页面层级
 
 ```text
 全国样本概览
-└── 地点指标（广州 / 北京 / 沈阳 / 武汉 / 上海）
-    └── 人工审核案例记录
+└── 地点指标（北京 / 上海 / 广州 / 沈阳 / 武汉）
+    └── Checkee F-1 标准化案例
 ```
 
 三级下钻使用同一页面状态，不为五个地点复制五套页面。每一层都提供明确的返回路径：案例记录返回地点指标，地点指标返回全国概览；浏览器后退也应恢复上一个状态。
@@ -19,7 +21,7 @@ URL 只保存非敏感的展示状态，不保存学校、备注、Case Update�
 | 全国概览 | `/?`                                                 | 默认全国视图，地点为全部。   |
 | 地点指标 | `/?location=guangzhou`                               | 打开广州地点指标。           |
 | 指标下钻 | `/?location=guangzhou&metric=pending-age`            | 广州地点的等待年龄案例入口。 |
-| 案例列表 | `/?location=guangzhou&view=cases&metric=pending-age` | 打开经人工审核的案例列表。   |
+| 案例列表 | `/?location=guangzhou&view=cases&metric=pending-age` | 打开 Checkee F-1 标准化案例列表。 |
 
 允许的 `location` 值为 `all`（可省略）、`guangzhou`、`beijing`、`shenyang`、`wuhan`、`shanghai`；`metric` 和 `view` 必须使用代码定义的有限枚举。非法或过期参数回退到全国概览，不报错、不暴露内部字段。
 

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "F-1 Visa Check 数据看板",
-  description: "面向 F-1 签证行政审查经历者的匿名众包数据说明与参考。",
+  title: "CheckMate F1 China · Checkee 公开样本",
+  description: "中国大陆 F-1 Checkee 公开样本的来源范围、地点分布和统计口径。",
 };
 
 export default function RootLayout({
