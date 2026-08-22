@@ -7,7 +7,7 @@
 - `lib/data/`：数据契约、公开模型和只读数据访问逻辑。
 - `lib/analytics/`：不依赖 React 的纯统计函数。
 - `scripts/`：仅在开发/同步阶段运行的导入、审计和质量门禁脚本。
-- `data/private/`：原始 Excel 等私有输入，只能本地存在，永不提交。
+- `data/private/`：原始 Excel、完整审核记录等私有输入，只能本地存在，永不提交。
 - `data/config/`：可审计的映射、规则和版本化配置。
 - `data/generated/`：经过 schema 与 PII 门禁的公开安全产物。
 - `docs/`：产品、数据、隐私、架构与阶段报告。
@@ -34,9 +34,17 @@ Node.js 使用 `package.json` 中声明的最低版本。依赖安装必须提�
 - 浏览器端只能读取公开安全产物；原始数据、内部模型和同步凭证不得进入客户端 bundle。
 - 统计字段命名必须区分 pending age 与 resolved duration，避免含混的 `averageWaitTime`。
 
+## 产品范围与审核边界
+
+- 当前 Demo 只关注中国大陆申请地点的 F-1 Check 案例，采用“全国概览 → 地点指标 → 人工审核案例记录”三级下钻。
+- 地点占比只能称为“本站样本分布”，不能称为领馆 Check 率或官方处理速度。
+- 人工审核只代表格式、逻辑、重复和隐私检查，不代表美国政府认证或完全真实性认证。
+- `docs/public-field-policy.md` 是公开字段的唯一细则：学校、精确面签日期、Case Update 和备注可以在人工审核清洗后公开；联系方式、案件号和身份字段必须删除。
+
 ## 数据隐私红线
 
-- `data/private/`、原始 xlsx/csv、自由文本、学校、Case Update、备注、联系方式、源表行号不得进入 Git、`public/`、静态产物、日志、source map 或测试快照。
+- `data/private/`、原始 xlsx/csv、未审核自由文本、联系方式、案件标识、源表行号和审核人员信息不得进入 Git、`public/`、静态产物、日志、source map 或测试快照。
+- 允许公开的学校、精确面签日期、Case Update 和备注必须来自 `verified_for_publish` 记录，并经过敏感信息清洗；不得把原文直接当作安全字段。
 - 不收集或要求姓名、护照号、DS-160、SEVIS ID、Case Number、邮箱、微信号或 QQ。
 - 公开案例必须经过 schema 校验、PII 扫描和重识别风险检查；命中即失败。
 

@@ -1,0 +1,7 @@
+# User-provided project instructions and private source data are not project code.
+docs/F1_Visa_Check_Dashboard_Codex_Phased_Prompts.md
+data/private/**
+*.xlsx
+*.xls
+*.csv
+*.tsv
