@@ -1,22 +1,26 @@
 /** @vitest-environment jsdom */
 
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { EvidenceAtlas } from "./evidence-atlas";
 
 describe("EvidenceAtlas", () => {
-  it("fails closed when no Checkee snapshot is available", () => {
+  it("renders the demo snapshot and drills into a location", () => {
     window.history.replaceState({}, "", "/");
     render(<EvidenceAtlas />);
 
     expect(screen.getByRole("heading", { name: "证据图谱" })).toBeTruthy();
-    expect(screen.getByText("来源访问受限")).toBeTruthy();
-    expect(screen.getByRole("button", { name: /查看标准化案例/ }).hasAttribute("disabled")).toBe(
-      true,
-    );
-    expect(screen.getByRole("button", { name: /进入地点指标/ }).hasAttribute("disabled")).toBe(
-      true,
-    );
-    expect(screen.getByText("暂无可用 Checkee 月份快照")).toBeTruthy();
+    expect(screen.getAllByText("DEMO_DATA").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("36", { selector: "strong" })).toHaveLength(2);
+
+    fireEvent.click(screen.getByRole("button", { name: /广州 12/ }));
+    expect(screen.getByRole("heading", { name: "广州 的公开样本" })).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: /查看标准化案例/ }));
+    expect(screen.getByRole("heading", { name: "Checkee F-1 标准化案例" })).toBeTruthy();
+
+    fireEvent.change(screen.getByLabelText("状态"), { target: { value: "pending" } });
+    expect(window.location.search).toContain("status=pending");
+    expect(screen.getAllByText("Pending", { selector: "span" }).length).toBeGreaterThan(0);
   });
 });

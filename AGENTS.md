@@ -61,6 +61,9 @@ Node.js 使用 `package.json` 中声明的最低版本。依赖安装必须提�
 - 不抓取 CEAC、Cookie、浏览器会话或个人登录态；Checkee 只有在 source contract 明确允许且未触发 403/429/验证码/结构异常时才可低频访问。
 - 不在前端、普通 build、单元测试或 CI 中访问线上 Checkee；测试只使用脱敏 fixtures。
 - 当前 Checkee 月份页验证返回 403，保持 fail closed，不实现生产抓取器。
+- `CHECKEE_ACCESS_MODE` 默认必须是 `disabled`；`CheckeeHtmlAdapter` 在未授权时必须明确失败，不得发起网络请求。
+- `DemoFixtureAdapter`、`CheckeeExportAdapter` 与未来的 `CheckeeHtmlAdapter` 只能输出同一套 `NormalizedCase`，统计和页面不得依赖来源 HTML。
+- `DEMO_DATA` 必须在 manifest、页面来源提示和方法说明中持续可见；合成数据不能宣传为真实 Checkee 数据。
 - 不接入数据库、登录、用户追踪、自动 CEAC 查询或未经授权的外部写操作。
 - 不提交原始数据，不 push，不部署生产，除非用户在对应阶段明确授权。
 

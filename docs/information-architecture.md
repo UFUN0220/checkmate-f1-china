@@ -16,14 +16,14 @@
 
 URL 只保存非敏感的展示状态，不保存学校、备注、Case Update、联系方式或任何案件标识。建议枚举：
 
-| 状态     | URL 示例                                             | 含义                         |
-| -------- | ---------------------------------------------------- | ---------------------------- |
-| 全国概览 | `/?`                                                 | 默认全国视图，地点为全部。   |
-| 地点指标 | `/?location=guangzhou`                               | 打开广州地点指标。           |
-| 指标下钻 | `/?location=guangzhou&metric=pending-age`            | 广州地点的等待年龄案例入口。 |
-| 案例列表 | `/?location=guangzhou&view=cases&metric=pending-age` | 打开 Checkee F-1 标准化案例列表。 |
+| 状态     | URL 示例                                    | 含义                                  |
+| -------- | ------------------------------------------- | ------------------------------------- |
+| 全国概览 | `/?`                                        | 默认全国视图，地点为全部。            |
+| 地点指标 | `/?location=guangzhou&view=location`        | 打开广州地点指标。                    |
+| 案例列表 | `/?location=guangzhou&view=cases`           | 打开广州 Checkee F-1 标准化案例列表。 |
+| 筛选结果 | `/?view=cases&status=pending&month=2026-08` | 保留 Pending 与月份筛选状态。         |
 
-允许的 `location` 值为 `all`（可省略）、`guangzhou`、`beijing`、`shenyang`、`wuhan`、`shanghai`；`metric` 和 `view` 必须使用代码定义的有限枚举。非法或过期参数回退到全国概览，不报错、不暴露内部字段。
+允许的 `location` 值为 `guangzhou`、`beijing`、`shenyang`、`wuhan`、`shanghai`；`view` 只能是 `location` 或 `cases`。`status`、`month`、`entry`、`major` 只保存公开筛选值。非法或过期参数回退到全国概览，不报错、不暴露内部字段。
 
 ## 移动端行为（390px 基线）
 

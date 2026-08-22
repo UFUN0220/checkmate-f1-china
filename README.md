@@ -6,7 +6,9 @@
 
 ## 当前状态
 
-阶段 3：已完成新版需求迁移和 Checkee 来源边界验证。Checkee 首页与 `robots.txt` 可读取，但 `2026-01` 与当前 `2026-08` 月份页返回 HTTP 403；项目已按 fail-closed 规则停止来源结构解析，不使用旧 Excel 或旧 80 条基线生成数据。
+阶段 3A：离线数据基础、统计引擎与前端解耦已完成。页面使用 42 条合成候选记录生成 36 条公开 `DEMO_DATA`，覆盖五个地点、Pending/Clear/Reject、Initial/Renewal、当前月份、小样本和异常记录。它只用于开发与截图，不能解释为 Checkee 真实数据。
+
+Checkee 当前记录为 `CHECKEE_ACCESS_BLOCKED`，默认 `CHECKEE_ACCESS_MODE=disabled`。没有真实抓取器、定时任务或线上数据请求；未来只需把 CSV/JSON 或经授权的 HTML 接入 `CaseSourceAdapter`，统计和页面继续消费同一个 `PublicSnapshot`。
 
 ## 本地运行
 
@@ -26,9 +28,11 @@ npm run build
 npm run audit
 ```
 
-## 数据更新（阶段 3 暂停）
+## 数据边界与离线验证
 
-唯一计划来源为 Checkee.info 自 2026-01-01 起的公开页面。当前月份页访问被 403 阻断，因此没有生产抓取器、线上数据快照或前端实时请求；后续必须先获得合规可访问的来源页面，再按 [`docs/data/checkee-source-contract.md`](docs/data/checkee-source-contract.md) 实现阶段 4。
+运行 `npm run check:offline` 会执行格式检查、Lint、TypeScript、单元测试和生产构建；这些步骤不访问 Checkee。运行 `npm run data:checkee:fetch` 会明确退出并说明当前访问模式被禁用，避免误把开发环境当成真实同步环境。
+
+来源契约、最小公开字段、适配器边界和阶段记录见 [`docs/data/checkee-source-contract.md`](docs/data/checkee-source-contract.md)、[`docs/data/offline-data-architecture.md`](docs/data/offline-data-architecture.md) 与 [`docs/phase-reports/phase-3a-offline-data-foundation.md`](docs/phase-reports/phase-3a-offline-data-foundation.md)。
 
 ## 隐私原则
 
