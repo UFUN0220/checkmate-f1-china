@@ -11,7 +11,10 @@ describe("EvidenceAtlas", () => {
 
     expect(screen.getByRole("heading", { name: "不同领区，通常等多久？" })).toBeTruthy();
     expect(screen.getAllByText("STATIC SNAPSHOT").length).toBeGreaterThan(0);
-    expect(screen.getByText("475 个 F-1 案例")).toBeTruthy();
+    expect(screen.getByText("REAL PUBLIC DATA")).toBeTruthy();
+    expect(screen.getByText("475 个公开 F-1 案例")).toBeTruthy();
+    expect(screen.getByText("中位等待 · 统计 n=177")).toBeTruthy();
+    expect(screen.getAllByText("DEMO DATA").length).toBeGreaterThan(1);
     expect(screen.getByRole("heading", { name: "身边同学现在等多久？" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Check 名人堂" })).toBeTruthy();
     expect(document.body.textContent).not.toContain("CHECKEE_ACCESS_BLOCKED");

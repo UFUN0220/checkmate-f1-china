@@ -11,15 +11,20 @@ import {
   UsersThree,
 } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
-import { calculateHallOfFame, calculateWaitStats } from "../lib/analytics/metrics";
-import { DATA_SNAPSHOT } from "../lib/data/snapshot-config";
-import { activeDatasetMode, activeSnapshot } from "../lib/demo-data";
-import { MOCK_HALL_OF_FAME, MOCK_PEER_CASES } from "../lib/data/mock-snapshot";
 import {
+  calculateHallOfFame,
+  calculateWaitStats,
+  sortByDurationDescending,
+} from "../lib/analytics/metrics";
+import { DATA_SNAPSHOT } from "../lib/data/snapshot-config";
+import { activeDatasetMetadata, activeSnapshot } from "../lib/demo-data";
+import { loadHallOfFameDataset, loadPeerDataset } from "../lib/data/manual-datasets";
+import { formatDays } from "../lib/data/presentation";
+import {
+  type CheckCase,
   LOCATIONS,
   type CaseStatus,
   type Location,
-  type MockCheckCase,
   type PublicCase,
   type WaitStats,
 } from "../lib/data/models";
@@ -46,12 +51,7 @@ const CITY_TONES: Record<Location, string> = {
   shenyang: "amber",
 };
 
-type DisplayCase = PublicCase | MockCheckCase;
-
-function formatDays(value: number | null) {
-  if (value === null) return "—";
-  return Number.isInteger(value) ? String(value) : value.toFixed(1);
-}
+type DisplayCase = PublicCase | CheckCase;
 
 function formatDate(value: string | null) {
   if (!value) return "—";
@@ -88,7 +88,8 @@ function scrollToSection(id: string) {
 
 export function EvidenceAtlas() {
   const [selectedCity, setSelectedCity] = useState<Location | null>(null);
-  const [peerVisibleCount, setPeerVisibleCount] = useState(12);
+  const [publicVisibleCount, setPublicVisibleCount] = useState(20);
+  const [peerVisibleCount, setPeerVisibleCount] = useState(20);
 
   useEffect(() => {
     const sync = () => {
@@ -105,6 +106,7 @@ export function EvidenceAtlas() {
     params.set("city", city);
     window.history.pushState({}, "", `/?${params.toString()}`);
     setSelectedCity(city);
+    setPublicVisibleCount(20);
   };
 
   const clearCity = () => {
@@ -112,12 +114,16 @@ export function EvidenceAtlas() {
     setSelectedCity(null);
   };
 
-  const peerStats = useMemo(() => calculateWaitStats(MOCK_PEER_CASES), []);
-  const hallOfFame = useMemo(() => calculateHallOfFame(MOCK_HALL_OF_FAME), []);
+  const peerDataset = useMemo(() => loadPeerDataset(), []);
+  const hallDataset = useMemo(() => loadHallOfFameDataset(), []);
+  const peerStats = useMemo(() => calculateWaitStats(peerDataset.cases), [peerDataset.cases]);
+  const hallOfFame = useMemo(() => calculateHallOfFame(hallDataset.cases), [hallDataset.cases]);
   const selectedCases = selectedCity
-    ? activeSnapshot.cases.filter((item) => item.location === selectedCity)
+    ? sortByDurationDescending(
+        activeSnapshot.cases.filter((item) => item.location === selectedCity),
+      )
     : [];
-  const isStatic = activeDatasetMode === "checkee-static";
+  const isStatic = !activeDatasetMetadata.isMock;
 
   return (
     <div className="checkmate-app">
@@ -147,8 +153,8 @@ export function EvidenceAtlas() {
             </p>
           </div>
           <div className="hero-trust-note">
-            <span>公开数据集</span>
-            <strong>{activeSnapshot.national.sampleCount} 个 F-1 案例</strong>
+            <span>{activeDatasetMetadata.isMock ? "DEMO DATA" : "REAL PUBLIC DATA"}</span>
+            <strong>{activeSnapshot.national.sampleCount} 个公开 F-1 案例</strong>
             <small>{DATA_SNAPSHOT.label} · 非官方处理时间</small>
           </div>
         </section>
@@ -206,7 +212,20 @@ export function EvidenceAtlas() {
             </p>
           </div>
           {selectedCity ? (
-            <CaseList records={selectedCases} emptyLabel="当前城市没有可展示的公开案例。" />
+            <>
+              <CaseList
+                records={selectedCases.slice(0, publicVisibleCount)}
+                emptyLabel="当前城市没有可展示的公开案例。"
+              />
+              {publicVisibleCount < selectedCases.length && (
+                <button
+                  className="text-button load-more-button"
+                  onClick={() => setPublicVisibleCount((count) => count + 20)}
+                >
+                  查看更多公开案例 <ArrowRight size={17} />
+                </button>
+              )}
+            </>
           ) : (
             <div className="selection-prompt">
               <span className="selection-prompt__number">5</span>
@@ -227,22 +246,28 @@ export function EvidenceAtlas() {
           <div className="section-intro">
             <div>
               <p className="section-kicker">
-                <UsersThree size={17} weight="bold" /> 个人匿名样本 · DEMO DATA
+                <UsersThree size={17} weight="bold" /> 个人匿名样本
+                {peerDataset.metadata.isMock && " · DEMO DATA"}
               </p>
               <h2 id="peer-title">身边同学现在等多久？</h2>
             </div>
-            <p>一组不按城市划分的独立样本。开发阶段使用匿名 mock 数据，未来可直接替换文件。</p>
+            <p>
+              一组不按城市划分的独立匿名样本。
+              {peerDataset.metadata.isMock
+                ? "当前为开发 mock 数据，可直接替换手工数据文件。"
+                : "当前为手工数据，和公开样本保持独立。"}
+            </p>
           </div>
-          <WaitStatsPanel stats={peerStats} sampleLabel="样本 n = 100" />
+          <WaitStatsPanel stats={peerStats} sampleLabel={`统计样本 n = ${peerStats.sampleSize}`} />
           <CaseList
-            records={MOCK_PEER_CASES.slice(0, peerVisibleCount)}
+            records={peerDataset.cases.slice(0, peerVisibleCount)}
             emptyLabel="暂无同学样本。"
-            mockLabel="DEMO DATA"
+            mockLabel={peerDataset.metadata.isMock ? "DEMO DATA" : undefined}
           />
-          {peerVisibleCount < MOCK_PEER_CASES.length && (
+          {peerVisibleCount < peerDataset.cases.length && (
             <button
-              className="text-button"
-              onClick={() => setPeerVisibleCount((count) => count + 12)}
+              className="text-button load-more-button"
+              onClick={() => setPeerVisibleCount((count) => count + 20)}
             >
               查看更多同学样本 <ArrowRight size={17} />
             </button>
@@ -257,13 +282,12 @@ export function EvidenceAtlas() {
           <div className="section-intro">
             <div>
               <p className="section-kicker">
-                <Crown size={17} weight="bold" /> 精选真实案例 · DEMO DATA
+                <Crown size={17} weight="bold" /> 精选案例
+                {hallDataset.metadata.isMock && " · DEMO DATA"}
               </p>
               <h2 id="hall-title">Check 名人堂</h2>
             </div>
-            <p>
-              有些 Check 是等待，有些已经快成为长期项目了。开发阶段先用合理范围的 mock 案例占位。
-            </p>
+            <p>有些 Check 是等待，有些已经快成为长期项目了。这里展示独立维护的精选案例。</p>
           </div>
           <div className="hall-list" aria-label="Check 名人堂 Top 10">
             {hallOfFame.map((record, index) => (
@@ -289,6 +313,10 @@ export function EvidenceAtlas() {
               <p>
                 较快 25%、中位数和较慢 25%分别对应
                 Q1、Median、Q3。样本不代表官方签证处理时间，也不能预测个人结果。
+              </p>
+              <p>
+                城市卡片的“公开案例”是该城市全部案例数；“统计样本 n”是实际拥有有效 duration
+                的记录数。 Reject 计入等待分布，但不计入 resolved duration。
               </p>
               <p>
                 Checkmate
@@ -332,20 +360,24 @@ function CityCard({
       <span className="city-card__topline">
         <span className="city-card__dot" />
         {LOCATION_NAMES[city]}
-        <small>n={sampleCount}</small>
+        <small>公开案例 {sampleCount}</small>
       </span>
       <span className="city-card__median">
         <strong>{formatDays(stats.median)}</strong>
         <em>天</em>
       </span>
-      <span className="city-card__label">中位等待</span>
+      <span className="city-card__label">中位等待 · 统计 n={stats.sampleSize}</span>
       <span className="city-card__range">
         <span>
-          <small>较快 25%</small>
+          <small>
+            较快的 25% <i>Q1</i>
+          </small>
           <b>{formatDays(stats.q1)} 天</b>
         </span>
         <span>
-          <small>较慢 25%</small>
+          <small>
+            较慢的 25% <i>Q3</i>
+          </small>
           <b>{formatDays(stats.q3)} 天</b>
         </span>
       </span>
@@ -367,7 +399,8 @@ function CityDetail({
   onClose: () => void;
   onScrollToCases: () => void;
 }) {
-  const stats = activeSnapshot.locations[city].waitStats;
+  const metrics = activeSnapshot.locations[city];
+  const stats = metrics.waitStats;
   return (
     <div className="city-detail" aria-labelledby="city-detail-title">
       <div className="city-detail__heading">
@@ -377,9 +410,15 @@ function CityDetail({
           </p>
           <h3 id="city-detail-title">{LOCATION_NAMES[city]}的公开案例</h3>
           <p>
-            中位等待 <strong>{formatDays(stats.median)} 天</strong> · {cases.length} 条样本 ·
-            案例按最近 Check 日期排列
+            中位等待 <strong>{formatDays(stats.median)} 天</strong> · 公开案例 {cases.length} 条 ·
+            统计样本 n={stats.sampleSize}
           </p>
+          <div className="city-detail__counts" aria-label="城市案例状态构成">
+            <span>Pending {metrics.pendingCount}</span>
+            <span>Clear {metrics.clearCount}</span>
+            <span>Reject {metrics.rejectCount}</span>
+            <small>Reject 不参与 resolved duration</small>
+          </div>
         </div>
         <div className="city-detail__actions">
           <button className="text-button" onClick={onScrollToCases}>
@@ -486,16 +525,20 @@ function CaseCard({ record, mockLabel }: { record: DisplayCase; mockLabel?: stri
   );
 }
 
-function HallRow({ record, rank }: { record: MockCheckCase; rank: number }) {
+function HallRow({ record, rank }: { record: CheckCase; rank: number }) {
   const treatment = rank <= 3 ? ["gold", "silver", "bronze"][rank - 1] : "standard";
   const title =
-    rank === 1
+    record.displayName ??
+    (rank === 1
       ? "年度耐心奖"
       : rank === 2
         ? "长期观察员"
         : rank === 3
           ? "耐心值 MAX"
-          : "长期项目候选";
+          : "长期项目候选");
+  const subtitle =
+    record.subtitle ??
+    `${record.city ? LOCATION_NAMES[record.city] : "匿名案例"} · ${statusLabel(record.status)}`;
   return (
     <article className={`hall-row hall-row--${treatment}`}>
       <div className="hall-row__rank">
@@ -504,9 +547,7 @@ function HallRow({ record, rank }: { record: MockCheckCase; rank: number }) {
       <div className="hall-row__body">
         <div>
           <strong>{title}</strong>
-          <span>
-            {record.city ? LOCATION_NAMES[record.city] : "匿名案例"} · {statusLabel(record.status)}
-          </span>
+          <span>{subtitle}</span>
         </div>
         <p>
           {formatDate(record.startDate)} <span>→</span>{" "}

@@ -1592,6 +1592,7 @@ a {
   margin-top: 8px;
   color: #687788;
   font-size: 11px;
+  line-height: 1.45;
 }
 
 .city-card__range {
@@ -1614,6 +1615,13 @@ a {
   color: #687788;
   font-size: 10px;
   font-weight: 400;
+}
+
+.city-card__range small i {
+  margin-left: 3px;
+  color: #9aa4ad;
+  font-size: 9px;
+  font-style: normal;
 }
 
 .city-card__range b {
@@ -1660,6 +1668,22 @@ a {
 .city-detail__heading p strong {
   color: #173e77;
 }
+.city-detail__counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 14px;
+  margin-top: 14px;
+  color: #687788;
+  font-size: 11px;
+}
+.city-detail__counts span {
+  font-weight: 700;
+}
+.city-detail__counts small {
+  flex-basis: 100%;
+  color: #8a949d;
+  font-size: 10px;
+}
 .city-detail__actions {
   display: flex;
   gap: 14px;
@@ -1686,6 +1710,10 @@ a {
 .text-button:hover,
 .quiet-button:hover {
   text-decoration: underline;
+}
+
+.load-more-button {
+  margin-top: 22px;
 }
 
 .public-cases-section,
@@ -2068,10 +2096,10 @@ a {
     position: absolute;
     top: 12px;
     right: 18px;
-    max-width: 132px;
-    overflow: hidden;
+    max-width: none;
     white-space: nowrap;
-    font-size: 9px;
+    font-size: 8px;
+    letter-spacing: 0.07em;
   }
   .stage3d-hero,
   .stage3d-section,
@@ -2149,7 +2177,8 @@ a {
   }
   .case-card__main p {
     font-size: 11px;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
   }
   .case-card__meta {
     grid-column: 2;

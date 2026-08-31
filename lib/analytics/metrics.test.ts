@@ -56,6 +56,24 @@ describe("metrics", () => {
     expect(metrics.sampleBand).toBe("standard");
   });
 
+  it("keeps wait stats sample size distinct from resolved duration semantics", () => {
+    const metrics = calculateMetrics([
+      {
+        ...DEMO_SNAPSHOT.cases.find((item) => item.status === "clear")!,
+        durationDays: 20,
+        resolvedDurationDays: 20,
+      },
+      {
+        ...DEMO_SNAPSHOT.cases.find((item) => item.status === "reject")!,
+        durationDays: 40,
+        resolvedDurationDays: null,
+      },
+    ]);
+    expect(metrics.sampleCount).toBe(2);
+    expect(metrics.waitStats.sampleSize).toBe(2);
+    expect(metrics.resolvedSampleCount).toBe(1);
+  });
+
   it("classifies insufficient and small location samples", () => {
     expect(DEMO_SNAPSHOT.locations.shanghai.sampleBand).toBe("insufficient");
     expect(DEMO_SNAPSHOT.locations.wuhan.sampleBand).toBe("small");

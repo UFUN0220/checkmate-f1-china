@@ -11,6 +11,32 @@ export type DataOrigin = "DEMO_DATA" | "CHECKEE_EXPORT" | "CHECKEE_HTML";
 
 export type MockCaseSource = "checkee" | "peer" | "hall-of-fame";
 
+export type DatasetSource = "public" | "peer" | "hall-of-fame";
+
+export interface DatasetMetadata {
+  source: DatasetSource;
+  isMock: boolean;
+  snapshotDate: string;
+  sampleSize: number;
+}
+
+export interface PeerCaseInput {
+  id: string;
+  startDate: string;
+  status: "pending" | "clear" | "reject";
+  endDate?: string;
+  note?: string;
+}
+
+export interface HallOfFameInput {
+  id: string;
+  displayName?: string;
+  startDate: string;
+  status: "pending" | "clear" | "reject";
+  endDate?: string;
+  subtitle?: string;
+}
+
 export type DataQualityFlag =
   | "unknown_visa_type"
   | "unknown_location"
@@ -99,7 +125,7 @@ export interface PublicCase {
   dataOrigin: DataOrigin;
 }
 
-export interface MockCheckCase {
+export interface CheckCase {
   id: string;
   source: MockCaseSource;
   city: Location | null;
@@ -110,8 +136,15 @@ export interface MockCheckCase {
   status: Exclude<CaseStatus, "unknown">;
   rawStatus: string;
   durationDays: number;
-  isMock: true;
+  isMock: boolean;
+  displayName?: string;
+  subtitle?: string;
+  note?: string;
 }
+
+export type MockCheckCase = CheckCase & { isMock: true };
+
+export type ManualCheckCase = CheckCase & { isMock: false };
 
 export interface WaitStats {
   q1: number | null;
