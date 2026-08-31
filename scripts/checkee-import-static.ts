@@ -6,6 +6,7 @@ import { ManualCheckeeHtmlAdapter } from "../lib/data/manual-html-adapter";
 import { buildPublicSnapshot } from "../lib/data/public-snapshot";
 import { normalizeLocation, normalizeVisaEntry, normalizeVisaType } from "../lib/data/allowlists";
 import type { PublicSnapshot } from "../lib/data/models";
+import { DATA_SNAPSHOT } from "../lib/data/snapshot-config";
 
 const IMPORTED_AT = "2026-08-23T00:00:00Z";
 const SOURCE_MONTHS = Array.from(
@@ -23,7 +24,7 @@ function inputPaths() {
 function options() {
   return {
     importedAt: process.env.CHECKEE_IMPORT_AT ?? IMPORTED_AT,
-    snapshotDate: "2026-08-31",
+    snapshotDate: DATA_SNAPSHOT.cutoffDate,
     rangeStart: "2026-01-01",
     waitingDaysReferenceDate: null,
   } as const;

@@ -60,24 +60,15 @@ function toPublicCase(
   ) {
     return null;
   }
-  const pendingAgeSource =
-    item.status === "pending"
-      ? item.origin === "CHECKEE_HTML" && item.waitingDaysReported !== null
-        ? "source_waiting_days"
-        : "derived_snapshot_date"
-      : null;
-  const pendingAgeDays =
-    item.status === "pending"
-      ? pendingAgeSource === "source_waiting_days"
-        ? item.waitingDaysReported
-        : dateDifference(item.checkDate, snapshotDate)
-      : null;
+  const pendingAgeSource = item.status === "pending" ? "derived_snapshot_date" : null;
+  const effectiveEndDate = item.status === "pending" ? snapshotDate : item.completeDate;
+  const durationDays = effectiveEndDate ? dateDifference(item.checkDate, effectiveEndDate) : null;
+  const pendingAgeDays = item.status === "pending" ? durationDays : null;
   const resolvedDurationDays =
     item.status === "clear" && item.completeDate
       ? dateDifference(item.checkDate, item.completeDate)
       : null;
-  if (pendingAgeDays !== null && pendingAgeDays < 0) return null;
-  if (resolvedDurationDays !== null && resolvedDurationDays < 0) return null;
+  if (durationDays !== null && durationDays < 0) return null;
   return {
     publicId,
     visaType: "F1",
@@ -89,6 +80,13 @@ function toPublicCase(
     status: item.status,
     checkDate: item.checkDate,
     completeDate: item.completeDate,
+    effectiveEndDate,
+    durationDays,
+    durationSource: effectiveEndDate
+      ? item.status === "pending"
+        ? "cutoff_date"
+        : "result_date"
+      : null,
     pendingAgeDays,
     pendingAgeSource,
     resolvedDurationDays,

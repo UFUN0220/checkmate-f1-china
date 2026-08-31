@@ -13,6 +13,7 @@ import {
 } from "./allowlists";
 import { normalizeRawCase } from "./normalize";
 import { DEMO_SNAPSHOT } from "./demo-snapshot";
+import { buildPublicSnapshot } from "./public-snapshot";
 import { CHECKEE_STATIC_SNAPSHOT } from "./static-snapshot";
 
 const context = {
@@ -53,6 +54,55 @@ describe("source-independent data foundation", () => {
     expect(item.dataQualityFlags).toEqual(["source_month_mismatch", "waiting_days_mismatch"]);
   });
 
+  it("uses the fixed snapshot cutoff for every Pending duration", () => {
+    const item = normalizeRawCase(
+      {
+        sourceRecordKeyInternal: "cutoff-pending",
+        publicId: "cutoff-pending",
+        visaTypeRaw: "F1",
+        visaEntryRaw: "New",
+        consulateRaw: "北京",
+        majorRaw: "Computer Science",
+        sourceStatusRaw: "Pending",
+        checkDate: "2026-08-01",
+        completeDate: null,
+        waitingDaysReported: 1,
+        sourceMonth: "2026-08",
+      },
+      { ...context, snapshotDate: "2026-08-31" },
+    );
+    expect(item.eligible).toBe(true);
+    expect(item.waitingDaysReported).toBe(1);
+    const snapshot = buildPublicSnapshot([item], {
+      sourceName: "fixture",
+      sourceUrl: "offline://fixture",
+      sourceMode: "demo-fixture",
+      dataOrigin: "DEMO_DATA",
+      accessStatus: "DEMO_DATA",
+      rangeStart: "2026-01-01",
+      rangeEnd: "2026-08",
+      coverageFrom: "2026-01",
+      coverageThrough: "2026-08",
+      sourceMonths: ["2026-08"],
+      importedAt: "2026-08-31T00:00:00Z",
+      fetchedAt: "2026-08-31T00:00:00Z",
+      snapshotDate: "2026-08-31",
+      parserVersion: "fixture-v1",
+      rawPageCount: 0,
+      currentMonthPartial: true,
+      demoData: true,
+      schemaVersion: "fixture-v1",
+      isLive: false,
+    });
+    expect(snapshot.cases[0]).toMatchObject({
+      effectiveEndDate: "2026-08-31",
+      durationDays: 30,
+      pendingAgeDays: 30,
+      pendingAgeSource: "derived_snapshot_date",
+      durationSource: "cutoff_date",
+    });
+  });
+
   it("builds the demo snapshot without any Checkee request", async () => {
     const cases = await new DemoFixtureAdapter().load();
     expect(cases).toHaveLength(42);
@@ -62,7 +112,7 @@ describe("source-independent data foundation", () => {
     expect(DEMO_SNAPSHOT.manifest.statusCounts).toEqual({ pending: 18, clear: 14, reject: 4 });
     expect(DEMO_SNAPSHOT.manifest.locationCounts.shanghai).toBe(4);
     expect(DEMO_SNAPSHOT.qualityReport.monthConflictCount).toBe(1);
-    expect(DEMO_SNAPSHOT.qualityReport.waitingDayMismatchCount).toBe(1);
+    expect(DEMO_SNAPSHOT.qualityReport.waitingDayMismatchCount).toBe(3);
     expect(DEMO_SNAPSHOT.qualityReport.duplicateCandidateCount).toBe(1);
     expect(DEMO_SNAPSHOT.cohorts.at(-1)?.partial).toBe(true);
   });

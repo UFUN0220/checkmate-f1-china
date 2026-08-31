@@ -13,31 +13,15 @@
       "candidateCount": 2,
       "sourceMonthCount": 1,
       "fileCount": 1,
-      "statuses": [
-        "pending"
-      ],
-      "locations": [
-        "beijing"
-      ],
-      "visaTypes": [
-        "other"
-      ],
-      "entries": [
-        "initial"
-      ],
-      "majorGroups": [
-        "Other"
-      ],
+      "statuses": ["pending"],
+      "locations": ["beijing"],
+      "visaTypes": ["other"],
+      "entries": ["initial"],
+      "majorGroups": ["Other"],
       "majorValueCount": 1,
-      "checkDates": [
-        "2026-06-08"
-      ],
-      "completeDates": [
-        ""
-      ],
-      "waitingDays": [
-        76
-      ],
+      "checkDates": ["2026-06-08"],
+      "completeDates": [""],
+      "waitingDays": [76],
       "sourceKeyCount": 1,
       "exactDuplicateRows": 1,
       "verdict": "CONFIRMED_DUPLICATE"
@@ -47,31 +31,15 @@
       "candidateCount": 2,
       "sourceMonthCount": 1,
       "fileCount": 1,
-      "statuses": [
-        "pending"
-      ],
-      "locations": [
-        "guangzhou"
-      ],
-      "visaTypes": [
-        "F1"
-      ],
-      "entries": [
-        "initial"
-      ],
-      "majorGroups": [
-        "STEM"
-      ],
+      "statuses": ["pending"],
+      "locations": ["guangzhou"],
+      "visaTypes": ["F1"],
+      "entries": ["initial"],
+      "majorGroups": ["STEM"],
       "majorValueCount": 1,
-      "checkDates": [
-        "2026-05-19"
-      ],
-      "completeDates": [
-        ""
-      ],
-      "waitingDays": [
-        96
-      ],
+      "checkDates": ["2026-05-19"],
+      "completeDates": [""],
+      "waitingDays": [96],
       "sourceKeyCount": 2,
       "exactDuplicateRows": 0,
       "verdict": "UNRESOLVED_KEEP_BOTH"
@@ -81,31 +49,15 @@
       "candidateCount": 2,
       "sourceMonthCount": 1,
       "fileCount": 1,
-      "statuses": [
-        "pending"
-      ],
-      "locations": [
-        "guangzhou"
-      ],
-      "visaTypes": [
-        "F1"
-      ],
-      "entries": [
-        "initial"
-      ],
-      "majorGroups": [
-        "Other"
-      ],
+      "statuses": ["pending"],
+      "locations": ["guangzhou"],
+      "visaTypes": ["F1"],
+      "entries": ["initial"],
+      "majorGroups": ["Other"],
       "majorValueCount": 1,
-      "checkDates": [
-        "2026-05-26"
-      ],
-      "completeDates": [
-        ""
-      ],
-      "waitingDays": [
-        89
-      ],
+      "checkDates": ["2026-05-26"],
+      "completeDates": [""],
+      "waitingDays": [89],
       "sourceKeyCount": 1,
       "exactDuplicateRows": 1,
       "verdict": "CONFIRMED_DUPLICATE"
@@ -115,31 +67,15 @@
       "candidateCount": 2,
       "sourceMonthCount": 1,
       "fileCount": 1,
-      "statuses": [
-        "pending"
-      ],
-      "locations": [
-        "outside-five"
-      ],
-      "visaTypes": [
-        "other"
-      ],
-      "entries": [
-        "initial"
-      ],
-      "majorGroups": [
-        "STEM"
-      ],
+      "statuses": ["pending"],
+      "locations": ["outside-five"],
+      "visaTypes": ["other"],
+      "entries": ["initial"],
+      "majorGroups": ["STEM"],
       "majorValueCount": 1,
-      "checkDates": [
-        "2026-03-23"
-      ],
-      "completeDates": [
-        ""
-      ],
-      "waitingDays": [
-        152
-      ],
+      "checkDates": ["2026-03-23"],
+      "completeDates": [""],
+      "waitingDays": [152],
       "sourceKeyCount": 2,
       "exactDuplicateRows": 0,
       "verdict": "UNRESOLVED_KEEP_BOTH"
@@ -149,31 +85,15 @@
       "candidateCount": 2,
       "sourceMonthCount": 1,
       "fileCount": 1,
-      "statuses": [
-        "clear"
-      ],
-      "locations": [
-        "wuhan"
-      ],
-      "visaTypes": [
-        "other"
-      ],
-      "entries": [
-        "renewal"
-      ],
-      "majorGroups": [
-        "Other"
-      ],
+      "statuses": ["clear"],
+      "locations": ["wuhan"],
+      "visaTypes": ["other"],
+      "entries": ["renewal"],
+      "majorGroups": ["Other"],
       "majorValueCount": 1,
-      "checkDates": [
-        "2026-03-09"
-      ],
-      "completeDates": [
-        "2026-04-09"
-      ],
-      "waitingDays": [
-        31
-      ],
+      "checkDates": ["2026-03-09"],
+      "completeDates": ["2026-04-09"],
+      "waitingDays": [31],
       "sourceKeyCount": 2,
       "exactDuplicateRows": 0,
       "verdict": "UNRESOLVED_KEEP_BOTH"
@@ -183,31 +103,15 @@
       "candidateCount": 2,
       "sourceMonthCount": 1,
       "fileCount": 1,
-      "statuses": [
-        "pending"
-      ],
-      "locations": [
-        "beijing"
-      ],
-      "visaTypes": [
-        "other"
-      ],
-      "entries": [
-        "initial"
-      ],
-      "majorGroups": [
-        "STEM"
-      ],
+      "statuses": ["pending"],
+      "locations": ["beijing"],
+      "visaTypes": ["other"],
+      "entries": ["initial"],
+      "majorGroups": ["STEM"],
       "majorValueCount": 1,
-      "checkDates": [
-        "2026-05-06"
-      ],
-      "completeDates": [
-        ""
-      ],
-      "waitingDays": [
-        109
-      ],
+      "checkDates": ["2026-05-06"],
+      "completeDates": [""],
+      "waitingDays": [109],
       "sourceKeyCount": 1,
       "exactDuplicateRows": 1,
       "verdict": "CONFIRMED_DUPLICATE"
@@ -217,31 +121,15 @@
       "candidateCount": 2,
       "sourceMonthCount": 1,
       "fileCount": 1,
-      "statuses": [
-        "pending"
-      ],
-      "locations": [
-        "shenyang"
-      ],
-      "visaTypes": [
-        "other"
-      ],
-      "entries": [
-        "initial"
-      ],
-      "majorGroups": [
-        "Unknown"
-      ],
+      "statuses": ["pending"],
+      "locations": ["shenyang"],
+      "visaTypes": ["other"],
+      "entries": ["initial"],
+      "majorGroups": ["Unknown"],
       "majorValueCount": 1,
-      "checkDates": [
-        "2026-06-05"
-      ],
-      "completeDates": [
-        ""
-      ],
-      "waitingDays": [
-        79
-      ],
+      "checkDates": ["2026-06-05"],
+      "completeDates": [""],
+      "waitingDays": [79],
       "sourceKeyCount": 2,
       "exactDuplicateRows": 0,
       "verdict": "UNRESOLVED_KEEP_BOTH"
@@ -251,31 +139,15 @@
       "candidateCount": 2,
       "sourceMonthCount": 1,
       "fileCount": 1,
-      "statuses": [
-        "pending"
-      ],
-      "locations": [
-        "wuhan"
-      ],
-      "visaTypes": [
-        "F1"
-      ],
-      "entries": [
-        "initial"
-      ],
-      "majorGroups": [
-        "Other"
-      ],
+      "statuses": ["pending"],
+      "locations": ["wuhan"],
+      "visaTypes": ["F1"],
+      "entries": ["initial"],
+      "majorGroups": ["Other"],
       "majorValueCount": 1,
-      "checkDates": [
-        "2026-06-18"
-      ],
-      "completeDates": [
-        ""
-      ],
-      "waitingDays": [
-        66
-      ],
+      "checkDates": ["2026-06-18"],
+      "completeDates": [""],
+      "waitingDays": [66],
       "sourceKeyCount": 2,
       "exactDuplicateRows": 0,
       "verdict": "UNRESOLVED_KEEP_BOTH"
@@ -285,31 +157,15 @@
       "candidateCount": 2,
       "sourceMonthCount": 1,
       "fileCount": 1,
-      "statuses": [
-        "reject"
-      ],
-      "locations": [
-        "beijing"
-      ],
-      "visaTypes": [
-        "other"
-      ],
-      "entries": [
-        "initial"
-      ],
-      "majorGroups": [
-        "Humanities & Social Science"
-      ],
+      "statuses": ["reject"],
+      "locations": ["beijing"],
+      "visaTypes": ["other"],
+      "entries": ["initial"],
+      "majorGroups": ["Humanities & Social Science"],
       "majorValueCount": 1,
-      "checkDates": [
-        "2026-03-16"
-      ],
-      "completeDates": [
-        "2026-03-29"
-      ],
-      "waitingDays": [
-        13
-      ],
+      "checkDates": ["2026-03-16"],
+      "completeDates": ["2026-03-29"],
+      "waitingDays": [13],
       "sourceKeyCount": 1,
       "exactDuplicateRows": 1,
       "verdict": "CONFIRMED_DUPLICATE"
@@ -319,31 +175,15 @@
       "candidateCount": 2,
       "sourceMonthCount": 1,
       "fileCount": 1,
-      "statuses": [
-        "clear"
-      ],
-      "locations": [
-        "beijing"
-      ],
-      "visaTypes": [
-        "F1"
-      ],
-      "entries": [
-        "renewal"
-      ],
-      "majorGroups": [
-        "Other"
-      ],
+      "statuses": ["clear"],
+      "locations": ["beijing"],
+      "visaTypes": ["F1"],
+      "entries": ["renewal"],
+      "majorGroups": ["Other"],
       "majorValueCount": 1,
-      "checkDates": [
-        "2026-04-22"
-      ],
-      "completeDates": [
-        "2026-07-21"
-      ],
-      "waitingDays": [
-        90
-      ],
+      "checkDates": ["2026-04-22"],
+      "completeDates": ["2026-07-21"],
+      "waitingDays": [90],
       "sourceKeyCount": 1,
       "exactDuplicateRows": 1,
       "verdict": "CONFIRMED_DUPLICATE"
@@ -487,11 +327,7 @@
       "2026-08": 10
     },
     "coverage": {
-      "statuses": [
-        "Clear",
-        "Pending",
-        "Reject"
-      ],
+      "statuses": ["Clear", "Pending", "Reject"],
       "locations": [
         "BeiJing",
         "Europe",
@@ -504,30 +340,10 @@
         "Vancouver",
         "WuHan"
       ],
-      "entries": [
-        "New",
-        "Renewal"
-      ],
-      "visaAliases": [
-        "B1",
-        "B2",
-        "F1",
-        "F2",
-        "H1",
-        "H4",
-        "J1",
-        "J2",
-        "L1",
-        "L2",
-        "O1"
-      ],
-      "majorPresence": [
-        "present"
-      ],
-      "completeDatePresence": [
-        "empty",
-        "present"
-      ]
+      "entries": ["New", "Renewal"],
+      "visaAliases": ["B1", "B2", "F1", "F2", "H1", "H4", "J1", "J2", "L1", "L2", "O1"],
+      "majorPresence": ["present"],
+      "completeDatePresence": ["empty", "present"]
     }
   },
   "isolationsByReason": {},
@@ -562,10 +378,7 @@
       "emptyState": false,
       "repeatedHeaderCount": 1,
       "hasMobileDesktopDuplicate": false,
-      "sensitiveColumns": [
-        "id",
-        "details"
-      ],
+      "sensitiveColumns": ["id", "details"],
       "parsedRowCount": 234,
       "isolatedRowCount": 0
     },
@@ -599,10 +412,7 @@
       "emptyState": false,
       "repeatedHeaderCount": 1,
       "hasMobileDesktopDuplicate": false,
-      "sensitiveColumns": [
-        "id",
-        "details"
-      ],
+      "sensitiveColumns": ["id", "details"],
       "parsedRowCount": 133,
       "isolatedRowCount": 0
     },
@@ -636,10 +446,7 @@
       "emptyState": false,
       "repeatedHeaderCount": 1,
       "hasMobileDesktopDuplicate": false,
-      "sensitiveColumns": [
-        "id",
-        "details"
-      ],
+      "sensitiveColumns": ["id", "details"],
       "parsedRowCount": 182,
       "isolatedRowCount": 0
     },
@@ -673,10 +480,7 @@
       "emptyState": false,
       "repeatedHeaderCount": 1,
       "hasMobileDesktopDuplicate": false,
-      "sensitiveColumns": [
-        "id",
-        "details"
-      ],
+      "sensitiveColumns": ["id", "details"],
       "parsedRowCount": 187,
       "isolatedRowCount": 0
     },
@@ -710,10 +514,7 @@
       "emptyState": false,
       "repeatedHeaderCount": 1,
       "hasMobileDesktopDuplicate": false,
-      "sensitiveColumns": [
-        "id",
-        "details"
-      ],
+      "sensitiveColumns": ["id", "details"],
       "parsedRowCount": 261,
       "isolatedRowCount": 0
     },
@@ -747,10 +548,7 @@
       "emptyState": false,
       "repeatedHeaderCount": 1,
       "hasMobileDesktopDuplicate": false,
-      "sensitiveColumns": [
-        "id",
-        "details"
-      ],
+      "sensitiveColumns": ["id", "details"],
       "parsedRowCount": 258,
       "isolatedRowCount": 0
     },
@@ -784,10 +582,7 @@
       "emptyState": false,
       "repeatedHeaderCount": 1,
       "hasMobileDesktopDuplicate": false,
-      "sensitiveColumns": [
-        "id",
-        "details"
-      ],
+      "sensitiveColumns": ["id", "details"],
       "parsedRowCount": 173,
       "isolatedRowCount": 0
     },
@@ -821,10 +616,7 @@
       "emptyState": false,
       "repeatedHeaderCount": 1,
       "hasMobileDesktopDuplicate": false,
-      "sensitiveColumns": [
-        "id",
-        "details"
-      ],
+      "sensitiveColumns": ["id", "details"],
       "parsedRowCount": 35,
       "isolatedRowCount": 0
     }

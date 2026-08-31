@@ -8,7 +8,7 @@
 - 输入：8 个本地手工保存的 Checkee 月份 HTML，覆盖 `2026-01` 至 `2026-08`。
 - 运行状态：`DATA_SOURCE_MODE=manual-static`、`DATASET_STATUS=STATIC_SNAPSHOT_DEMO`、`CHECKEE_ACCESS_MODE=disabled`。
 - 页面入口只读取 `public/data/checkee-static-snapshot.json`；不执行线上请求、不读取 Cookie、不提供 Detail 页面。
-- 快照内容哈希：`fnv1a-89c23d32`；2026-08 标记为 `PARTIAL_MONTH`。
+- 快照内容哈希：`fnv1a-727b5c59`；2026-08 标记为 `PARTIAL_MONTH`。
 
 ## 2. 独占式总账与重复记录审计
 
@@ -38,7 +38,7 @@
 
 公开案例共 475 条：Pending 262、Clear 209、Reject 4；地点为北京 177、上海 34、广州 158、沈阳 55、武汉 51。全国 Pending age 中位数/P75/最长值为 68/94/230 天；Clear resolved duration 中位数/P75 为 50/64 天。
 
-Pending age 与 Clear resolved duration 使用不同字段和公式：Pending 优先使用来源 `Waiting Day(s)`；Clear 使用 `completeDate - checkDate`；Reject 不进入 resolved duration。所有分组统计都携带分母，`n < 5` 不做分组结论，`5–9` 标记为样本较少。
+Pending duration 与 Clear resolved duration 使用不同语义但统一日期规则：Pending 使用固定 `2026-08-31 - checkDate`；已结束记录使用 `completeDate - checkDate`；Reject 不进入 resolved duration。所有分组统计都携带分母，`n < 5` 不做分组结论，`5–9` 标记为样本较少。
 
 ## 5. 字段分层与信息架构
 

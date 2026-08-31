@@ -5,24 +5,22 @@ import { describe, expect, it } from "vitest";
 import { EvidenceAtlas } from "./evidence-atlas";
 
 describe("EvidenceAtlas", () => {
-  it("renders the static snapshot and drills into a location", () => {
+  it("renders the snapshot and drills into a city case list", () => {
     window.history.replaceState({}, "", "/");
     render(<EvidenceAtlas />);
 
-    expect(screen.getByRole("heading", { name: "证据图谱" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "不同领区，通常等多久？" })).toBeTruthy();
     expect(screen.getAllByText("STATIC SNAPSHOT").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("475", { selector: "strong" }).length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText("475 个 F-1 案例")).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "身边同学现在等多久？" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Check 名人堂" })).toBeTruthy();
     expect(document.body.textContent).not.toContain("CHECKEE_ACCESS_BLOCKED");
-    expect(document.body.textContent).not.toContain("source-banner");
 
     fireEvent.click(screen.getByRole("button", { name: /广州 158/ }));
-    expect(screen.getByRole("heading", { name: "广州 的公开样本" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "广州的公开案例" })).toBeTruthy();
 
-    fireEvent.click(screen.getByRole("button", { name: /查看标准化案例/ }));
-    expect(screen.getByRole("heading", { name: "Checkee F-1 标准化案例" })).toBeTruthy();
-
-    fireEvent.change(screen.getByLabelText("状态"), { target: { value: "pending" } });
-    expect(window.location.search).toContain("status=pending");
-    expect(screen.getAllByText("Pending", { selector: "span" }).length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole("button", { name: /查看案例列表/ }));
+    expect(window.location.hash).toBe("#public-cases");
+    expect(screen.getByRole("heading", { name: "数字背后，是一条条时间线。" })).toBeTruthy();
   });
 });

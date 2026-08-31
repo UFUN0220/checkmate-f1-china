@@ -4,6 +4,7 @@ import type {
   DistributionItem,
   Location,
   PublicCase,
+  WaitStats,
 } from "../data/models";
 import { LOCATIONS } from "../data/models";
 
@@ -27,6 +28,34 @@ export function percentile(values: number[], percentileValue: number) {
   const upper = Math.ceil(position);
   if (lower === upper) return sorted[lower];
   return sorted[lower] + (sorted[upper] - sorted[lower]) * (position - lower);
+}
+
+export function calculateWaitStats(records: Pick<PublicCase, "durationDays">[]): WaitStats {
+  const durations = records.flatMap((record) =>
+    record.durationDays === null || !Number.isFinite(record.durationDays)
+      ? []
+      : [record.durationDays],
+  );
+  return {
+    q1: percentile(durations, 0.25),
+    median: percentile(durations, 0.5),
+    q3: percentile(durations, 0.75),
+    sampleSize: durations.length,
+  };
+}
+
+export function sortByDurationDescending<T extends Pick<PublicCase, "durationDays">>(records: T[]) {
+  return [...records].sort((left, right) => (right.durationDays ?? -1) - (left.durationDays ?? -1));
+}
+
+export function calculateHallOfFame<T extends Pick<PublicCase, "durationDays">>(
+  records: T[],
+  limit = 10,
+) {
+  return sortByDurationDescending(records.filter((record) => record.durationDays !== null)).slice(
+    0,
+    limit,
+  );
 }
 
 function distribution(values: string[], denominator: number): DistributionItem[] {
@@ -89,6 +118,7 @@ export function calculateMetrics(
       cases.map((item) => item.visaEntry),
       cases.length,
     ),
+    waitStats: calculateWaitStats(cases),
   };
 }
 

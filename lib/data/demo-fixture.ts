@@ -1,6 +1,7 @@
 import type { RawCaseInput } from "./normalize";
+import { DATA_SNAPSHOT } from "./snapshot-config";
 
-const SNAPSHOT_DATE = "2026-08-22";
+const SNAPSHOT_DATE = DATA_SNAPSHOT.cutoffDate;
 
 function isoDate(month: number, day: number) {
   return new Date(Date.UTC(2026, month - 1, day)).toISOString().slice(0, 10);

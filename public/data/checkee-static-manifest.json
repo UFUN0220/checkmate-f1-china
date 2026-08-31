@@ -41,7 +41,7 @@
     "shenyang": 55,
     "wuhan": 51
   },
-  "contentHash": "fnv1a-89c23d32",
+  "contentHash": "fnv1a-727b5c59",
   "currentMonthPartial": true,
   "demoData": false,
   "recordCount": 475,
@@ -55,6 +55,6 @@
   "excludedCount": 988,
   "quarantinedCount": 0,
   "schemaVersion": "3b-static-html-v1",
-  "snapshotChecksum": "fnv1a-89c23d32",
+  "snapshotChecksum": "fnv1a-727b5c59",
   "isLive": false
 }

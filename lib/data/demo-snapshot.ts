@@ -1,11 +1,12 @@
 import { DEMO_RAW_CASES } from "./demo-fixture";
 import { normalizeRawCase, type NormalizeContext } from "./normalize";
 import { buildPublicSnapshot } from "./public-snapshot";
+import { DATA_SNAPSHOT } from "./snapshot-config";
 
 const DEMO_CONTEXT: NormalizeContext = {
   origin: "DEMO_DATA",
-  fetchedAt: "2026-08-22T00:00:00Z",
-  snapshotDate: "2026-08-22",
+  fetchedAt: "2026-08-31T00:00:00Z",
+  snapshotDate: DATA_SNAPSHOT.cutoffDate,
   rangeStart: "2026-01-01",
 };
 

@@ -1,29 +1,28 @@
 "use client";
 
 import {
-  ArrowLeft,
+  ArrowDown,
   ArrowRight,
-  CaretRight,
-  ChartLineUp,
-  FileText,
-  GlobeHemisphereWest,
+  CalendarBlank,
+  Crown,
   Info,
+  Medal,
   MapPin,
+  UsersThree,
 } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
+import { calculateHallOfFame, calculateWaitStats } from "../lib/analytics/metrics";
+import { DATA_SNAPSHOT } from "../lib/data/snapshot-config";
 import { activeDatasetMode, activeSnapshot } from "../lib/demo-data";
-import { calculateMetrics } from "../lib/analytics/metrics";
+import { MOCK_HALL_OF_FAME, MOCK_PEER_CASES } from "../lib/data/mock-snapshot";
 import {
-  filterPublicCases,
-  filtersFromSearchParams,
-  filtersToSearchParams,
-  type CaseFilters,
-} from "../lib/data/query";
-import { LOCATIONS, type CaseStatus, type Location, type VisaEntry } from "../lib/data/models";
-import { DISPLAY_FIELD_CONFIG } from "../lib/data/display-config";
-
-type AtlasView = "overview" | "location" | "cases";
-type FilterValue = "all" | string;
+  LOCATIONS,
+  type CaseStatus,
+  type Location,
+  type MockCheckCase,
+  type PublicCase,
+  type WaitStats,
+} from "../lib/data/models";
 
 const LOCATION_NAMES: Record<Location, string> = {
   beijing: "北京",
@@ -39,810 +38,488 @@ const STATUS_NAMES: Record<Exclude<CaseStatus, "unknown">, string> = {
   reject: "Reject",
 };
 
-const ENTRY_NAMES: Record<Exclude<VisaEntry, "unknown">, string> = {
-  initial: "Initial",
-  renewal: "Renewal",
+const CITY_TONES: Record<Location, string> = {
+  beijing: "coral",
+  shanghai: "blue",
+  guangzhou: "green",
+  wuhan: "purple",
+  shenyang: "amber",
 };
 
-const DISTRIBUTION_NAMES: Record<string, string> = {
-  pending: "Pending",
-  clear: "Clear",
-  reject: "Reject",
-  initial: "Initial",
-  renewal: "Renewal",
-  unknown: "Unknown",
-  STEM: "STEM",
-  Business: "Business",
-  "Humanities & Social Science": "人文社科",
-  Other: "Other",
-  Unknown: "Unknown",
-  Doctoral: "Doctoral",
-  Master: "Master",
-  Bachelor: "Bachelor",
-};
+type DisplayCase = PublicCase | MockCheckCase;
 
-type AtlasState = {
-  view: AtlasView;
-  location: FilterValue;
-  status: FilterValue;
-  month: FilterValue;
-  degree: FilterValue;
-  majorGroup: FilterValue;
-  entry: FilterValue;
-};
-
-const defaultState: AtlasState = {
-  view: "overview",
-  location: "all",
-  status: "all",
-  month: "all",
-  degree: "all",
-  majorGroup: "all",
-  entry: "all",
-};
-
-function filterValue(values: string[]) {
-  return values.length ? values.join(",") : "all";
+function formatDays(value: number | null) {
+  if (value === null) return "—";
+  return Number.isInteger(value) ? String(value) : value.toFixed(1);
 }
 
-function valuesFromFilter(value: FilterValue) {
-  return value === "all" ? [] : value.split(",").filter(Boolean);
+function formatDate(value: string | null) {
+  if (!value) return "—";
+  return value.replace(/^2026-/, "").replace("-", ".");
 }
 
-function filtersFromState(state: AtlasState): CaseFilters {
-  return {
-    locations: valuesFromFilter(state.location) as Location[],
-    statuses: valuesFromFilter(state.status) as CaseFilters["statuses"],
-    months: valuesFromFilter(state.month),
-    degrees: valuesFromFilter(state.degree),
-    majorGroups: valuesFromFilter(state.majorGroup),
-    entries: valuesFromFilter(state.entry) as VisaEntry[],
-  };
+function startDate(record: DisplayCase) {
+  return "checkDate" in record ? record.checkDate : record.startDate;
 }
 
-function readUrlState(): AtlasState {
-  if (typeof window === "undefined") return defaultState;
-  const params = new URLSearchParams(window.location.search);
-  const filters = filtersFromSearchParams(params);
-  const view = params.get("view");
-  return {
-    view: view === "location" || view === "cases" ? view : "overview",
-    location: filterValue(filters.locations),
-    status: filterValue(filters.statuses),
-    month: filterValue(filters.months),
-    degree: filterValue(filters.degrees),
-    majorGroup: filterValue(filters.majorGroups),
-    entry: filterValue(filters.entries),
-  };
+function endDate(record: DisplayCase) {
+  return "completeDate" in record ? record.completeDate : record.endDate;
 }
 
-function countLabel(value: number | null) {
-  return value === null ? "—" : value;
+function locationOf(record: DisplayCase) {
+  return "location" in record ? record.location : record.city;
 }
 
-function metricLabel(value: number | null, suffix = "天") {
-  return value === null ? "—" : `${value}${suffix}`;
+function caseId(record: DisplayCase) {
+  return "publicId" in record ? record.publicId : record.id;
 }
 
-function visibleMetric(
-  sampleBand: "insufficient" | "small" | "standard",
-  value: number | null,
-  suffix = "天",
-) {
-  return sampleBand === "insufficient" ? "—" : metricLabel(value, suffix);
+function statusLabel(status: Exclude<CaseStatus, "unknown">) {
+  return STATUS_NAMES[status];
+}
+
+function scrollToSection(id: string) {
+  window.history.replaceState({}, "", `${window.location.pathname}${window.location.search}#${id}`);
+  const target = document.getElementById(id);
+  if (target && typeof target.scrollIntoView === "function") {
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 export function EvidenceAtlas() {
-  const [state, setState] = useState<AtlasState>(defaultState);
+  const [selectedCity, setSelectedCity] = useState<Location | null>(null);
+  const [peerVisibleCount, setPeerVisibleCount] = useState(12);
 
   useEffect(() => {
-    const sync = () => setState(readUrlState());
+    const sync = () => {
+      const city = new URLSearchParams(window.location.search).get("city");
+      setSelectedCity(city && LOCATIONS.includes(city as Location) ? (city as Location) : null);
+    };
     sync();
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);
   }, []);
 
-  const updateUrl = (next: Partial<AtlasState>) => {
-    const nextState = { ...state, ...next };
-    const params = new URLSearchParams();
-    const filters = filtersToSearchParams(filtersFromState(nextState));
-    filters.forEach((value, key) => params.set(key, value));
-    if (nextState.view !== "overview") params.set("view", nextState.view);
-    const query = params.toString();
-    window.history.pushState({}, "", query ? `/?${query}` : "/");
-    setState(nextState);
+  const selectCity = (city: Location) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("city", city);
+    window.history.pushState({}, "", `/?${params.toString()}`);
+    setSelectedCity(city);
   };
 
-  const openLocation = (location: Location) => updateUrl({ view: "location", location });
-  const openCases = (location = state.location) => updateUrl({ view: "cases", location });
-  const goBack = () =>
-    state.view === "cases"
-      ? updateUrl({ view: state.location !== "all" ? "location" : "overview" })
-      : updateUrl({ ...defaultState });
+  const clearCity = () => {
+    window.history.pushState({}, "", "/");
+    setSelectedCity(null);
+  };
 
-  const selectedLocations = valuesFromFilter(state.location) as Location[];
-  const singleLocation = selectedLocations.length === 1 ? selectedLocations[0] : null;
-  const snapshot = activeSnapshot;
+  const peerStats = useMemo(() => calculateWaitStats(MOCK_PEER_CASES), []);
+  const hallOfFame = useMemo(() => calculateHallOfFame(MOCK_HALL_OF_FAME), []);
+  const selectedCases = selectedCity
+    ? activeSnapshot.cases.filter((item) => item.location === selectedCity)
+    : [];
   const isStatic = activeDatasetMode === "checkee-static";
 
   return (
-    <div className="atlas-app">
-      <header className="atlas-header">
-        <div className="atlas-header__brand">
-          <span className="atlas-header__mark" aria-hidden="true">
-            <GlobeHemisphereWest size={22} weight="regular" />
+    <div className="checkmate-app">
+      <header className="checkmate-header">
+        <a className="checkmate-brand" href="#city-status" aria-label="回到城市等待情况">
+          <span className="checkmate-brand__mark" aria-hidden="true">
+            C
           </span>
-          <span>CheckMate F1 China</span>
-          <span className="atlas-header__divider" aria-hidden="true" />
-          <span className="atlas-header__descriptor">
-            {isStatic ? "STATIC SNAPSHOT" : "DEMO DATA"}
-          </span>
-        </div>
-        <div className="atlas-header__meta">
-          <span>覆盖至：{snapshot.manifest.coverageThrough}</span>
-          <a href="#methods">关于口径</a>
-        </div>
+          <span>Checkmate</span>
+        </a>
+        <nav className="checkmate-nav" aria-label="页面导航">
+          <a href="#city-status">城市情况</a>
+          <a href="#peer-sample">同学样本</a>
+          <a href="#hall-of-fame">名人堂</a>
+        </nav>
+        <span className="snapshot-badge">STATIC SNAPSHOT</span>
       </header>
 
-      <main className="atlas-layout">
-        <aside className="atlas-sidebar">
-          <div className="atlas-sidebar__intro">
-            <p className="eyebrow">
-              F-1 Checkee 数据观察 · {isStatic ? "STATIC SNAPSHOT" : "DEMO_DATA"}
-            </p>
-            <h1>证据图谱</h1>
-            <p>
-              {isStatic
-                ? "Checkee.info 公开列表样本 · 2026.01–2026.08"
-                : "离线数据产品演示 · fixture snapshot"}
+      <main>
+        <section className="stage3d-hero" id="city-status" aria-labelledby="page-title">
+          <div className="stage3d-hero__copy">
+            <p className="eyebrow">中国 F-1 Check 等待情况</p>
+            <h1 id="page-title">不同领区，通常等多久？</h1>
+            <p className="stage3d-hero__lede">
+              基于公开案例整理，数据截至 {DATA_SNAPSHOT.cutoffDate}
+              。先看城市中位等待，再看看构成这些数字的真实样本。
             </p>
           </div>
+          <div className="hero-trust-note">
+            <span>公开数据集</span>
+            <strong>{activeSnapshot.national.sampleCount} 个 F-1 案例</strong>
+            <small>{DATA_SNAPSHOT.label} · 非官方处理时间</small>
+          </div>
+        </section>
 
-          <div className="atlas-sidebar__summary" aria-label="数据快照概览">
-            <span>{isStatic ? "公开静态快照" : "离线演示快照"}</span>
-            <div className="atlas-sidebar__sample">
-              <strong>{snapshot.national.sampleCount}</strong>
-              <span>
-                F-1 cases
-                <br />
-                2026.01–2026.08
-              </span>
+        <section className="stage3d-section city-section" aria-labelledby="city-section-title">
+          <div className="section-intro">
+            <div>
+              <p className="section-kicker">
+                <MapPin size={17} weight="bold" /> 城市等待情况
+              </p>
+              <h2 id="city-section-title">先看中位数，再看两边的人。</h2>
             </div>
+            <p>每个城市只突出较快 25%、中位数和较慢 25%。样本量放在旁边，帮助你判断数字的分量。</p>
           </div>
 
-          <div className="atlas-sidebar__note">
-            <div className="section-kicker">
-              <Info size={16} weight="bold" />
-              <span>来源状态</span>
-            </div>
-            <p>
-              {isStatic
-                ? "Checkee.info · 用户公开列表信息 · 2026.01–2026.08"
-                : "离线合成数据 · 仅用于界面演示"}
-            </p>
-            <a href="#methods">
-              查看数据口径 <ArrowRight size={14} />
-            </a>
+          <div className="city-grid" aria-label="五个城市的等待时长统计">
+            {LOCATIONS.map((city) => (
+              <CityCard
+                key={city}
+                city={city}
+                stats={activeSnapshot.locations[city].waitStats}
+                sampleCount={activeSnapshot.locations[city].sampleCount}
+                selected={selectedCity === city}
+                onClick={() => selectCity(city)}
+              />
+            ))}
           </div>
-        </aside>
 
-        <section className="atlas-content" aria-label="证据图谱内容">
-          <nav className="atlas-breadcrumbs" aria-label="页面层级">
-            <button
-              className={state.view === "overview" ? "is-current" : ""}
-              onClick={() => updateUrl(defaultState)}
-            >
-              全国概览
-            </button>
-            <CaretRight size={14} aria-hidden="true" />
-            <button
-              className={state.view === "location" ? "is-current" : ""}
-              disabled={!singleLocation}
-              onClick={() => updateUrl({ view: "location" })}
-            >
-              地点指标
-            </button>
-            <CaretRight size={14} aria-hidden="true" />
-            <button
-              className={state.view === "cases" ? "is-current" : ""}
-              onClick={() => openCases()}
-            >
-              标准化案例
-            </button>
-          </nav>
-
-          {state.view !== "overview" && (
-            <button className="back-link" onClick={goBack}>
-              <ArrowLeft size={16} /> 返回上一级
-            </button>
-          )}
-
-          {state.view === "overview" && (
-            <OverviewPanel onOpenCases={() => openCases()} onOpenLocation={openLocation} />
-          )}
-          {state.view === "location" && singleLocation && (
-            <LocationPanel
-              location={singleLocation}
-              onOpenCases={() => openCases(singleLocation)}
-            />
-          )}
-          {state.view === "cases" && (
-            <CasesPanel
-              state={state}
-              onChange={updateUrl}
-              onClear={() => updateUrl({ ...defaultState, view: "cases" })}
+          {selectedCity && (
+            <CityDetail
+              city={selectedCity}
+              cases={selectedCases}
+              onClose={clearCity}
+              onScrollToCases={() => scrollToSection("public-cases")}
             />
           )}
         </section>
+
+        <section
+          className="stage3d-section public-cases-section"
+          id="public-cases"
+          aria-labelledby="public-cases-title"
+        >
+          <div className="section-intro section-intro--compact">
+            <div>
+              <p className="section-kicker">
+                <CalendarBlank size={17} weight="bold" /> 身边的公开案例
+              </p>
+              <h2 id="public-cases-title">数字背后，是一条条时间线。</h2>
+            </div>
+            <p>
+              {selectedCity
+                ? `当前查看：${LOCATION_NAMES[selectedCity]}`
+                : "点击上面的城市，展开对应的案例。"}
+            </p>
+          </div>
+          {selectedCity ? (
+            <CaseList records={selectedCases} emptyLabel="当前城市没有可展示的公开案例。" />
+          ) : (
+            <div className="selection-prompt">
+              <span className="selection-prompt__number">5</span>
+              <div>
+                <strong>选择一个城市</strong>
+                <p>从城市中位数开始，再进入当前城市的公开案例。</p>
+              </div>
+              <ArrowDown size={20} aria-hidden="true" />
+            </div>
+          )}
+        </section>
+
+        <section
+          className="stage3d-section peer-section"
+          id="peer-sample"
+          aria-labelledby="peer-title"
+        >
+          <div className="section-intro">
+            <div>
+              <p className="section-kicker">
+                <UsersThree size={17} weight="bold" /> 个人匿名样本 · DEMO DATA
+              </p>
+              <h2 id="peer-title">身边同学现在等多久？</h2>
+            </div>
+            <p>一组不按城市划分的独立样本。开发阶段使用匿名 mock 数据，未来可直接替换文件。</p>
+          </div>
+          <WaitStatsPanel stats={peerStats} sampleLabel="样本 n = 100" />
+          <CaseList
+            records={MOCK_PEER_CASES.slice(0, peerVisibleCount)}
+            emptyLabel="暂无同学样本。"
+            mockLabel="DEMO DATA"
+          />
+          {peerVisibleCount < MOCK_PEER_CASES.length && (
+            <button
+              className="text-button"
+              onClick={() => setPeerVisibleCount((count) => count + 12)}
+            >
+              查看更多同学样本 <ArrowRight size={17} />
+            </button>
+          )}
+        </section>
+
+        <section
+          className="stage3d-section hall-section"
+          id="hall-of-fame"
+          aria-labelledby="hall-title"
+        >
+          <div className="section-intro">
+            <div>
+              <p className="section-kicker">
+                <Crown size={17} weight="bold" /> 精选真实案例 · DEMO DATA
+              </p>
+              <h2 id="hall-title">Check 名人堂</h2>
+            </div>
+            <p>
+              有些 Check 是等待，有些已经快成为长期项目了。开发阶段先用合理范围的 mock 案例占位。
+            </p>
+          </div>
+          <div className="hall-list" aria-label="Check 名人堂 Top 10">
+            {hallOfFame.map((record, index) => (
+              <HallRow key={caseId(record)} record={record} rank={index + 1} />
+            ))}
+          </div>
+        </section>
+
+        <section className="methodology-section" id="methods" aria-labelledby="methods-title">
+          <details>
+            <summary id="methods-title">
+              <Info size={18} weight="bold" /> 数据说明 <ArrowDown size={17} />
+            </summary>
+            <div className="methodology-grid">
+              <p>
+                数据截止日期：{DATA_SNAPSHOT.cutoffDate}。公开数据来自手工保存的 Checkee.info HTML
+                快照，经过清洗、标准化和去重。
+              </p>
+              <p>
+                Pending 案例统一计算到截止日；已结束案例使用原始记录中的合法结束日期。所有 duration
+                使用 calendar day difference，同一天为 0 天。
+              </p>
+              <p>
+                较快 25%、中位数和较慢 25%分别对应
+                Q1、Median、Q3。样本不代表官方签证处理时间，也不能预测个人结果。
+              </p>
+              <p>
+                Checkmate
+                展示的是公开样本的统计情况，不是美国领馆官方处理时间，也无法预测某一个人的签证结果。
+              </p>
+            </div>
+          </details>
+        </section>
       </main>
 
-      <footer id="methods" className="atlas-footer">
+      <footer className="checkmate-footer">
         <span>
-          {isStatic
-            ? "Checkee.info · 2026.01–2026.08 · static snapshot"
-            : "Offline fixture · demo snapshot"}
+          Checkmate · {isStatic ? "公开数据集" : "DEMO DATA"} · {DATA_SNAPSHOT.label}
         </span>
-        <span>Snapshot 2026-08-23 · 2026-08 PARTIAL_MONTH</span>
+        <span>Checkee.info · 非实时 snapshot</span>
       </footer>
     </div>
   );
 }
 
-function MetricCard({
+function CityCard({
+  city,
+  stats,
+  sampleCount,
+  selected,
+  onClick,
+}: {
+  city: Location;
+  stats: WaitStats;
+  sampleCount: number;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className={`city-card city-card--${CITY_TONES[city]}${selected ? " is-selected" : ""}`}
+      onClick={onClick}
+      aria-pressed={selected}
+      aria-label={`${LOCATION_NAMES[city]} ${sampleCount} 个样本，中位数 ${formatDays(stats.median)} 天`}
+    >
+      <span className="city-card__topline">
+        <span className="city-card__dot" />
+        {LOCATION_NAMES[city]}
+        <small>n={sampleCount}</small>
+      </span>
+      <span className="city-card__median">
+        <strong>{formatDays(stats.median)}</strong>
+        <em>天</em>
+      </span>
+      <span className="city-card__label">中位等待</span>
+      <span className="city-card__range">
+        <span>
+          <small>较快 25%</small>
+          <b>{formatDays(stats.q1)} 天</b>
+        </span>
+        <span>
+          <small>较慢 25%</small>
+          <b>{formatDays(stats.q3)} 天</b>
+        </span>
+      </span>
+      <span className="city-card__action">
+        {selected ? "正在查看" : "查看案例"} <ArrowRight size={16} />
+      </span>
+    </button>
+  );
+}
+
+function CityDetail({
+  city,
+  cases,
+  onClose,
+  onScrollToCases,
+}: {
+  city: Location;
+  cases: PublicCase[];
+  onClose: () => void;
+  onScrollToCases: () => void;
+}) {
+  const stats = activeSnapshot.locations[city].waitStats;
+  return (
+    <div className="city-detail" aria-labelledby="city-detail-title">
+      <div className="city-detail__heading">
+        <div>
+          <p className="section-kicker">
+            <MapPin size={17} weight="bold" /> 当前查看：{LOCATION_NAMES[city]}
+          </p>
+          <h3 id="city-detail-title">{LOCATION_NAMES[city]}的公开案例</h3>
+          <p>
+            中位等待 <strong>{formatDays(stats.median)} 天</strong> · {cases.length} 条样本 ·
+            案例按最近 Check 日期排列
+          </p>
+        </div>
+        <div className="city-detail__actions">
+          <button className="text-button" onClick={onScrollToCases}>
+            查看案例列表 <ArrowRight size={17} />
+          </button>
+          <button className="quiet-button" onClick={onClose}>
+            关闭
+          </button>
+        </div>
+      </div>
+      <CaseList records={cases.slice(0, 6)} emptyLabel="当前样本不足" />
+    </div>
+  );
+}
+
+function WaitStatsPanel({ stats, sampleLabel }: { stats: WaitStats; sampleLabel: string }) {
+  return (
+    <div className="wait-stats-panel" aria-label="Q1、中位数和 Q3 等待时长">
+      <WaitStat label="较快 25%" detail="Q1" value={stats.q1} />
+      <WaitStat label="中位数" detail="Median" value={stats.median} featured />
+      <WaitStat label="较慢 25%" detail="Q3" value={stats.q3} />
+      <small className="wait-stats-panel__sample">{sampleLabel}</small>
+    </div>
+  );
+}
+
+function WaitStat({
   label,
+  detail,
   value,
-  note,
-  tone,
+  featured = false,
 }: {
   label: string;
-  value: number | string;
-  note: string;
-  tone: "blue" | "amber" | "teal" | "violet";
+  detail: string;
+  value: number | null;
+  featured?: boolean;
 }) {
   return (
-    <div className={`metric-card metric-card--${tone}`}>
-      <span>{label}</span>
-      <strong>{value}</strong>
-      <small>{note}</small>
+    <div className={`wait-stat${featured ? " is-featured" : ""}`}>
+      <small>
+        {label} <i>{detail}</i>
+      </small>
+      <strong>{formatDays(value)}</strong>
+      <span>天</span>
     </div>
   );
 }
 
-function OverviewPanel({
-  onOpenCases,
-  onOpenLocation,
+function CaseList({
+  records,
+  emptyLabel,
+  mockLabel,
 }: {
-  onOpenCases: () => void;
-  onOpenLocation: (location: Location) => void;
+  records: DisplayCase[];
+  emptyLabel: string;
+  mockLabel?: string;
 }) {
+  if (!records.length) return <div className="case-empty">{emptyLabel}</div>;
   return (
-    <>
-      <div className="atlas-overview-head">
-        <div>
-          <p className="eyebrow">
-            全国概览 · {activeDatasetMode === "checkee-static" ? "STATIC SNAPSHOT" : "DEMO_DATA"}
-          </p>
-          <h2>
-            从样本范围开始，逐层
-            <br className="mobile-only-break" />
-            了解数据。
-          </h2>
-          <p className="atlas-lede">
-            先看全国状态构成和五个地点的静态分布，再进入地点指标或标准化案例列表。所有数值来自同一份快照。
-          </p>
-        </div>
-        <div className="atlas-actions">
-          <button className="button button--primary" onClick={onOpenCases}>
-            查看标准化案例 <ArrowRight size={17} />
-          </button>
-          <a className="button button--secondary" href="#methods">
-            了解数据口径 <ArrowRight size={17} />
-          </a>
-        </div>
+    <div className="case-list" aria-label="案例列表">
+      {records.map((record) => (
+        <CaseCard key={caseId(record)} record={record} mockLabel={mockLabel} />
+      ))}
+    </div>
+  );
+}
+
+function CaseCard({ record, mockLabel }: { record: DisplayCase; mockLabel?: string }) {
+  const city = locationOf(record);
+  const end = endDate(record);
+  return (
+    <article className="case-card">
+      <div className="case-card__duration">
+        <strong>{formatDays(record.durationDays)}</strong>
+        <span>天</span>
       </div>
-
-      <section
-        className="core-metrics"
-        aria-label="首屏核心指标"
-        data-primary-fields={DISPLAY_FIELD_CONFIG.primaryMetrics.join(",")}
-      >
-        <MetricCard
-          label="公开案例"
-          value={activeSnapshot.national.sampleCount}
-          note="F-1 public cases"
-          tone="blue"
-        />
-        <MetricCard
-          label="Pending"
-          value={activeSnapshot.national.pendingCount}
-          note={`占 ${((activeSnapshot.national.pendingCount / activeSnapshot.national.sampleCount) * 100).toFixed(1)}% · 中位 ${activeSnapshot.national.pendingAgeMedianDays} 天`}
-          tone="amber"
-        />
-        <MetricCard
-          label="Clear"
-          value={activeSnapshot.national.clearCount}
-          note={`占 ${((activeSnapshot.national.clearCount / activeSnapshot.national.sampleCount) * 100).toFixed(1)}% · 中位 ${activeSnapshot.national.resolvedDurationMedianDays} 天`}
-          tone="teal"
-        />
-        <MetricCard label="覆盖月份" value="8" note="2026.01–2026.08 · 8月不完整" tone="violet" />
-      </section>
-
-      <section className="atlas-trajectory" aria-labelledby="trajectory-title">
-        <div className="atlas-trajectory__header">
-          <div>
-            <p className="section-kicker" id="trajectory-title">
-              <MapPin size={16} weight="bold" /> Checkee F-1 公开样本分布
-            </p>
-            <p className="muted">
-              按申请地点 · 共 {activeSnapshot.national.sampleCount} 条公开案例
-            </p>
-          </div>
-          <span className="selection-readout">
-            来源：{activeDatasetMode === "checkee-static" ? "Checkee.info" : "DEMO_DATA"}
+      <div className="case-card__main">
+        <div className="case-card__status-line">
+          <span className={`status-chip status-chip--${record.status}`}>
+            {statusLabel(record.status)}
           </span>
+          {mockLabel && <span className="mock-chip">{mockLabel}</span>}
         </div>
-        <div className="atlas-map-strip">
-          <div className="atlas-map-strip__background" aria-hidden="true" />
-          <div className="atlas-route" aria-label="五个地点的公开样本数量">
-            <span className="atlas-route__origin">
-              <span className="atlas-route__origin-label">全国</span>
-              <strong>{activeSnapshot.national.sampleCount}</strong>
-            </span>
-            <span className="atlas-route__line" aria-hidden="true" />
-            {LOCATIONS.map((location) => (
-              <button
-                key={location}
-                className={`atlas-node atlas-node--${location}`}
-                onClick={() => onOpenLocation(location)}
-              >
-                <span className="atlas-node__dot" aria-hidden="true" />
-                <span>{LOCATION_NAMES[location]}</span>
-                <strong>{activeSnapshot.locations[location].sampleCount}</strong>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="atlas-table-section" aria-labelledby="location-table-title">
-        <div className="section-heading-row">
-          <div>
-            <p className="section-kicker" id="location-table-title">
-              <FileText size={16} weight="bold" /> 地点指标
-            </p>
-            <p className="muted">选择地点，查看 Pending/Clear/Reject 和等待时间。</p>
-          </div>
-          <span className="data-status">
-            {activeDatasetMode === "checkee-static" ? "STATIC" : "DEMO_DATA"}
-          </span>
-        </div>
-        <div className="atlas-table-wrap">
-          <table className="atlas-table">
-            <thead>
-              <tr>
-                <th scope="col">地点</th>
-                <th scope="col">样本</th>
-                <th scope="col">占比</th>
-                <th scope="col">Pending</th>
-                <th scope="col">Clear</th>
-                <th scope="col">进入</th>
-              </tr>
-            </thead>
-            <tbody>
-              {LOCATIONS.map((location) => {
-                const metrics = activeSnapshot.locations[location];
-                return (
-                  <tr key={location}>
-                    <th scope="row">
-                      <button
-                        className={`table-location table-location--${location}`}
-                        onClick={() => onOpenLocation(location)}
-                      >
-                        <span className="table-location__dot" aria-hidden="true" />
-                        {LOCATION_NAMES[location]}
-                      </button>
-                    </th>
-                    <td>{metrics.sampleCount}</td>
-                    <td>{(metrics.sampleShare * 100).toFixed(1)}%</td>
-                    <td>{metrics.pendingCount}</td>
-                    <td>{metrics.clearCount}</td>
-                    <td>
-                      <button
-                        className="table-enter"
-                        onClick={() => onOpenLocation(location)}
-                        aria-label={`查看${LOCATION_NAMES[location]}地点指标`}
-                      >
-                        <CaretRight size={17} />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-        <p className="table-footnote">
-          <Info size={14} /> 地点占比是公开快照的样本分布，不是领馆比例或风险。
+        <p>
+          {formatDate(startDate(record))} <span>→</span>{" "}
+          {record.status === "pending"
+            ? `截至 ${formatDate(record.effectiveEndDate)}`
+            : formatDate(end)}
         </p>
-      </section>
-
-      <TrendSection />
-    </>
-  );
-}
-
-function TrendSection() {
-  const max = Math.max(...activeSnapshot.cohorts.map((cohort) => cohort.sampleCount));
-  return (
-    <section className="trend-section" aria-labelledby="trend-title">
-      <div className="section-heading-row">
-        <div>
-          <p className="section-kicker" id="trend-title">
-            <ChartLineUp size={16} weight="bold" /> 月度 cohort 趋势
-          </p>
-          <p className="muted">按 Check 月份分组；当前月标记为尚未完整。</p>
-        </div>
-        <span className="data-status">2026-01 → 2026-08</span>
       </div>
-      <div className="trend-list">
-        {activeSnapshot.cohorts.map((cohort) => (
-          <div
-            className={`trend-row${cohort.partial ? " trend-row--partial" : ""}`}
-            key={cohort.month}
-          >
-            <span>
-              {cohort.month}
-              {cohort.partial && <em>PARTIAL_MONTH</em>}
-            </span>
-            <div className="trend-row__track">
-              <span style={{ width: `${max ? (cohort.sampleCount / max) * 100 : 0}%` }} />
-            </div>
-            <strong>
-              {cohort.sampleCount}
-              <small>
-                P{cohort.pendingCount} · C{cohort.clearCount} · R{cohort.rejectCount}
-              </small>
-            </strong>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function LocationPanel({ location, onOpenCases }: { location: Location; onOpenCases: () => void }) {
-  const metrics = activeSnapshot.locations[location];
-  return (
-    <section className="detail-panel" aria-labelledby="location-title">
-      <div className="detail-panel__heading">
-        <div>
-          <p className="eyebrow">
-            地点指标 · {LOCATION_NAMES[location]} ·{" "}
-            {activeDatasetMode === "checkee-static" ? "STATIC SNAPSHOT" : "DEMO_DATA"}
-          </p>
-          <h2 id="location-title">{LOCATION_NAMES[location]} 的公开样本</h2>
-          <p className="atlas-lede">
-            本页严格区分 Pending 等待年龄与 Clear 已完成时长；小样本只做描述性展示。
-          </p>
-        </div>
-        <button className="button button--primary" onClick={onOpenCases}>
-          查看标准化案例 <ArrowRight size={17} />
-        </button>
-      </div>
-      <div className="detail-stats">
-        <Stat
-          label="样本数"
-          value={countLabel(metrics.sampleCount)}
-          note={`${(metrics.sampleShare * 100).toFixed(1)}% of snapshot`}
-        />
-        <Stat
-          label="Pending"
-          value={countLabel(metrics.pendingCount)}
-          note={`年龄中位数 ${visibleMetric(metrics.sampleBand, metrics.pendingAgeMedianDays)}`}
-        />
-        <Stat
-          label="Clear"
-          value={countLabel(metrics.clearCount)}
-          note={`完成时长中位数 ${visibleMetric(metrics.sampleBand, metrics.resolvedDurationMedianDays)}`}
-        />
-      </div>
-      <div className="detail-stats detail-stats--secondary">
-        <Stat
-          label="Pending P75"
-          value={visibleMetric(metrics.sampleBand, metrics.pendingAgeP75Days)}
-          note={`最长 ${visibleMetric(metrics.sampleBand, metrics.pendingAgeMaxDays)}`}
-        />
-        <Stat
-          label="Clear P75"
-          value={visibleMetric(metrics.sampleBand, metrics.resolvedDurationP75Days)}
-          note={`有效完成样本 n=${metrics.resolvedSampleCount}`}
-        />
-        <Stat
-          label="Check 日期"
-          value={
-            metrics.checkDateRange
-              ? `${metrics.checkDateRange.start.slice(5)} → ${metrics.checkDateRange.end.slice(5)}`
-              : "—"
-          }
-          note="来源快照字段"
-        />
-      </div>
-      <div className="location-breakdown">
-        <DistributionList
-          title="状态构成"
-          items={[
-            { key: "pending", count: metrics.pendingCount },
-            { key: "clear", count: metrics.clearCount },
-            { key: "reject", count: metrics.rejectCount },
-          ]}
-        />
-        <DistributionList title="Initial / Renewal" items={metrics.visaEntryDistribution} />
-        <DistributionList title="Degree" items={metrics.degreeDistribution} />
-        <DistributionList title="Major Group" items={metrics.majorGroupDistribution} />
-        <DistributionList title="按 Check 月份" items={monthDistribution(location)} compact />
-      </div>
-      <div className="detail-empty">
-        <Info size={22} />
-        <div>
-          <strong>快照状态说明</strong>
-          <p>
-            {metrics.sampleBand === "insufficient"
-              ? "当前地点样本少于 5 条，因此隐藏等待和完成时长的描述性分位数；仅保留样本数和日期范围。"
-              : metrics.sampleBand === "small"
-                ? "当前地点为小样本（5–9 条），指标仅作描述性参考，不作地点间结论。"
-                : "当前地点达到标准描述性样本量。"}
-            以上指标由离线快照驱动。Pending 使用来源页面的静态 Waiting
-            Day(s)，不会随页面打开自动增加；Clear 时长使用 Check Date 与 Complete Date 的日期差。
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Stat({ label, value, note }: { label: string; value: string | number; note: string }) {
-  return (
-    <div>
-      <span>{label}</span>
-      <strong>{value}</strong>
-      <small>{note}</small>
-    </div>
-  );
-}
-
-function monthDistribution(location: Location) {
-  const locationCases = activeSnapshot.cases.filter((item) => item.location === location);
-  const counts = new Map<string, number>();
-  for (const item of locationCases) {
-    const month = item.checkDate.slice(0, 7);
-    counts.set(month, (counts.get(month) ?? 0) + 1);
-  }
-  return [...counts.entries()]
-    .sort(([left], [right]) => left.localeCompare(right))
-    .map(([key, count]) => ({ key, count }));
-}
-
-function DistributionList({
-  title,
-  items,
-  compact = false,
-}: {
-  title: string;
-  items: Array<{ key: string; count: number; share?: number }>;
-  compact?: boolean;
-}) {
-  const max = Math.max(...items.map((item) => item.count), 1);
-  return (
-    <div className={`distribution-list${compact ? " distribution-list--compact" : ""}`}>
-      <h3>{title}</h3>
-      <div className="distribution-list__items">
-        {items.map((item) => (
-          <div className="distribution-row" key={item.key}>
-            <span>{DISTRIBUTION_NAMES[item.key] ?? item.key}</span>
-            <div className="distribution-row__track">
-              <i style={{ width: `${(item.count / max) * 100}%` }} />
-            </div>
-            <strong>{item.count}</strong>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function CasesPanel({
-  state,
-  onChange,
-  onClear,
-}: {
-  state: AtlasState;
-  onChange: (next: Partial<AtlasState>) => void;
-  onClear: () => void;
-}) {
-  const majorGroups = [...new Set(activeSnapshot.cases.map((item) => item.majorGroup))].sort();
-  const degrees = [...new Set(activeSnapshot.cases.map((item) => item.degree))].sort();
-  const months = activeSnapshot.cohorts.map((cohort) => cohort.month);
-  const filteredCases = useMemo(
-    () => filterPublicCases(activeSnapshot.cases, filtersFromState(state)),
-    [state],
-  );
-  const filteredMetrics = calculateMetrics(filteredCases);
-  const hasFilters = [
-    state.location,
-    state.status,
-    state.month,
-    state.degree,
-    state.majorGroup,
-    state.entry,
-  ].some((value) => value !== "all");
-  const selectedLocationValues = valuesFromFilter(state.location);
-  const locationLabel =
-    selectedLocationValues.length === 1
-      ? LOCATION_NAMES[selectedLocationValues[0] as Location]
-      : selectedLocationValues.length > 1
-        ? "多地点"
-        : "全国";
-  const changeMulti = (
-    key: keyof Pick<
-      AtlasState,
-      "location" | "status" | "month" | "degree" | "majorGroup" | "entry"
-    >,
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const values = [...event.target.selectedOptions].map((option) => option.value);
-    onChange({ [key]: values.length ? values.join(",") : "all" });
-  };
-  return (
-    <section
-      className="detail-panel"
-      aria-labelledby="cases-title"
-      data-case-fields={DISPLAY_FIELD_CONFIG.caseListFields.join(",")}
-    >
-      <div className="detail-panel__heading">
-        <div>
-          <p className="eyebrow">
-            标准化案例 · {locationLabel} ·{" "}
-            {activeDatasetMode === "checkee-static" ? "STATIC SNAPSHOT" : "DEMO_DATA"}
-          </p>
-          <h2 id="cases-title">Checkee F-1 标准化案例</h2>
-          <p className="atlas-lede">
-            仅展示 PublicCase 允许字段。同一字段多选为 OR，不同字段之间为
-            AND；当前结果只作描述性展示。
-          </p>
-        </div>
-        <span className="data-status">
-          {filteredCases.length} 条结果 · P{filteredMetrics.pendingCount} / C
-          {filteredMetrics.clearCount} / R{filteredMetrics.rejectCount}
+      <div className="case-card__meta">
+        <span>{city ? LOCATION_NAMES[city] : "匿名样本"}</span>
+        <span>
+          {"visaEntry" in record
+            ? record.visaEntry === "initial"
+              ? "Initial"
+              : record.visaEntry === "renewal"
+                ? "Renewal"
+                : "Unknown"
+            : "F-1"}
         </span>
       </div>
-      <details className="filter-drawer" open>
-        <summary>
-          <span>筛选案例</span>
-          <strong>{filteredCases.length} 条结果</strong>
-        </summary>
-        <div className="filter-bar" aria-label="案例筛选">
-          <MultiSelectField
-            label="地点"
-            value={state.location}
-            options={LOCATIONS.map((location) => [location, LOCATION_NAMES[location]])}
-            onChange={(event) => changeMulti("location", event)}
-          />
-          <MultiSelectField
-            label="状态"
-            value={state.status}
-            options={Object.entries(STATUS_NAMES)}
-            onChange={(event) => changeMulti("status", event)}
-          />
-          <MultiSelectField
-            label="Check 月份"
-            value={state.month}
-            options={months.map((month) => [month, month])}
-            onChange={(event) => changeMulti("month", event)}
-          />
-          <MultiSelectField
-            label="Degree"
-            value={state.degree}
-            options={degrees.map((degree) => [degree, degree])}
-            onChange={(event) => changeMulti("degree", event)}
-          />
-          <MultiSelectField
-            label="Major Group"
-            value={state.majorGroup}
-            options={majorGroups.map((majorGroup) => [majorGroup, majorGroup])}
-            onChange={(event) => changeMulti("majorGroup", event)}
-          />
-          <MultiSelectField
-            label="签证入口"
-            value={state.entry}
-            options={[
-              ["initial", "Initial"],
-              ["renewal", "Renewal"],
-              ["unknown", "Unknown"],
-            ]}
-            onChange={(event) => changeMulti("entry", event)}
-          />
-          {hasFilters && (
-            <button className="filter-clear" onClick={onClear}>
-              清除筛选
-            </button>
-          )}
-        </div>
-      </details>
-      {filteredCases.length === 0 ? (
-        <div className="detail-empty detail-empty--large">
-          <FileText size={28} />
-          <div>
-            <strong>没有匹配的结果</strong>
-            <p>清除筛选后查看全部静态案例；不会用合成数据补齐空结果。</p>
-          </div>
-        </div>
-      ) : (
-        <div className="case-list" aria-label="标准化案例列表">
-          {filteredCases.map((item) => (
-            <article className="case-row" key={item.publicId}>
-              <div>
-                <strong>{LOCATION_NAMES[item.location]}</strong>
-                <span>
-                  {item.majorGroup} · {item.degree} ·{" "}
-                  {item.visaEntry === "unknown" ? "Unknown" : ENTRY_NAMES[item.visaEntry]}
-                </span>
-              </div>
-              <div>
-                <span className={`status-chip status-chip--${item.status}`}>
-                  {STATUS_NAMES[item.status]}
-                </span>
-                <span>Check {item.checkDate}</span>
-              </div>
-              <div>
-                <span>
-                  {item.status === "pending"
-                    ? `等待 ${item.pendingAgeDays} 天`
-                    : item.status === "clear"
-                      ? `完成 ${item.resolvedDurationDays ?? "—"} 天`
-                      : "无完成时长"}
-                </span>
-                <small>
-                  {item.sourceMonth} ·{" "}
-                  {item.pendingAgeSource === "source_waiting_days"
-                    ? "静态等待天数"
-                    : item.dataOrigin}
-                </small>
-              </div>
-            </article>
-          ))}
-        </div>
-      )}
-    </section>
+    </article>
   );
 }
 
-function MultiSelectField({
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  label: string;
-  value: FilterValue;
-  options: string[][];
-  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-}) {
-  const selectedValues = value === "all" ? [] : value.split(",");
+function HallRow({ record, rank }: { record: MockCheckCase; rank: number }) {
+  const treatment = rank <= 3 ? ["gold", "silver", "bronze"][rank - 1] : "standard";
+  const title =
+    rank === 1
+      ? "年度耐心奖"
+      : rank === 2
+        ? "长期观察员"
+        : rank === 3
+          ? "耐心值 MAX"
+          : "长期项目候选";
   return (
-    <label>
-      {label}
-      <select
-        multiple
-        value={selectedValues}
-        size={Math.min(Math.max(options.length, 2), 4)}
-        onChange={onChange}
-      >
-        {options.map(([optionValue, optionLabel]) => (
-          <option key={optionValue} value={optionValue}>
-            {optionLabel}
-          </option>
-        ))}
-      </select>
-    </label>
+    <article className={`hall-row hall-row--${treatment}`}>
+      <div className="hall-row__rank">
+        {rank <= 3 ? <Medal size={23} weight="fill" aria-hidden="true" /> : "#" + rank}
+      </div>
+      <div className="hall-row__body">
+        <div>
+          <strong>{title}</strong>
+          <span>
+            {record.city ? LOCATION_NAMES[record.city] : "匿名案例"} · {statusLabel(record.status)}
+          </span>
+        </div>
+        <p>
+          {formatDate(record.startDate)} <span>→</span>{" "}
+          {record.status === "pending"
+            ? `截至 ${formatDate(record.effectiveEndDate)}`
+            : formatDate(record.endDate)}
+        </p>
+      </div>
+      <div className="hall-row__duration">
+        <strong>{formatDays(record.durationDays)}</strong>
+        <span>天</span>
+        {rank === 1 && <Crown size={18} aria-label="第一名" />}
+      </div>
+    </article>
   );
 }

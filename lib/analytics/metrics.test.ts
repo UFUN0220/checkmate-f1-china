@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { calculateCohorts, calculateMetrics, median, percentile } from "./metrics";
+import {
+  calculateCohorts,
+  calculateHallOfFame,
+  calculateMetrics,
+  calculateWaitStats,
+  median,
+  percentile,
+} from "./metrics";
 import { DEMO_SNAPSHOT } from "../data/demo-snapshot";
 
 describe("metrics", () => {
@@ -7,6 +14,35 @@ describe("metrics", () => {
     expect(median([1, 2, 3, 4])).toBe(2.5);
     expect(percentile([1, 2, 3, 4], 0.75)).toBe(3.25);
     expect(median([])).toBeNull();
+  });
+
+  it("calculates one shared Q1, median, and Q3 contract", () => {
+    const stats = calculateWaitStats([
+      { durationDays: 10 },
+      { durationDays: 20 },
+      { durationDays: 30 },
+      { durationDays: 40 },
+    ]);
+    expect(stats).toEqual({ q1: 17.5, median: 25, q3: 32.5, sampleSize: 4 });
+    expect(calculateWaitStats([{ durationDays: null }])).toEqual({
+      q1: null,
+      median: null,
+      q3: null,
+      sampleSize: 0,
+    });
+  });
+
+  it("sorts Hall of Fame records by duration descending", () => {
+    const records: Array<{ publicId: string; durationDays: number }> = [
+      { publicId: "short", durationDays: 20 },
+      { publicId: "long", durationDays: 230 },
+      { publicId: "middle", durationDays: 80 },
+    ];
+    expect(calculateHallOfFame(records).map((record) => record.publicId)).toEqual([
+      "long",
+      "middle",
+      "short",
+    ]);
   });
 
   it("separates Pending age from Clear duration", () => {

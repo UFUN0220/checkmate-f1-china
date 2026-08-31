@@ -101,7 +101,7 @@ describe("ManualCheckeeHtmlAdapter", () => {
     expect(publicJson).not.toContain("details");
     expect(snapshot.cases.every((item) => item.publicId.startsWith("case-"))).toBe(true);
     expect(snapshot.cases.find((item) => item.status === "pending")?.pendingAgeSource).toBe(
-      "source_waiting_days",
+      "derived_snapshot_date",
     );
   });
 

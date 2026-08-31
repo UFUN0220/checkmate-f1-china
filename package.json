@@ -17,6 +17,7 @@
     "data:checkee:inspect": "node scripts/run-checkee-static.mjs inspect",
     "data:checkee:import-static": "node scripts/run-checkee-static.mjs import",
     "data:checkee:validate": "node scripts/validate-checkee-static.mjs",
+    "data:mock:generate": "node scripts/generate-stage3d-mock-data.mjs",
     "check:offline": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run data:checkee:validate && npm run build"
   },
   "dependencies": {

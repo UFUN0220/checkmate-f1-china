@@ -9,6 +9,8 @@ export type CaseStatus = (typeof CASE_STATUSES)[number];
 
 export type DataOrigin = "DEMO_DATA" | "CHECKEE_EXPORT" | "CHECKEE_HTML";
 
+export type MockCaseSource = "checkee" | "peer" | "hall-of-fame";
+
 export type DataQualityFlag =
   | "unknown_visa_type"
   | "unknown_location"
@@ -83,12 +85,36 @@ export interface PublicCase {
   status: Exclude<CaseStatus, "unknown">;
   checkDate: string;
   completeDate: string | null;
+  effectiveEndDate: string | null;
+  durationDays: number | null;
+  durationSource: "cutoff_date" | "result_date" | null;
   pendingAgeDays: number | null;
-  pendingAgeSource: "source_waiting_days" | "derived_snapshot_date" | null;
+  pendingAgeSource: "derived_snapshot_date" | null;
   resolvedDurationDays: number | null;
   sourceMonth: string;
   snapshotDate: string;
   dataOrigin: DataOrigin;
+}
+
+export interface MockCheckCase {
+  id: string;
+  source: MockCaseSource;
+  city: Location | null;
+  visaType: "F1";
+  startDate: string;
+  endDate: string | null;
+  effectiveEndDate: string;
+  status: Exclude<CaseStatus, "unknown">;
+  rawStatus: string;
+  durationDays: number;
+  isMock: true;
+}
+
+export interface WaitStats {
+  q1: number | null;
+  median: number | null;
+  q3: number | null;
+  sampleSize: number;
 }
 
 export interface DistributionItem {
@@ -121,6 +147,7 @@ export interface AggregateMetrics {
   degreeDistribution: DistributionItem[];
   majorGroupDistribution: DistributionItem[];
   visaEntryDistribution: DistributionItem[];
+  waitStats: WaitStats;
 }
 
 export interface CohortMetrics extends AggregateMetrics {
