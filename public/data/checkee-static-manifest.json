@@ -18,43 +18,43 @@
     "2026-07",
     "2026-08"
   ],
-  "importedAt": "2026-08-23T00:00:00Z",
-  "fetchedAt": "2026-08-23T00:00:00Z",
-  "snapshotDate": "2026-08-31",
+  "importedAt": "2026-09-01T00:00:00Z",
+  "fetchedAt": "2026-09-01T00:00:00Z",
+  "snapshotDate": "2026-09-01",
   "parserVersion": "manual-checkee-html-v1",
   "rawPageCount": 8,
-  "includedCount": 475,
+  "includedCount": 503,
   "excludedCountByReason": {
-    "non_f1": 890,
+    "non_f1": 913,
     "unknown_location": 30,
-    "duplicate_candidate": 76
+    "duplicate_candidate": 78
   },
   "statusCounts": {
-    "pending": 262,
-    "clear": 209,
+    "pending": 263,
+    "clear": 236,
     "reject": 4
   },
   "locationCounts": {
-    "beijing": 177,
-    "shanghai": 34,
-    "guangzhou": 158,
-    "shenyang": 55,
-    "wuhan": 51
+    "beijing": 183,
+    "shanghai": 39,
+    "guangzhou": 170,
+    "shenyang": 57,
+    "wuhan": 54
   },
-  "contentHash": "fnv1a-727b5c59",
+  "contentHash": "fnv1a-e53a1f6b",
   "currentMonthPartial": true,
   "demoData": false,
-  "recordCount": 475,
+  "recordCount": 503,
   "consulateCounts": {
-    "beijing": 177,
-    "shanghai": 34,
-    "guangzhou": 158,
-    "shenyang": 55,
-    "wuhan": 51
+    "beijing": 183,
+    "shanghai": 39,
+    "guangzhou": 170,
+    "shenyang": 57,
+    "wuhan": 54
   },
-  "excludedCount": 988,
+  "excludedCount": 1016,
   "quarantinedCount": 0,
   "schemaVersion": "3b-static-html-v1",
-  "snapshotChecksum": "fnv1a-727b5c59",
+  "snapshotChecksum": "fnv1a-e53a1f6b",
   "isLive": false
 }

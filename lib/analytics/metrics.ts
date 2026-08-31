@@ -3,10 +3,13 @@ import type {
   CohortMetrics,
   DistributionItem,
   Location,
+  MonthlyF1Trend,
+  NormalizedCase,
   PublicCase,
   WaitStats,
 } from "../data/models";
 import { LOCATIONS } from "../data/models";
+import { calculateDurationDays } from "../data/normalize";
 
 function round(value: number, digits = 1) {
   const factor = 10 ** digits;
@@ -147,6 +150,49 @@ export function calculateCohorts(
       cases.length,
     ),
   }));
+}
+
+export type MonthlyF1Input = Pick<
+  NormalizedCase,
+  "visaType" | "checkDate" | "completeDate" | "status" | "waitingDaysReported"
+>;
+
+export function calculateMonthlyF1Trends(
+  records: MonthlyF1Input[],
+  snapshotDate: string,
+  rangeStartMonth: string,
+  rangeEndMonth: string,
+): MonthlyF1Trend[] {
+  const months = monthRange(rangeStartMonth, rangeEndMonth);
+  return months.map((month) => {
+    const monthRecords = records.filter(
+      (item) => item.visaType === "F1" && item.checkDate?.startsWith(month),
+    );
+    const pending = monthRecords.filter(
+      (item) => item.completeDate === null || item.status === "pending",
+    );
+    const clear = monthRecords.filter(
+      (item) => item.completeDate !== null && item.status === "clear",
+    );
+    const waitingDays = [...pending, ...clear].flatMap((item) => {
+      const value =
+        item.completeDate === null
+          ? calculateDurationDays(item.checkDate as string, snapshotDate)
+          : item.waitingDaysReported;
+      return value !== null && Number.isFinite(value) ? [value] : [];
+    });
+    return {
+      month,
+      pendingCount: pending.length,
+      clearCount: clear.length,
+      totalCount: pending.length + clear.length,
+      averageWaitingDays: waitingDays.length
+        ? round(waitingDays.reduce((sum, value) => sum + value, 0) / waitingDays.length)
+        : null,
+      averageSampleSize: waitingDays.length,
+      waitingDaysTotal: waitingDays.reduce((sum, value) => sum + value, 0),
+    };
+  });
 }
 
 export function calculateLocationMetrics(cases: PublicCase[], totalForShare = cases.length) {

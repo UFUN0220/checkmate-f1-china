@@ -9,7 +9,7 @@ import { calculateDurationDays } from "../lib/data/normalize";
 import { LOCATIONS, type NormalizedCase, type PublicSnapshot } from "../lib/data/models";
 import { DATA_SNAPSHOT } from "../lib/data/snapshot-config";
 
-const IMPORTED_AT = "2026-08-23T00:00:00Z";
+const IMPORTED_AT = DATA_SNAPSHOT.timestamp;
 const SOURCE_MONTHS = Array.from(
   { length: 8 },
   (_, index) => `2026-${String(index + 1).padStart(2, "0")}`,
@@ -17,7 +17,7 @@ const SOURCE_MONTHS = Array.from(
 const SOURCE_DIR = path.resolve("data/raw");
 const NORMALIZED_OUTPUT = path.resolve("data/normalized/public-f1-checks.json");
 const NORMALIZED_META_OUTPUT = path.resolve("data/normalized/public-f1-checks.meta.json");
-const VALIDATION_REPORT_OUTPUT = path.resolve("docs/data-validation-report-2026-08-31.md");
+const VALIDATION_REPORT_OUTPUT = path.resolve("docs/data-validation-report-2026-09-01.md");
 
 function inputPaths() {
   const requestedDir = path.resolve(process.env.CHECKEE_HTML_DIR ?? SOURCE_DIR);
@@ -450,7 +450,7 @@ function buildValidationReport(result: Awaited<ReturnType<typeof load>>, snapsho
   return `# Checkmate Data Validation Report
 
 Snapshot:
-2026-08-31
+${manifest.snapshotDate}
 
 Source:
 Local manually supplied Checkee HTML

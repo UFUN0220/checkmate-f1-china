@@ -8,11 +8,11 @@
 
 ```text
 DATA_SOURCE_MODE=manual-static
-DATASET_STATUS=STATIC_SNAPSHOT_DEMO
+DATASET_STATUS=STATIC_SNAPSHOT_REAL
 CHECKEE_ACCESS_MODE=disabled
 ```
 
-阶段 3C：真实静态数据 Demo 产品化与视觉验收。默认页面读取 8 个本地保存的 Checkee 月份 HTML（2026-01 至 2026-08），经过 DOM 解析、归一化、质量门禁后生成 475 条公开静态案例。`CHECKEE_ACCESS_MODE=disabled` 仅表示没有启用网络接入；当前产品使用正式认可的手工静态数据路线。`DEMO_DATA` 仍可作为显式离线回退。
+当前生产快照读取 8 个本地保存的 Checkee 月份 HTML（2026-01 至 2026-08），经过 DOM 解析、归一化、质量门禁后生成 503 条公开静态案例，快照时间为 2026-09-01 00:00。`CHECKEE_ACCESS_MODE=disabled` 仅表示没有启用网络接入；当前产品使用本地手工静态数据路线。`DEMO_DATA` 仍可作为显式离线回退。
 
 静态导入只接受本地文件路径，不接受 URL、Cookie 或网络请求；没有自动刷新或线上数据请求。未来若出现 API 或规范数据文档，再增加新的 Adapter，统计和页面继续消费同一个 `PublicSnapshot`。
 

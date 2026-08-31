@@ -25,7 +25,7 @@ export interface CaseSourceAdapter {
 
 const DEMO_CONTEXT: NormalizeContext = {
   origin: "DEMO_DATA",
-  fetchedAt: "2026-08-31T00:00:00Z",
+  fetchedAt: DATA_SNAPSHOT.timestamp,
   snapshotDate: DATA_SNAPSHOT.cutoffDate,
   rangeStart: "2026-01-01",
 };

@@ -153,6 +153,16 @@ export interface WaitStats {
   sampleSize: number;
 }
 
+export interface MonthlyF1Trend {
+  month: string;
+  pendingCount: number;
+  clearCount: number;
+  totalCount: number;
+  averageWaitingDays: number | null;
+  averageSampleSize: number;
+  waitingDaysTotal: number;
+}
+
 export interface DistributionItem {
   key: string;
   count: number;
@@ -247,6 +257,7 @@ export interface PublicSnapshot {
   national: AggregateMetrics;
   locations: Record<Location, AggregateMetrics>;
   cohorts: CohortMetrics[];
+  monthlyF1Trends: MonthlyF1Trend[];
   cases: PublicCase[];
   qualityReport: DataQualityReport;
 }

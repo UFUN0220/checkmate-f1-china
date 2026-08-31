@@ -1,8 +1,9 @@
 {
   "DATA_SOURCE_MODE": "manual-static",
-  "DATASET_STATUS": "STATIC_SNAPSHOT_DEMO",
+  "DATASET_STATUS": "STATIC_SNAPSHOT_REAL",
   "CHECKEE_ACCESS_MODE": "disabled",
   "isLive": false,
   "coverage": "2026-01–2026-08",
-  "snapshotDate": "2026-08-31"
+  "snapshotDate": "2026-09-01",
+  "snapshotTimestamp": "2026-09-01T00:00:00Z"
 }

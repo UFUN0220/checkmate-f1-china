@@ -15,7 +15,7 @@ const cases = CHECKEE_STATIC_SNAPSHOT.cases;
 describe("public case query semantics", () => {
   it("applies a single condition", () => {
     const filtered = filterPublicCases(cases, { ...EMPTY_CASE_FILTERS, locations: ["beijing"] });
-    expect(filtered).toHaveLength(177);
+    expect(filtered).toHaveLength(183);
     expect(filtered.every((item) => item.location === "beijing")).toBe(true);
   });
 
@@ -42,7 +42,7 @@ describe("public case query semantics", () => {
       ...EMPTY_CASE_FILTERS,
       statuses: ["pending", "clear"],
     });
-    expect(filtered).toHaveLength(471);
+    expect(filtered).toHaveLength(499);
     expect(filtered.every((item) => item.status === "pending" || item.status === "clear")).toBe(
       true,
     );

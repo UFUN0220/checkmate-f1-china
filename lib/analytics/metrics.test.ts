@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   calculateCohorts,
   calculateHallOfFame,
+  calculateMonthlyF1Trends,
   calculateMetrics,
   calculateWaitStats,
   median,
@@ -47,7 +48,7 @@ describe("metrics", () => {
 
   it("separates Pending age from Clear duration", () => {
     const metrics = calculateMetrics(DEMO_SNAPSHOT.cases);
-    expect(metrics.pendingCount).toBe(18);
+    expect(metrics.pendingCount).toBe(19);
     expect(metrics.clearCount).toBe(14);
     expect(metrics.rejectCount).toBe(4);
     expect(metrics.resolvedSampleCount).toBe(14);
@@ -75,7 +76,7 @@ describe("metrics", () => {
   });
 
   it("classifies insufficient and small location samples", () => {
-    expect(DEMO_SNAPSHOT.locations.shanghai.sampleBand).toBe("insufficient");
+    expect(DEMO_SNAPSHOT.locations.shanghai.sampleBand).toBe("small");
     expect(DEMO_SNAPSHOT.locations.wuhan.sampleBand).toBe("small");
     expect(DEMO_SNAPSHOT.locations.guangzhou.sampleBand).toBe("standard");
   });
@@ -86,5 +87,70 @@ describe("metrics", () => {
     expect(cohorts[0].month).toBe("2026-01");
     expect(cohorts.at(-1)?.month).toBe("2026-08");
     expect(cohorts.at(-1)?.partial).toBe(true);
+  });
+
+  it("calculates F1-only monthly snapshot metrics with the fixed snapshot date", () => {
+    const trends = calculateMonthlyF1Trends(
+      [
+        {
+          visaType: "F1",
+          checkDate: "2026-01-01",
+          completeDate: null,
+          status: "pending",
+          waitingDaysReported: 999,
+        },
+        {
+          visaType: "F1",
+          checkDate: "2026-01-10",
+          completeDate: "2026-02-01",
+          status: "clear",
+          waitingDaysReported: 20,
+        },
+        {
+          visaType: null,
+          checkDate: "2026-01-15",
+          completeDate: null,
+          status: "pending",
+          waitingDaysReported: 123,
+        },
+        {
+          visaType: "F1",
+          checkDate: "2026-02-01",
+          completeDate: "2026-02-15",
+          status: "clear",
+          waitingDaysReported: 10,
+        },
+        {
+          visaType: "F1",
+          checkDate: "2026-02-03",
+          completeDate: "2026-02-04",
+          status: "reject",
+          waitingDaysReported: 1,
+        },
+      ],
+      "2026-09-01",
+      "2026-01",
+      "2026-08",
+    );
+
+    expect(trends).toHaveLength(8);
+    expect(trends[0]).toEqual({
+      month: "2026-01",
+      pendingCount: 1,
+      clearCount: 1,
+      totalCount: 2,
+      averageWaitingDays: 131.5,
+      averageSampleSize: 2,
+      waitingDaysTotal: 263,
+    });
+    expect(trends[1]).toMatchObject({
+      pendingCount: 0,
+      clearCount: 1,
+      totalCount: 1,
+      averageWaitingDays: 10,
+    });
+    expect(
+      trends.every((trend) => trend.totalCount === trend.pendingCount + trend.clearCount),
+    ).toBe(true);
   });
 });

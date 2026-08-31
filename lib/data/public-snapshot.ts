@@ -2,6 +2,7 @@ import {
   calculateCohorts,
   calculateLocationMetrics,
   calculateMetrics,
+  calculateMonthlyF1Trends,
   reconcileCounts,
 } from "../analytics/metrics";
 import { calculateDurationDays } from "./normalize";
@@ -234,6 +235,12 @@ export function buildPublicSnapshot(
     national,
     locations,
     cohorts: calculateCohorts(cases, options.rangeStart.slice(0, 7), options.rangeEnd),
+    monthlyF1Trends: calculateMonthlyF1Trends(
+      publicCandidates,
+      options.snapshotDate,
+      options.rangeStart.slice(0, 7),
+      options.rangeEnd,
+    ),
     cases,
     qualityReport: {
       totalCandidates: normalizedCases.length,

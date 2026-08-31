@@ -3,7 +3,6 @@
 import {
   ArrowDown,
   ArrowRight,
-  CalendarBlank,
   Crown,
   Info,
   Medal,
@@ -25,6 +24,7 @@ import {
   LOCATIONS,
   type CaseStatus,
   type Location,
+  type MonthlyF1Trend,
   type PublicCase,
   type WaitStats,
 } from "../lib/data/models";
@@ -52,10 +52,11 @@ const CITY_TONES: Record<Location, string> = {
 };
 
 type DisplayCase = PublicCase | CheckCase;
-type AppView = "cities" | "peers" | "hall";
+type AppView = "cities" | "trend" | "peers" | "hall";
 
 const VIEW_ITEMS: Array<{ key: AppView; label: string }> = [
   { key: "cities", label: "城市等待" },
+  { key: "trend", label: "趋势分析" },
   { key: "peers", label: "同学样本" },
   { key: "hall", label: "Check 名人堂" },
 ];
@@ -94,19 +95,9 @@ function statusLabel(status: Exclude<CaseStatus, "unknown">) {
   return STATUS_NAMES[status];
 }
 
-function scrollToSection(id: string) {
-  window.history.replaceState({}, "", `${window.location.pathname}${window.location.search}#${id}`);
-  const target = document.getElementById(id);
-  if (target && typeof target.scrollIntoView === "function") {
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-}
-
 export function EvidenceAtlas() {
   const [activeView, setActiveView] = useState<AppView>("cities");
   const [selectedCity, setSelectedCity] = useState<Location | null>(null);
-  const [publicVisibleCount, setPublicVisibleCount] = useState(20);
-  const [peerVisibleCount, setPeerVisibleCount] = useState(20);
 
   useEffect(() => {
     const sync = () => {
@@ -138,7 +129,6 @@ export function EvidenceAtlas() {
     window.history.pushState({}, "", `${window.location.pathname}?${params.toString()}`);
     setActiveView("cities");
     setSelectedCity(city);
-    setPublicVisibleCount(20);
   };
 
   const clearCity = () => {
@@ -194,7 +184,7 @@ export function EvidenceAtlas() {
           ))}
         </nav>
         <span className="snapshot-badge">
-          {activeView === "cities" ? "STATIC SNAPSHOT" : "DEMO DATA"}
+          {activeView === "cities" || activeView === "trend" ? "STATIC SNAPSHOT" : "DEMO DATA"}
         </span>
       </header>
 
@@ -204,20 +194,12 @@ export function EvidenceAtlas() {
           <CitiesView
             selectedCity={selectedCity}
             selectedCases={selectedCases}
-            publicVisibleCount={publicVisibleCount}
             selectCity={selectCity}
             clearCity={clearCity}
-            setPublicVisibleCount={setPublicVisibleCount}
           />
         )}
-        {activeView === "peers" && (
-          <PeerView
-            dataset={peerDataset}
-            stats={peerStats}
-            visibleCount={peerVisibleCount}
-            setVisibleCount={setPeerVisibleCount}
-          />
-        )}
+        {activeView === "trend" && <TrendView trends={activeSnapshot.monthlyF1Trends ?? []} />}
+        {activeView === "peers" && <PeerView dataset={peerDataset} stats={peerStats} />}
         {activeView === "hall" && <HallView dataset={hallDataset} records={hallOfFame} />}
 
         <section className="methodology-section" id="methods" aria-labelledby="methods-title">
@@ -227,8 +209,8 @@ export function EvidenceAtlas() {
             </summary>
             <div className="methodology-grid">
               <p>
-                城市等待页的数据截止日期为 {DATA_SNAPSHOT.cutoffDate}，来自手工保存的 Checkee.info
-                HTML 快照，经过清洗、标准化和去重；同学样本与名人堂使用独立数据入口。
+                城市等待与趋势页使用 {DATA_SNAPSHOT.displayTimestamp} 的 Checkee.info
+                静态快照；同学样本与名人堂使用独立数据入口。
               </p>
               <p>
                 Pending 案例统一计算到截止日；已结束案例使用原始记录中的合法结束日期。所有 duration
@@ -256,7 +238,9 @@ export function EvidenceAtlas() {
           Checkmate · {isStatic ? "公开数据集" : "DEMO DATA"} · {DATA_SNAPSHOT.label}
         </span>
         <span>
-          {activeView === "cities" ? "Checkee.info · 非实时 snapshot" : "开发 mock · 非实时"}
+          {activeView === "cities" || activeView === "trend"
+            ? "Checkee.info · 非实时 snapshot"
+            : "开发 mock · 非实时"}
         </span>
       </footer>
     </div>
@@ -266,10 +250,17 @@ export function EvidenceAtlas() {
 function PageHeader({ view }: { view: AppView }) {
   const copy = {
     cities: {
-      eyebrow: "中国 F-1 · Checkee 公开样本",
-      title: "城市等待",
-      lede: "看看不同领区大概要等多久，再下钻到组成这些数字的公开案例。",
-      meta: `${activeSnapshot.national.sampleCount} 个公开 F-1 案例 · 截至 ${DATA_SNAPSHOT.cutoffDate}`,
+      eyebrow: "F-1 Check · Checkee 公开快照",
+      title: "中国 F-1 Check 等待情况",
+      lede: null,
+      meta: `截至 ${DATA_SNAPSHOT.displayTimestamp}`,
+      badge: activeDatasetMetadata.isMock ? "DEMO DATA" : "REAL PUBLIC DATA",
+    },
+    trend: {
+      eyebrow: "F-1 Check · 月度快照",
+      title: "趋势分析",
+      lede: "按 Check Date 归属月份，看 Pending、Clear 与平均等待天数。",
+      meta: `${DATA_SNAPSHOT.coverageLabel} · 不区分城市`,
       badge: activeDatasetMetadata.isMock ? "DEMO DATA" : "REAL PUBLIC DATA",
     },
     peers: {
@@ -292,7 +283,7 @@ function PageHeader({ view }: { view: AppView }) {
       <div>
         <p className="eyebrow">{copy.eyebrow}</p>
         <h1 id="page-title">{copy.title}</h1>
-        <p className="checkmate-page-header__lede">{copy.lede}</p>
+        {copy.lede && <p className="checkmate-page-header__lede">{copy.lede}</p>}
       </div>
       <div className="checkmate-page-header__meta">
         <span>{copy.badge}</span>
@@ -306,17 +297,13 @@ function PageHeader({ view }: { view: AppView }) {
 function CitiesView({
   selectedCity,
   selectedCases,
-  publicVisibleCount,
   selectCity,
   clearCity,
-  setPublicVisibleCount,
 }: {
   selectedCity: Location | null;
   selectedCases: PublicCase[];
-  publicVisibleCount: number;
   selectCity: (city: Location) => void;
   clearCity: () => void;
-  setPublicVisibleCount: (value: number | ((value: number) => number)) => void;
 }) {
   return (
     <>
@@ -347,72 +334,89 @@ function CitiesView({
           ))}
         </div>
         {selectedCity && (
-          <CityDetail
-            city={selectedCity}
-            cases={selectedCases}
-            onClose={clearCity}
-            onScrollToCases={() => scrollToSection("public-cases")}
-          />
-        )}
-      </section>
-      <section
-        className="checkmate-view-section public-cases-section"
-        id="public-cases"
-        aria-labelledby="public-cases-title"
-      >
-        <div className="section-intro section-intro--compact">
-          <div>
-            <p className="section-kicker">
-              <CalendarBlank size={17} weight="bold" /> 标准化公开案例
-            </p>
-            <h2 id="public-cases-title">每条记录，都是一条时间线。</h2>
-          </div>
-          <p>
-            {selectedCity
-              ? `当前查看：${LOCATION_NAMES[selectedCity]}`
-              : "点击城市卡片，展开对应案例。"}
-          </p>
-        </div>
-        {selectedCity ? (
-          <>
-            <CaseList
-              records={selectedCases.slice(0, publicVisibleCount)}
-              emptyLabel="当前城市没有可展示的公开案例。"
-            />
-            {publicVisibleCount < selectedCases.length && (
-              <button
-                className="text-button load-more-button"
-                onClick={() => setPublicVisibleCount((count) => count + 20)}
-              >
-                查看更多公开案例 <ArrowRight size={17} />
-              </button>
-            )}
-          </>
-        ) : (
-          <div className="selection-prompt">
-            <span className="selection-prompt__number">5</span>
-            <div>
-              <strong>选择一个城市</strong>
-              <p>从城市中位数开始，再进入当前城市的公开案例。</p>
-            </div>
-            <ArrowDown size={20} aria-hidden="true" />
-          </div>
+          <CityDetail city={selectedCity} cases={selectedCases} onClose={clearCity} />
         )}
       </section>
     </>
   );
 }
 
+function TrendView({ trends }: { trends: MonthlyF1Trend[] }) {
+  const summary = trends.reduce(
+    (result, trend) => {
+      result.pendingCount += trend.pendingCount;
+      result.clearCount += trend.clearCount;
+      result.totalCount += trend.totalCount;
+      result.waitingDays += trend.waitingDaysTotal;
+      result.waitingCount += trend.averageSampleSize;
+      return result;
+    },
+    { pendingCount: 0, clearCount: 0, totalCount: 0, waitingDays: 0, waitingCount: 0 },
+  );
+  const average = summary.waitingCount ? summary.waitingDays / summary.waitingCount : null;
+  return (
+    <section className="checkmate-view-section trend-section" aria-labelledby="trend-title">
+      <div className="section-intro">
+        <div>
+          <p className="section-kicker">F-1 · 全国月度统计</p>
+          <h2 id="trend-title">今年到目前为止，整体怎么走？</h2>
+        </div>
+        <p>只看 F-1；按 Check Date 归属月份。Reject 不进入此指标。</p>
+      </div>
+      <div className="trend-table" role="table" aria-label="2026 年 F-1 月度等待统计">
+        <div className="trend-table__header" role="row">
+          <span>月份</span>
+          <span>Pending</span>
+          <span>Clear</span>
+          <span>Total</span>
+          <span>平均等待</span>
+        </div>
+        {trends.map((trend) => (
+          <div className="trend-row" role="row" key={trend.month}>
+            <strong>{formatMonth(trend.month)}</strong>
+            <span>
+              <small>Pending</small>
+              {trend.pendingCount}
+            </span>
+            <span>
+              <small>Clear</small>
+              {trend.clearCount}
+            </span>
+            <span>
+              <small>Total</small>
+              {trend.totalCount}
+            </span>
+            <span>
+              <small>Avg Wait</small>
+              {formatDays(trend.averageWaitingDays)} 天
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="trend-summary" aria-label="2026 年 1 月至 8 月累计统计">
+        <small>2026 Jan–Aug Total</small>
+        <strong>
+          {summary.totalCount} <span>cases</span>
+        </strong>
+        <span>Pending {summary.pendingCount}</span>
+        <span>Clear {summary.clearCount}</span>
+        <span>Avg Wait {formatDays(average)} 天</span>
+      </div>
+    </section>
+  );
+}
+
+function formatMonth(month: string) {
+  const monthNumber = Number(month.slice(5));
+  return `${["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][monthNumber - 1]} ${month.slice(0, 4)}`;
+}
+
 function PeerView({
   dataset,
   stats,
-  visibleCount,
-  setVisibleCount,
 }: {
   dataset: ReturnType<typeof loadPeerDataset>;
   stats: WaitStats;
-  visibleCount: number;
-  setVisibleCount: (value: number | ((value: number) => number)) => void;
 }) {
   return (
     <section
@@ -436,18 +440,10 @@ function PeerView({
       </div>
       <WaitStatsPanel stats={stats} sampleLabel={`统计样本 n = ${stats.sampleSize}`} />
       <CaseList
-        records={dataset.cases.slice(0, visibleCount)}
+        records={dataset.cases.slice(0, 5)}
         emptyLabel="暂无同学样本。"
         mockLabel={dataset.metadata.isMock ? "DEMO DATA" : undefined}
       />
-      {visibleCount < dataset.cases.length && (
-        <button
-          className="text-button load-more-button"
-          onClick={() => setVisibleCount((count) => count + 20)}
-        >
-          查看更多同学样本 <ArrowRight size={17} />
-        </button>
-      )}
     </section>
   );
 }
@@ -512,29 +508,26 @@ function CityCard({
       <span className="city-card__topline">
         <span className="city-card__dot" />
         {LOCATION_NAMES[city]}
-        <small>公开案例 {sampleCount}</small>
       </span>
-      <span className="city-card__median">
-        <strong>{formatDays(stats.median)}</strong>
-        <em>天</em>
-      </span>
-      <span className="city-card__label">中位等待 · 统计 n={stats.sampleSize}</span>
-      <span className="city-card__range">
+      <span className="city-card__stats">
         <span>
-          <small>
-            较快的 25% <i>Q1</i>
-          </small>
-          <b>{formatDays(stats.q1)} 天</b>
+          <small>Q1</small>
+          <b>{formatDays(stats.q1)}</b>
+          <em>天</em>
+        </span>
+        <span className="is-median">
+          <small>Median</small>
+          <b>{formatDays(stats.median)}</b>
+          <em>天</em>
         </span>
         <span>
-          <small>
-            较慢的 25% <i>Q3</i>
-          </small>
-          <b>{formatDays(stats.q3)} 天</b>
+          <small>Q3</small>
+          <b>{formatDays(stats.q3)}</b>
+          <em>天</em>
         </span>
       </span>
-      <span className="city-card__action">
-        {selected ? "正在查看" : "查看案例"} <ArrowRight size={16} />
+      <span className="city-card__action" aria-hidden="true">
+        {selected ? "已选择" : "查看"} <ArrowRight size={16} />
       </span>
     </button>
   );
@@ -544,12 +537,10 @@ function CityDetail({
   city,
   cases,
   onClose,
-  onScrollToCases,
 }: {
   city: Location;
   cases: PublicCase[];
   onClose: () => void;
-  onScrollToCases: () => void;
 }) {
   const metrics = activeSnapshot.locations[city];
   const stats = metrics.waitStats;
@@ -573,9 +564,6 @@ function CityDetail({
           </div>
         </div>
         <div className="city-detail__actions">
-          <button className="text-button" onClick={onScrollToCases}>
-            查看案例列表 <ArrowRight size={17} />
-          </button>
           <button className="quiet-button" onClick={onClose}>
             关闭
           </button>
@@ -664,13 +652,15 @@ function CaseCard({ record, mockLabel }: { record: DisplayCase; mockLabel?: stri
       <div className="case-card__meta">
         <span>{city ? LOCATION_NAMES[city] : "匿名样本"}</span>
         <span>
-          {"visaEntry" in record
-            ? record.visaEntry === "initial"
-              ? "Initial"
-              : record.visaEntry === "renewal"
-                ? "Renewal"
-                : "Unknown"
-            : "F-1"}
+          {"majorCategory" in record
+            ? record.majorCategory
+            : "visaEntry" in record
+              ? record.visaEntry === "initial"
+                ? "Initial"
+                : record.visaEntry === "renewal"
+                  ? "Renewal"
+                  : "Unknown"
+              : "F-1"}
         </span>
       </div>
     </article>

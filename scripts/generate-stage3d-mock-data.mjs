@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 /* global console */
 import { resolve } from "node:path";
 
-const cutoffDate = "2026-08-31";
+const cutoffDate = "2026-09-01";
 const locations = ["beijing", "shanghai", "guangzhou", "wuhan", "shenyang"];
 
 function isoDate(month, day) {

@@ -24,7 +24,8 @@ CheckeeHtmlAdapter*              未来授权后的生产入口，当前 disable
 
 - F-1 仅接受 `f1`、`f-1`、`f 1`；地点仅接受北京、上海、广州、沈阳、武汉及代码内显式别名。
 - 状态只接受 Pending、Clear、Reject；未知状态、未知地点、非 F-1、非法日期和无法判断的日期顺序不进入公开快照。
-- Pending duration 统一使用固定 `snapshotDate - checkDate`，本版 `snapshotDate=2026-08-31`；来源页面 `Waiting Day(s)` 只用于审计对照。已结束记录使用 `completeDate - checkDate`；Reject 不参与 resolved duration，但如果存在合法结束日期可参与统一 check duration。
+- Pending duration 统一使用固定 `snapshotDate - checkDate`，本版 `snapshotDate=2026-09-01`；来源页面 `Waiting Day(s)` 只用于审计对照。已结束记录使用 `completeDate - checkDate`；Reject 不参与 resolved duration，但如果存在合法结束日期可参与统一 check duration。
+- 月度 F1 趋势是公开聚合字段：按 `Check Date` 月份统计 Pending/Clear/Total，Reject 排除；Clear 平均等待使用来源 Waiting Day(s)，Pending 使用固定 `2026-09-01 - Check Date`。
 - `sourceMonth` 与日期不一致、来源 waiting days 与日期推导不一致时保留记录但标记质量问题。
 - 地点样本量 `<5` 标记 `insufficient` 并在地点页隐藏等待/完成时长分位数；`5–9` 标记 `small`，只作描述性参考；`≥10` 标记 `standard`。统计函数始终返回分母和 `sampleBand`。
 - 当前月份在 manifest/cohort 中标记 `partial`，不得与完整月份直接比较。
@@ -41,4 +42,4 @@ CHECKEE_ACCESS_MODE=disabled
 
 ## 数据来源说明
 
-当前页面默认使用 2026-01 至 2026-08 的手工保存 HTML 静态快照；`manifest.sourceMode=manual-html-static`、`isLive=false`、`accessStatus=CHECKEE_ACCESS_BLOCKED`。快照不是实时数据，不代表 Checkee 真实总体、官方处理速度或个案预测。获得授权后，适配器应输出同一 `NormalizedCase`，不需要改写页面或统计层。`DEMO_DATA` 仅在显式设置 `NEXT_PUBLIC_DATASET_MODE=demo-fixture` 时使用。
+当前页面默认使用 2026-01 至 2026-08 的手工保存 HTML 静态快照；`manifest.sourceMode=manual-html-static`、`isLive=false`、`accessStatus=CHECKEE_ACCESS_BLOCKED`，快照时间为 `2026-09-01 00:00`。快照不是实时数据，不代表 Checkee 真实总体、官方处理速度或个案预测。获得授权后，适配器应输出同一 `NormalizedCase`，不需要改写页面或统计层。`DEMO_DATA` 仅在显式设置 `NEXT_PUBLIC_DATASET_MODE=demo-fixture` 时使用。

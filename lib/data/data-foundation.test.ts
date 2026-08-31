@@ -186,9 +186,9 @@ describe("source-independent data foundation", () => {
     expect(cases).toHaveLength(42);
     expect(DEMO_SNAPSHOT.manifest.demoData).toBe(true);
     expect(DEMO_SNAPSHOT.manifest.sourceName).toBe("DEMO_DATA");
-    expect(DEMO_SNAPSHOT.manifest.includedCount).toBe(36);
-    expect(DEMO_SNAPSHOT.manifest.statusCounts).toEqual({ pending: 18, clear: 14, reject: 4 });
-    expect(DEMO_SNAPSHOT.manifest.locationCounts.shanghai).toBe(4);
+    expect(DEMO_SNAPSHOT.manifest.includedCount).toBe(37);
+    expect(DEMO_SNAPSHOT.manifest.statusCounts).toEqual({ pending: 19, clear: 14, reject: 4 });
+    expect(DEMO_SNAPSHOT.manifest.locationCounts.shanghai).toBe(5);
     expect(DEMO_SNAPSHOT.qualityReport.monthConflictCount).toBe(1);
     expect(DEMO_SNAPSHOT.qualityReport.waitingDayMismatchCount).toBe(3);
     expect(DEMO_SNAPSHOT.qualityReport.duplicateCandidateCount).toBe(1);
@@ -230,18 +230,19 @@ describe("source-independent data foundation", () => {
     );
     expect(dispositionTotal).toBe(quality.totalCandidates);
     expect(quality.exclusiveDispositionCounts).toMatchObject({
-      included: 475,
-      non_f1: 835,
+      included: 503,
+      non_f1: 856,
       unknown_location: 28,
-      duplicate: 125,
+      duplicate: 132,
     });
-    expect(quality.includedCount + quality.duplicateRemovalCount + 835 + 28).toBe(1463);
+    expect(quality.includedCount + quality.duplicateRemovalCount + 856 + 28).toBe(1519);
     expect(quality.exactDuplicateCount).toBe(5);
-    expect(quality.possibleDuplicateCount).toBe(10);
-    expect(quality.duplicateKeyGroupCount).toBe(76);
+    expect(quality.possibleDuplicateCount).toBe(12);
+    expect(quality.duplicateKeyGroupCount).toBe(78);
   });
 
   it("reconciles monthly cohorts with the national snapshot", () => {
+    expect(CHECKEE_STATIC_SNAPSHOT.manifest.snapshotDate).toBe("2026-09-01");
     expect(
       CHECKEE_STATIC_SNAPSHOT.cohorts.reduce((sum, cohort) => sum + cohort.sampleCount, 0),
     ).toBe(CHECKEE_STATIC_SNAPSHOT.national.sampleCount);
@@ -253,5 +254,11 @@ describe("source-independent data foundation", () => {
         CHECKEE_STATIC_SNAPSHOT.locations.shenyang.sampleCount +
         CHECKEE_STATIC_SNAPSHOT.locations.wuhan.sampleCount,
     ).toBe(CHECKEE_STATIC_SNAPSHOT.national.sampleCount);
+    expect(
+      CHECKEE_STATIC_SNAPSHOT.monthlyF1Trends.reduce((sum, trend) => sum + trend.totalCount, 0),
+    ).toBe(
+      CHECKEE_STATIC_SNAPSHOT.manifest.statusCounts.pending +
+        CHECKEE_STATIC_SNAPSHOT.manifest.statusCounts.clear,
+    );
   });
 });

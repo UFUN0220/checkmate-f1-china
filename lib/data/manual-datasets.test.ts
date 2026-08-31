@@ -15,8 +15,8 @@ describe("manual peer and hall datasets", () => {
     expect(dataset.metadata).toMatchObject({ source: "peer", isMock: false, sampleSize: 1 });
     expect(dataset.cases[0]).toMatchObject({
       endDate: null,
-      effectiveEndDate: "2026-08-31",
-      durationDays: 30,
+      effectiveEndDate: "2026-09-01",
+      durationDays: 31,
       status: "pending",
       isMock: false,
     });
@@ -31,8 +31,8 @@ describe("manual peer and hall datasets", () => {
     expect(dataset.cases[1]).toMatchObject({
       status: "pending",
       endDate: null,
-      effectiveEndDate: "2026-08-31",
-      durationDays: 61,
+      effectiveEndDate: "2026-09-01",
+      durationDays: 62,
     });
   });
 
