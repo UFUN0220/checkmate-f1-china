@@ -7,6 +7,7 @@ import {
   calculateWaitStats,
   median,
   percentile,
+  sortByCheckDateDescending,
 } from "./metrics";
 import { DEMO_SNAPSHOT } from "../data/demo-snapshot";
 
@@ -43,6 +44,19 @@ describe("metrics", () => {
       "long",
       "middle",
       "short",
+    ]);
+  });
+
+  it("sorts city records by Check Date descending", () => {
+    const records = [
+      { publicId: "old", checkDate: "2026-01-03" },
+      { publicId: "new", checkDate: "2026-08-18" },
+      { publicId: "middle", checkDate: "2026-04-22" },
+    ];
+    expect(sortByCheckDateDescending(records).map((record) => record.publicId)).toEqual([
+      "new",
+      "middle",
+      "old",
     ]);
   });
 

@@ -51,6 +51,10 @@ export function sortByDurationDescending<T extends Pick<PublicCase, "durationDay
   return [...records].sort((left, right) => (right.durationDays ?? -1) - (left.durationDays ?? -1));
 }
 
+export function sortByCheckDateDescending<T extends Pick<PublicCase, "checkDate">>(records: T[]) {
+  return [...records].sort((left, right) => right.checkDate.localeCompare(left.checkDate));
+}
+
 export function calculateHallOfFame<T extends Pick<PublicCase, "durationDays">>(
   records: T[],
   limit = 10,

@@ -3,6 +3,8 @@
 import {
   ArrowDown,
   ArrowRight,
+  CaretLeft,
+  CaretRight,
   Crown,
   Info,
   Medal,
@@ -13,7 +15,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   calculateHallOfFame,
   calculateWaitStats,
-  sortByDurationDescending,
+  sortByCheckDateDescending,
 } from "../lib/analytics/metrics";
 import { DATA_SNAPSHOT } from "../lib/data/snapshot-config";
 import { activeDatasetMetadata, activeSnapshot } from "../lib/demo-data";
@@ -52,11 +54,10 @@ const CITY_TONES: Record<Location, string> = {
 };
 
 type DisplayCase = PublicCase | CheckCase;
-type AppView = "cities" | "trend" | "peers" | "hall";
+type AppView = "cities" | "peers" | "hall";
 
 const VIEW_ITEMS: Array<{ key: AppView; label: string }> = [
   { key: "cities", label: "城市等待" },
-  { key: "trend", label: "趋势分析" },
   { key: "peers", label: "同学样本" },
   { key: "hall", label: "Check 名人堂" },
 ];
@@ -98,6 +99,7 @@ function statusLabel(status: Exclude<CaseStatus, "unknown">) {
 export function EvidenceAtlas() {
   const [activeView, setActiveView] = useState<AppView>("cities");
   const [selectedCity, setSelectedCity] = useState<Location | null>(null);
+  const [cityPage, setCityPage] = useState(1);
 
   useEffect(() => {
     const sync = () => {
@@ -110,6 +112,10 @@ export function EvidenceAtlas() {
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);
   }, []);
+
+  useEffect(() => {
+    setCityPage(1);
+  }, [selectedCity]);
 
   const navigateView = (view: AppView) => {
     const params = new URLSearchParams(window.location.search);
@@ -144,10 +150,12 @@ export function EvidenceAtlas() {
   const peerStats = useMemo(() => calculateWaitStats(peerDataset.cases), [peerDataset.cases]);
   const hallOfFame = useMemo(() => calculateHallOfFame(hallDataset.cases), [hallDataset.cases]);
   const selectedCases = selectedCity
-    ? sortByDurationDescending(
+    ? sortByCheckDateDescending(
         activeSnapshot.cases.filter((item) => item.location === selectedCity),
       )
     : [];
+  const cityPageCount = Math.max(1, Math.ceil(selectedCases.length / 10));
+  const visibleSelectedCases = selectedCases.slice((cityPage - 1) * 10, cityPage * 10);
   const isStatic = !activeDatasetMetadata.isMock;
 
   return (
@@ -184,7 +192,7 @@ export function EvidenceAtlas() {
           ))}
         </nav>
         <span className="snapshot-badge">
-          {activeView === "cities" || activeView === "trend" ? "STATIC SNAPSHOT" : "DEMO DATA"}
+          {activeView === "cities" ? "STATIC SNAPSHOT" : "DEMO DATA"}
         </span>
       </header>
 
@@ -193,12 +201,16 @@ export function EvidenceAtlas() {
         {activeView === "cities" && (
           <CitiesView
             selectedCity={selectedCity}
-            selectedCases={selectedCases}
+            selectedCases={visibleSelectedCases}
+            totalCaseCount={selectedCases.length}
+            cityPage={cityPage}
+            cityPageCount={cityPageCount}
+            onCityPageChange={setCityPage}
             selectCity={selectCity}
             clearCity={clearCity}
+            trends={activeSnapshot.monthlyF1Trends ?? []}
           />
         )}
-        {activeView === "trend" && <TrendView trends={activeSnapshot.monthlyF1Trends ?? []} />}
         {activeView === "peers" && <PeerView dataset={peerDataset} stats={peerStats} />}
         {activeView === "hall" && <HallView dataset={hallDataset} records={hallOfFame} />}
 
@@ -209,7 +221,7 @@ export function EvidenceAtlas() {
             </summary>
             <div className="methodology-grid">
               <p>
-                城市等待与趋势页使用 {DATA_SNAPSHOT.displayTimestamp} 的 Checkee.info
+                城市等待页使用 {DATA_SNAPSHOT.displayTimestamp} 的 Checkee.info
                 静态快照；同学样本与名人堂使用独立数据入口。
               </p>
               <p>
@@ -238,9 +250,7 @@ export function EvidenceAtlas() {
           Checkmate · {isStatic ? "公开数据集" : "DEMO DATA"} · {DATA_SNAPSHOT.label}
         </span>
         <span>
-          {activeView === "cities" || activeView === "trend"
-            ? "Checkee.info · 非实时 snapshot"
-            : "开发 mock · 非实时"}
+          {activeView === "cities" ? "Checkee.info · 非实时 snapshot" : "开发 mock · 非实时"}
         </span>
       </footer>
     </div>
@@ -250,17 +260,10 @@ export function EvidenceAtlas() {
 function PageHeader({ view }: { view: AppView }) {
   const copy = {
     cities: {
-      eyebrow: "F-1 Check · Checkee 公开快照",
-      title: "中国 F-1 Check 等待情况",
+      eyebrow: "F-1 CHECK · CHINA SNAPSHOT",
+      title: "2026年度白宫严选中国F1硕博",
       lede: null,
       meta: `截至 ${DATA_SNAPSHOT.displayTimestamp}`,
-      badge: activeDatasetMetadata.isMock ? "DEMO DATA" : "REAL PUBLIC DATA",
-    },
-    trend: {
-      eyebrow: "F-1 Check · 月度快照",
-      title: "趋势分析",
-      lede: "按 Check Date 归属月份，看 Pending、Clear 与平均等待天数。",
-      meta: `${DATA_SNAPSHOT.coverageLabel} · 不区分城市`,
       badge: activeDatasetMetadata.isMock ? "DEMO DATA" : "REAL PUBLIC DATA",
     },
     peers: {
@@ -297,47 +300,73 @@ function PageHeader({ view }: { view: AppView }) {
 function CitiesView({
   selectedCity,
   selectedCases,
+  totalCaseCount,
+  cityPage,
+  cityPageCount,
+  onCityPageChange,
   selectCity,
   clearCity,
+  trends,
 }: {
   selectedCity: Location | null;
   selectedCases: PublicCase[];
+  totalCaseCount: number;
+  cityPage: number;
+  cityPageCount: number;
+  onCityPageChange: (page: number) => void;
   selectCity: (city: Location) => void;
   clearCity: () => void;
+  trends: MonthlyF1Trend[];
 }) {
   return (
-    <>
-      <section
-        className="checkmate-view-section city-section"
-        id="city-status"
-        aria-labelledby="city-section-title"
-      >
-        <div className="section-intro">
-          <div>
-            <p className="section-kicker">
-              <MapPin size={17} weight="bold" /> 五个核心领区
-            </p>
-            <h2 id="city-section-title">先看中位数，再看两边的人。</h2>
-          </div>
-          <p>Median 是主指标；Q1、Q3 帮你看到分布边界，案例数帮助判断样本分量。</p>
+    <section
+      className="checkmate-view-section city-section"
+      id="city-status"
+      aria-labelledby="city-section-title"
+    >
+      <div className="city-overview-heading">
+        <div>
+          <p className="section-kicker">
+            <MapPin size={17} weight="bold" /> 五个核心领区
+          </p>
+          <h2 id="city-section-title">五城等待分布</h2>
         </div>
-        <div className="city-grid" aria-label="五个城市的等待时长统计">
-          {LOCATIONS.map((city) => (
-            <CityCard
-              key={city}
-              city={city}
-              stats={activeSnapshot.locations[city].waitStats}
-              sampleCount={activeSnapshot.locations[city].sampleCount}
-              selected={selectedCity === city}
-              onClick={() => selectCity(city)}
+        <p>点击城市查看最新 Check Date 的案例。</p>
+      </div>
+      <div className="city-grid" aria-label="五个城市的等待时长统计">
+        {LOCATIONS.map((city) => (
+          <CityCard
+            key={city}
+            city={city}
+            stats={activeSnapshot.locations[city].waitStats}
+            sampleCount={activeSnapshot.locations[city].sampleCount}
+            selected={selectedCity === city}
+            onClick={() => selectCity(city)}
+          />
+        ))}
+      </div>
+      <div className="cities-lower-grid">
+        <TrendView trends={trends} />
+        <div className="city-detail-column">
+          {selectedCity ? (
+            <CityDetail
+              city={selectedCity}
+              cases={selectedCases}
+              totalCaseCount={totalCaseCount}
+              page={cityPage}
+              totalPages={cityPageCount}
+              onPageChange={onCityPageChange}
+              onClose={clearCity}
             />
-          ))}
+          ) : (
+            <div className="selection-prompt" role="status">
+              <strong>选择一个城市</strong>
+              <span>查看该地区最新的 10 条案例</span>
+            </div>
+          )}
         </div>
-        {selectedCity && (
-          <CityDetail city={selectedCity} cases={selectedCases} onClose={clearCity} />
-        )}
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
 
@@ -355,13 +384,13 @@ function TrendView({ trends }: { trends: MonthlyF1Trend[] }) {
   );
   const average = summary.waitingCount ? summary.waitingDays / summary.waitingCount : null;
   return (
-    <section className="checkmate-view-section trend-section" aria-labelledby="trend-title">
-      <div className="section-intro">
+    <article className="trend-card" aria-labelledby="trend-title">
+      <div className="section-intro trend-card__intro">
         <div>
           <p className="section-kicker">F-1 · 全国月度统计</p>
-          <h2 id="trend-title">今年到目前为止，整体怎么走？</h2>
+          <h2 id="trend-title">月度趋势</h2>
         </div>
-        <p>只看 F-1；按 Check Date 归属月份。Reject 不进入此指标。</p>
+        <p>按 Check Date；Reject 不计入。</p>
       </div>
       <div className="trend-table" role="table" aria-label="2026 年 F-1 月度等待统计">
         <div className="trend-table__header" role="row">
@@ -402,7 +431,7 @@ function TrendView({ trends }: { trends: MonthlyF1Trend[] }) {
         <span>Clear {summary.clearCount}</span>
         <span>Avg Wait {formatDays(average)} 天</span>
       </div>
-    </section>
+    </article>
   );
 }
 
@@ -536,10 +565,18 @@ function CityCard({
 function CityDetail({
   city,
   cases,
+  totalCaseCount,
+  page,
+  totalPages,
+  onPageChange,
   onClose,
 }: {
   city: Location;
   cases: PublicCase[];
+  totalCaseCount: number;
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
   onClose: () => void;
 }) {
   const metrics = activeSnapshot.locations[city];
@@ -551,10 +588,10 @@ function CityDetail({
           <p className="section-kicker">
             <MapPin size={17} weight="bold" /> 当前查看：{LOCATION_NAMES[city]}
           </p>
-          <h3 id="city-detail-title">{LOCATION_NAMES[city]}的公开案例</h3>
+          <h3 id="city-detail-title">{LOCATION_NAMES[city]} · 最新案例</h3>
           <p>
-            中位等待 <strong>{formatDays(stats.median)} 天</strong> · 公开案例 {cases.length} 条 ·
-            统计样本 n={stats.sampleSize}
+            中位 {formatDays(stats.median)} 天 · {totalCaseCount} 条公开案例 · 第 {page} /{" "}
+            {totalPages} 页
           </p>
           <div className="city-detail__counts" aria-label="城市案例状态构成">
             <span>Pending {metrics.pendingCount}</span>
@@ -569,8 +606,44 @@ function CityDetail({
           </button>
         </div>
       </div>
-      <CaseList records={cases.slice(0, 6)} emptyLabel="当前样本不足" />
+      <CaseList records={cases} emptyLabel="当前样本不足" />
+      <Pagination page={page} totalPages={totalPages} onPageChange={onPageChange} />
     </div>
+  );
+}
+
+function Pagination({
+  page,
+  totalPages,
+  onPageChange,
+}: {
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}) {
+  if (totalPages <= 1) return null;
+  return (
+    <nav className="case-pagination" aria-label="案例分页">
+      <button
+        type="button"
+        onClick={() => onPageChange(Math.max(1, page - 1))}
+        disabled={page === 1}
+        aria-label="上一页"
+      >
+        <CaretLeft size={15} />
+      </button>
+      <span>
+        {page} <i>/</i> {totalPages}
+      </span>
+      <button
+        type="button"
+        onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+        disabled={page === totalPages}
+        aria-label="下一页"
+      >
+        <CaretRight size={15} />
+      </button>
+    </nav>
   );
 }
 
@@ -631,10 +704,6 @@ function CaseCard({ record, mockLabel }: { record: DisplayCase; mockLabel?: stri
   const end = endDate(record);
   return (
     <article className="case-card">
-      <div className="case-card__duration">
-        <strong>{formatDays(record.durationDays)}</strong>
-        <span>天</span>
-      </div>
       <div className="case-card__main">
         <div className="case-card__status-line">
           <span className={`status-chip status-chip--${record.status}`}>
@@ -648,6 +717,10 @@ function CaseCard({ record, mockLabel }: { record: DisplayCase; mockLabel?: stri
             ? `截至 ${formatDate(record.effectiveEndDate)}`
             : formatDate(end)}
         </p>
+      </div>
+      <div className="case-card__duration">
+        <strong>{formatDays(record.durationDays)}</strong>
+        <span>天</span>
       </div>
       <div className="case-card__meta">
         <span>{city ? LOCATION_NAMES[city] : "匿名样本"}</span>
