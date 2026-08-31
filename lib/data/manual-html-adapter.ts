@@ -204,6 +204,7 @@ function makeRawCase(
     sourceRecordKeyInternal: `checkee-id:${sourceId}`,
     publicId: `html-${fileName}-${rowNumber}`,
     sourceFileName: fileName,
+    sourceRowIndex: rowNumber,
     visaTypeRaw: value("visa type"),
     visaEntryRaw: value("visa entry"),
     consulateRaw: value("us consulate"),
@@ -213,6 +214,19 @@ function makeRawCase(
     completeDate: value("complete date") || null,
     waitingDaysReported: waitingDays,
     sourceMonth,
+    rawFields: {
+      Update: value("update") || null,
+      ID: sourceId || null,
+      "Visa Type": value("visa type") || null,
+      "Visa Entry": value("visa entry") || null,
+      "US Consulate": value("us consulate") || null,
+      Major: value("major") || null,
+      Status: value("status") || null,
+      "Check Date": value("check date") || null,
+      "Complete Date": value("complete date") || null,
+      "Waiting Day(s)": value("waiting day(s)") || null,
+      Details: value("details") || null,
+    },
   };
   if (!raw.visaTypeRaw || !raw.consulateRaw || !raw.sourceStatusRaw || !raw.checkDate) {
     return { isolation: "missing_required_value" as const };

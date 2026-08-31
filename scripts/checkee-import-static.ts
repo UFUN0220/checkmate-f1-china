@@ -1,11 +1,12 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { JSDOM } from "jsdom";
 import { ManualCheckeeHtmlAdapter } from "../lib/data/manual-html-adapter";
 import { buildPublicSnapshot } from "../lib/data/public-snapshot";
 import { normalizeLocation, normalizeVisaEntry, normalizeVisaType } from "../lib/data/allowlists";
-import type { PublicSnapshot } from "../lib/data/models";
+import { calculateDurationDays } from "../lib/data/normalize";
+import { LOCATIONS, type NormalizedCase, type PublicSnapshot } from "../lib/data/models";
 import { DATA_SNAPSHOT } from "../lib/data/snapshot-config";
 
 const IMPORTED_AT = "2026-08-23T00:00:00Z";
@@ -13,12 +14,27 @@ const SOURCE_MONTHS = Array.from(
   { length: 8 },
   (_, index) => `2026-${String(index + 1).padStart(2, "0")}`,
 );
+const SOURCE_DIR = path.resolve("data/raw");
+const NORMALIZED_OUTPUT = path.resolve("data/normalized/public-f1-checks.json");
+const NORMALIZED_META_OUTPUT = path.resolve("data/normalized/public-f1-checks.meta.json");
+const VALIDATION_REPORT_OUTPUT = path.resolve("docs/data-validation-report-2026-08-31.md");
 
 function inputPaths() {
-  const inputDir = path.resolve(process.env.CHECKEE_HTML_DIR ?? "dataset_260823");
-  return SOURCE_MONTHS.map((month) =>
-    path.join(inputDir, `${month.slice(2).replace("-", "")}.html`),
+  const requestedDir = path.resolve(process.env.CHECKEE_HTML_DIR ?? SOURCE_DIR);
+  if (requestedDir !== SOURCE_DIR) {
+    throw new Error(`Stage 3E accepts local HTML from data/raw only; received ${requestedDir}.`);
+  }
+  const files = SOURCE_MONTHS.map((month) =>
+    path.join(SOURCE_DIR, `${month.slice(2).replace("-", "")}.html`),
   );
+  if (!existsSync(SOURCE_DIR)) {
+    throw new Error(`Stage 3E input missing: ${SOURCE_DIR}. No network fallback is allowed.`);
+  }
+  const missing = files.filter((filePath) => !existsSync(filePath));
+  if (missing.length) {
+    throw new Error(`Stage 3E input incomplete; missing local HTML: ${missing.join(", ")}`);
+  }
+  return files;
 }
 
 function options() {
@@ -252,7 +268,7 @@ function sampleAudit(result: Awaited<ReturnType<typeof load>>) {
       ["Status", "status", "yes", "primary"],
       ["Check Date", "checkDate", "yes", "primary"],
       ["Complete Date", "completeDate", "no", "secondary"],
-      ["Waiting Day(s)", "waitingDaysReported → pendingAgeDays", "yes", "primary"],
+      ["Waiting Day(s)", "waitingDaysReported; audit only", "no", "secondary"],
       ["Details", "hidden_technical", "no", "—"],
     ].map(([field, model, displayed, priority]) => {
       const entry = inventory.get(field);
@@ -305,6 +321,263 @@ function buildSnapshot(result: Awaited<ReturnType<typeof load>>) {
   });
 }
 
+function statusAsOfSnapshot(item: NormalizedCase, snapshotDate: string) {
+  return item.status === "pending" ||
+    (item.completeDate !== null && item.completeDate > snapshotDate)
+    ? "pending"
+    : item.status;
+}
+
+function dedupeBySourceKey(records: NormalizedCase[]) {
+  const seen = new Set<string>();
+  return records.filter((item) => {
+    if (seen.has(item.sourceRecordKeyInternal)) return false;
+    seen.add(item.sourceRecordKeyInternal);
+    return true;
+  });
+}
+
+function buildNormalizedPublicCases(records: NormalizedCase[], snapshotDate: string) {
+  return dedupeBySourceKey(records)
+    .filter(
+      (item) =>
+        item.eligible &&
+        item.visaType === "F1" &&
+        item.location !== null &&
+        item.status !== "unknown" &&
+        item.checkDate !== null,
+    )
+    .map((item) => {
+      const snapshotStatus = statusAsOfSnapshot(item, snapshotDate);
+      const effectiveEndDate = snapshotStatus === "pending" ? snapshotDate : item.completeDate;
+      return {
+        ...item,
+        source: "checkee" as const,
+        sourceRecordId: item.sourceRecordKeyInternal,
+        sourceFile: item.sourceFileName,
+        rawStatus: item.sourceStatusRaw,
+        currentStatus: item.status,
+        snapshotStatus,
+        status: snapshotStatus,
+        effectiveEndDate,
+        durationDays: effectiveEndDate
+          ? calculateDurationDays(item.checkDate as string, effectiveEndDate)
+          : null,
+        isMock: false as const,
+      };
+    });
+}
+
+function displayNumber(value: number | null) {
+  return value === null ? "n/a" : Number.isInteger(value) ? String(value) : value.toFixed(1);
+}
+
+function cityValidationLines(snapshot: PublicSnapshot, deduped: NormalizedCase[]) {
+  return LOCATIONS.map((location) => {
+    const records = snapshot.cases.filter((item) => item.location === location);
+    const candidates = deduped.filter(
+      (item) => item.visaType === "F1" && item.location === location,
+    );
+    const durations = records.flatMap((item) =>
+      item.durationDays === null ? [] : [item.durationDays],
+    );
+    const sorted = [...durations].sort((left, right) => left - right);
+    const metrics = snapshot.locations[location];
+    return [
+      `## ${location[0].toUpperCase()}${location.slice(1)}`,
+      "",
+      `Sample size: ${records.length}`,
+      `Pending: ${metrics.pendingCount}`,
+      `Resolved: ${metrics.clearCount + metrics.rejectCount}`,
+      `Approved (Clear): ${metrics.clearCount}`,
+      `Refused (Reject): ${metrics.rejectCount}`,
+      `Invalid excluded: ${Math.max(0, candidates.length - records.length)}`,
+      "",
+      `Q1: ${displayNumber(metrics.waitStats.q1)} days`,
+      `Median: ${displayNumber(metrics.waitStats.median)} days`,
+      `Q3: ${displayNumber(metrics.waitStats.q3)} days`,
+      `Minimum: ${displayNumber(sorted[0] ?? null)} days`,
+      `Maximum: ${displayNumber(sorted.at(-1) ?? null)} days`,
+      "",
+    ].join("\n");
+  }).join("\n");
+}
+
+function buildValidationReport(result: Awaited<ReturnType<typeof load>>, snapshot: PublicSnapshot) {
+  const deduped = dedupeBySourceKey(result.cases);
+  const duplicateRemoved = result.cases.length - deduped.length;
+  const nonDuplicateExcluded =
+    result.rawRowCount - snapshot.cases.length - duplicateRemoved - result.isolations.length;
+  const accounted =
+    snapshot.cases.length + nonDuplicateExcluded + duplicateRemoved + result.isolations.length;
+  const futureResultCount = result.cases.filter((item) =>
+    item.dataQualityFlags.includes("future_complete_date"),
+  ).length;
+  const unresolvedDuplicateGroups = result.duplicateGroups.filter(
+    (group) => group.verdict === "UNRESOLVED_KEEP_BOTH",
+  ).length;
+  const quality = snapshot.qualityReport;
+  const manifest = snapshot.manifest;
+  const mapping = [
+    ["Update", "local audit metadata; not displayed"],
+    ["ID", "sourceRecordKeyInternal; local provenance only"],
+    ["Visa Type", "visaTypeRaw → explicit F1 allowlist"],
+    ["Visa Entry", "visaEntryRaw → visaEntry"],
+    ["US Consulate", "consulateRaw → explicit five-city allowlist"],
+    ["Major", "majorRaw → degree / majorGroup / majorCategory"],
+    ["Status", "sourceStatusRaw → status"],
+    ["Check Date", "checkDate → YYYY-MM-DD"],
+    ["Complete Date", "completeDate → YYYY-MM-DD; future result reconstructed"],
+    ["Waiting Day(s)", "audit-only source field; duration uses effectiveEndDate"],
+    ["Details", "local raw provenance only; never public"],
+  ];
+  const files = result.fileReports
+    .map((file) => `| ${file.fileName} | ${file.dataTableRowCount} | ${file.sha256} |`)
+    .join("\n");
+  const excludedReasons = [
+    ["Non-F1", quality.exclusiveDispositionCounts.non_f1],
+    ["Unknown city", quality.exclusiveDispositionCounts.unknown_location],
+    ["Unknown status", quality.exclusiveDispositionCounts.unknown_status],
+    ["Invalid date", quality.exclusiveDispositionCounts.invalid_date],
+    ["Resolved missing end date", quality.exclusiveDispositionCounts.incomplete_record],
+    ["Out-of-range date", quality.exclusiveDispositionCounts.out_of_range_date],
+    ["Confirmed duplicate rows removed", duplicateRemoved],
+    ["Schema-isolated rows", result.isolations.length],
+    ["Other malformed records", quality.exclusiveDispositionCounts.other_exclusion],
+  ]
+    .map(([label, count]) => `- ${label}: ${count}`)
+    .join("\n");
+  return `# Checkmate Data Validation Report
+
+Snapshot:
+2026-08-31
+
+Source:
+Local manually supplied Checkee HTML
+
+Network access:
+None
+
+Raw HTML files:
+
+${result.fileReports.map((file) => `- data/raw/${file.fileName}`).join("\n")}
+
+## Structure inspection
+
+The eight supplied pages each contain one Check Reporter data table plus unrelated tables. The data table has one header row and no pagination residue, hidden duplicate table, or mobile/desktop duplicate. Repeated header rows: one per page. All pages use the following confirmed columns:
+
+| HTML column | Normalized mapping |
+| --- | --- |
+${mapping.map(([field, target]) => `| ${field} | ${target} |`).join("\n")}
+
+No \`UNKNOWN FIELD MAPPING\` remains for the supplied files. \`ID\` and \`Details\` are retained only in the ignored local normalized output and are not included in the public snapshot.
+
+## Overall counts
+
+- Raw HTML rows: ${result.rawRowCount}
+- Parsed rows: ${result.cases.length}
+- F-1 rows before dedupe: ${result.cases.filter((item) => item.visaType === "F1").length}
+- Included public F-1 cases: ${snapshot.cases.length}
+- Non-duplicate excluded rows: ${nonDuplicateExcluded}
+- Confirmed duplicate rows removed by stable source ID: ${duplicateRemoved}
+- Exact identical duplicate rows among those: ${result.exactDuplicateCount}
+- Suspected duplicate groups retained: ${unresolvedDuplicateGroups}
+- Future result rows reconstructed as Pending at cutoff: ${futureResultCount}
+- Pending: ${manifest.statusCounts.pending}
+- Resolved: ${manifest.statusCounts.clear + manifest.statusCounts.reject}
+- Approved (Clear): ${manifest.statusCounts.clear}
+- Refused (Reject): ${manifest.statusCounts.reject}
+- Other / unknown excluded: ${quality.exclusiveDispositionCounts.unknown_status}
+- Invalid / malformed excluded: ${quality.exclusiveDispositionCounts.invalid_date + quality.exclusiveDispositionCounts.incomplete_record + quality.exclusiveDispositionCounts.other_exclusion}
+
+Accounting: ${result.rawRowCount} = ${snapshot.cases.length} included + ${nonDuplicateExcluded} non-duplicate excluded + ${duplicateRemoved} duplicate rows removed + ${result.isolations.length} schema-isolated rows.
+
+${accounted === result.rawRowCount ? "No UNACCOUNTED RECORDS." : `UNACCOUNTED RECORDS: ${result.rawRowCount - accounted}`}
+
+## Exclusion reasons
+
+${excludedReasons}
+
+## City validation
+
+${cityValidationLines(snapshot, deduped)}
+## Input file hashes
+
+| File | Rows | SHA-256 |
+| --- | ---: | --- |
+${files}
+
+## Snapshot and output
+
+- Snapshot cutoff: \`${manifest.snapshotDate}\`
+- Pending effective end date: \`${manifest.snapshotDate}\`
+- Resolved effective end date: original valid \`Complete Date\` on or before cutoff
+- Duration function: \`calculateDurationDays(startDate, effectiveEndDate)\` using calendar days; same day is 0
+- Public output: \`public/data/checkee-static-snapshot.json\`
+- Local traceable normalized output: \`data/normalized/public-f1-checks.json\`
+- Local metadata: \`data/normalized/public-f1-checks.meta.json\`
+- Inspection output: \`data/generated/checkee-static-ingest-report.json\`
+
+## Privacy and product boundary
+
+- The frontend imports only the public snapshot; it never imports raw HTML or local normalized provenance.
+- Public cases are real local Checkee snapshot records and are no longer marked \`DEMO DATA\`.
+- Peer Sample remains 100 mock records and Hall of Fame remains 10 curated mock records; both retain \`DEMO DATA\`.
+- \`STATIC SNAPSHOT\` remains because this is not realtime data.
+- The dataset is descriptive public-sample evidence, not official processing time, probability, prediction, or an individual outcome.
+`;
+}
+
+async function writeStage3EOutputs(
+  result: Awaited<ReturnType<typeof load>>,
+  snapshot: PublicSnapshot,
+) {
+  const normalizedCases = buildNormalizedPublicCases(result.cases, DATA_SNAPSHOT.cutoffDate);
+  await writeJson(NORMALIZED_OUTPUT, normalizedCases);
+  await writeJson(NORMALIZED_META_OUTPUT, {
+    snapshotDate: DATA_SNAPSHOT.cutoffDate,
+    source: "Checkee local HTML snapshot",
+    generatedAt: IMPORTED_AT,
+    rawRecordCount: result.rawRowCount,
+    parsedRecordCount: result.cases.length,
+    includedRecordCount: normalizedCases.length,
+    isMock: false,
+    sourceFiles: result.fileReports.map((file) => file.fileName),
+  });
+  await writeFile(VALIDATION_REPORT_OUTPUT, buildValidationReport(result, snapshot), "utf8");
+}
+
+function printImportSummary(result: Awaited<ReturnType<typeof load>>, snapshot: PublicSnapshot) {
+  const deduped = dedupeBySourceKey(result.cases);
+  const excludedCount =
+    result.rawRowCount -
+    snapshot.cases.length -
+    (result.cases.length - deduped.length) -
+    result.isolations.length;
+  const citySummary = LOCATIONS.map((location) => {
+    const metrics = snapshot.locations[location];
+    return `${location}: n=${metrics.sampleCount} Q1=${displayNumber(metrics.waitStats.q1)} Median=${displayNumber(metrics.waitStats.median)} Q3=${displayNumber(metrics.waitStats.q3)}`;
+  });
+  console.log(
+    [
+      "Checkmate Snapshot Build",
+      `Snapshot: ${DATA_SNAPSHOT.cutoffDate}`,
+      "",
+      `Raw records: ${result.rawRowCount}`,
+      `Parsed: ${result.cases.length}`,
+      `F-1 before dedupe: ${result.cases.filter((item) => item.visaType === "F1").length}`,
+      `Included: ${snapshot.cases.length}`,
+      `Excluded (non-duplicate): ${excludedCount}`,
+      `Duplicates removed: ${result.cases.length - deduped.length}`,
+      "",
+      ...citySummary,
+      "",
+      `Validation report: ${VALIDATION_REPORT_OUTPUT}`,
+      `Output: ${NORMALIZED_OUTPUT}`,
+    ].join("\n"),
+  );
+}
+
 function safeInspection(result: Awaited<ReturnType<typeof load>>) {
   return {
     generatedAt: IMPORTED_AT,
@@ -351,21 +624,14 @@ export async function main(mode: string) {
   const result = await load();
   const inspection = safeInspection(result);
   await writeJson("data/generated/checkee-static-ingest-report.json", inspection);
-  console.log(JSON.stringify(inspection, null, 2));
-  if (mode === "inspect") return;
+  if (mode === "inspect") {
+    console.log(JSON.stringify(inspection, null, 2));
+    return;
+  }
 
   const snapshot = buildSnapshot(result);
   await writeJson("public/data/checkee-static-snapshot.json", snapshot);
   await writeJson("public/data/checkee-static-manifest.json", snapshot.manifest);
-  console.log(
-    JSON.stringify({
-      rawRowCount: result.rawRowCount,
-      parsedRowCount: result.cases.length,
-      isolatedRowCount: result.isolations.length,
-      publicRowCount: snapshot.cases.length,
-      exactDuplicateCount: result.exactDuplicateCount,
-      possibleDuplicateCount: result.possibleDuplicateCount,
-      checksum: snapshot.manifest.snapshotChecksum,
-    }),
-  );
+  await writeStage3EOutputs(result, snapshot);
+  printImportSummary(result, snapshot);
 }

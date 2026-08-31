@@ -4,6 +4,7 @@ import {
   calculateMetrics,
   reconcileCounts,
 } from "../analytics/metrics";
+import { calculateDurationDays } from "./normalize";
 import type { ExclusiveDisposition, NormalizedCase, PublicCase, PublicSnapshot } from "./models";
 
 export interface SnapshotBuildOptions {
@@ -31,12 +32,6 @@ export interface SnapshotBuildOptions {
   possibleDuplicateCount?: number;
 }
 
-function dateDifference(start: string, end: string) {
-  return Math.round(
-    (Date.parse(`${end}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) / 86_400_000,
-  );
-}
-
 function simpleHash(value: string) {
   let hash = 2_166_136_261;
   for (let index = 0; index < value.length; index += 1) {
@@ -60,13 +55,17 @@ function toPublicCase(
   ) {
     return null;
   }
-  const pendingAgeSource = item.status === "pending" ? "derived_snapshot_date" : null;
-  const effectiveEndDate = item.status === "pending" ? snapshotDate : item.completeDate;
-  const durationDays = effectiveEndDate ? dateDifference(item.checkDate, effectiveEndDate) : null;
-  const pendingAgeDays = item.status === "pending" ? durationDays : null;
+  const futureResult = item.completeDate !== null && item.completeDate > snapshotDate;
+  const snapshotStatus = item.status === "pending" || futureResult ? "pending" : item.status;
+  const pendingAgeSource = snapshotStatus === "pending" ? "derived_snapshot_date" : null;
+  const effectiveEndDate = snapshotStatus === "pending" ? snapshotDate : item.completeDate;
+  const durationDays = effectiveEndDate
+    ? calculateDurationDays(item.checkDate, effectiveEndDate)
+    : null;
+  const pendingAgeDays = snapshotStatus === "pending" ? durationDays : null;
   const resolvedDurationDays =
-    item.status === "clear" && item.completeDate
-      ? dateDifference(item.checkDate, item.completeDate)
+    snapshotStatus === "clear" && item.completeDate
+      ? calculateDurationDays(item.checkDate, item.completeDate)
       : null;
   if (durationDays !== null && durationDays < 0) return null;
   return {
@@ -77,13 +76,13 @@ function toPublicCase(
     majorGroup: item.majorGroup,
     location: item.location,
     majorCategory: item.majorCategory,
-    status: item.status,
+    status: snapshotStatus,
     checkDate: item.checkDate,
-    completeDate: item.completeDate,
+    completeDate: futureResult ? null : item.completeDate,
     effectiveEndDate,
     durationDays,
     durationSource: effectiveEndDate
-      ? item.status === "pending"
+      ? snapshotStatus === "pending"
         ? "cutoff_date"
         : "result_date"
       : null,

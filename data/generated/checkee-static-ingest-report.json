@@ -302,9 +302,9 @@
         "parsed": true,
         "dataCompleteness": 1,
         "uniqueValueCount": 192,
-        "standardModel": "waitingDaysReported → pendingAgeDays",
-        "displayed": "yes",
-        "priority": "primary"
+        "standardModel": "waitingDaysReported; audit only",
+        "displayed": "no",
+        "priority": "secondary"
       },
       {
         "field": "Details",

@@ -70,7 +70,7 @@ export const DEMO_RAW_CASES: RawCaseInput[] = (() => {
       const day = 3 + ((currentId * 3) % 22);
       const checkDate = currentId === 11 ? "2026-08-03" : isoDate(month, day);
       const completeDate =
-        status === "Clear"
+        status === "Clear" || status === "Reject"
           ? currentId === 17
             ? "2026-08-18"
             : isoDate(month, day + 8 + ((currentId * 5) % 28))

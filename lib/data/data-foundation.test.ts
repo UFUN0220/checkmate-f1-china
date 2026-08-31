@@ -11,7 +11,7 @@ import {
   normalizeVisaEntry,
   normalizeVisaType,
 } from "./allowlists";
-import { normalizeRawCase } from "./normalize";
+import { calculateDurationDays, normalizeRawCase } from "./normalize";
 import { DEMO_SNAPSHOT } from "./demo-snapshot";
 import { buildPublicSnapshot } from "./public-snapshot";
 import { CHECKEE_STATIC_SNAPSHOT } from "./static-snapshot";
@@ -101,6 +101,84 @@ describe("source-independent data foundation", () => {
       pendingAgeSource: "derived_snapshot_date",
       durationSource: "cutoff_date",
     });
+  });
+
+  it("reconstructs a future result as Pending at the snapshot cutoff", () => {
+    const item = normalizeRawCase(
+      {
+        sourceRecordKeyInternal: "future-result",
+        publicId: "future-result",
+        visaTypeRaw: "F1",
+        visaEntryRaw: "New",
+        consulateRaw: "北京",
+        majorRaw: "Computer Science",
+        sourceStatusRaw: "Clear",
+        checkDate: "2026-07-01",
+        completeDate: "2026-09-10",
+        waitingDaysReported: null,
+        sourceMonth: "2026-07",
+      },
+      { ...context, snapshotDate: "2026-08-31" },
+    );
+    expect(item.eligible).toBe(true);
+    expect(item.dataQualityFlags).toContain("future_complete_date");
+    const snapshot = buildPublicSnapshot([item], {
+      sourceName: "fixture",
+      sourceUrl: "offline://fixture",
+      sourceMode: "manual-html-static",
+      dataOrigin: "CHECKEE_HTML",
+      accessStatus: "CHECKEE_ACCESS_BLOCKED",
+      rangeStart: "2026-01-01",
+      rangeEnd: "2026-08",
+      coverageFrom: "2026-01",
+      coverageThrough: "2026-08",
+      sourceMonths: ["2026-07"],
+      importedAt: "2026-08-31T00:00:00Z",
+      fetchedAt: "2026-08-31T00:00:00Z",
+      snapshotDate: "2026-08-31",
+      parserVersion: "fixture-v1",
+      rawPageCount: 1,
+      currentMonthPartial: true,
+      demoData: false,
+      schemaVersion: "fixture-v1",
+      isLive: false,
+    });
+    expect(snapshot.cases[0]).toMatchObject({
+      status: "pending",
+      completeDate: null,
+      effectiveEndDate: "2026-08-31",
+      durationDays: 61,
+      pendingAgeDays: 61,
+      durationSource: "cutoff_date",
+    });
+  });
+
+  it("fails closed when a resolved record has no end date", () => {
+    const item = normalizeRawCase(
+      {
+        sourceRecordKeyInternal: "missing-reject-end",
+        publicId: "missing-reject-end",
+        visaTypeRaw: "F1",
+        visaEntryRaw: "New",
+        consulateRaw: "上海",
+        majorRaw: "Business",
+        sourceStatusRaw: "Reject",
+        checkDate: "2026-07-01",
+        completeDate: null,
+        waitingDaysReported: null,
+        sourceMonth: "2026-07",
+      },
+      { ...context, snapshotDate: "2026-08-31" },
+    );
+    expect(item.eligible).toBe(false);
+    expect(item.exclusionReason).toBe("incomplete_record");
+    expect(item.dataQualityFlags).toContain("missing_complete_date");
+  });
+
+  it("uses calendar-day duration with same-day cases equal to zero", () => {
+    expect(calculateDurationDays("2026-08-31", "2026-08-31")).toBe(0);
+    expect(calculateDurationDays("2026-08-01", "2026-08-31")).toBe(30);
+    expect(calculateDurationDays("2026-08-31", "2026-08-01")).toBe(-30);
   });
 
   it("builds the demo snapshot without any Checkee request", async () => {

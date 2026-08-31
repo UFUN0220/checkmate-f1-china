@@ -25,6 +25,8 @@ data/**/cache/
 
 # User-saved Checkee HTML and downloaded asset folders are local-only inputs
 /dataset_*/
+/data/raw/**
+/data/normalized/**
 .checkee-static-entry.mjs
 
 # Local analysis and test downloads

@@ -13,6 +13,8 @@ export interface RawCaseInput {
   sourceRecordKeyInternal: string;
   publicId: string;
   sourceFileName?: string | null;
+  sourceRowIndex?: number | null;
+  rawFields?: Record<string, string | null> | null;
   visaTypeRaw: string;
   visaEntryRaw?: string | null;
   consulateRaw: string;
@@ -39,7 +41,7 @@ function parseIsoDate(value: string | null | undefined) {
   return Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== value ? null : value;
 }
 
-export function differenceInDays(start: string, end: string) {
+export function calculateDurationDays(start: string, end: string) {
   const startTime = Date.parse(`${start}T00:00:00Z`);
   const endTime = Date.parse(`${end}T00:00:00Z`);
   return Math.round((endTime - startTime) / 86_400_000);
@@ -72,6 +74,9 @@ export function normalizeRawCase(raw: RawCaseInput, context: NormalizeContext): 
   if (checkDate && completeDate && completeDate < checkDate) {
     addFlag(dataQualityFlags, "invalid_date_order");
   }
+  if (completeDate && completeDate > context.snapshotDate) {
+    addFlag(dataQualityFlags, "future_complete_date");
+  }
   if (checkDate && raw.sourceMonth && !checkDate.startsWith(raw.sourceMonth)) {
     addFlag(dataQualityFlags, "source_month_mismatch");
   }
@@ -82,10 +87,14 @@ export function normalizeRawCase(raw: RawCaseInput, context: NormalizeContext): 
       : context.waitingDaysReferenceDate;
   const expectedDays =
     checkDate && status === "pending" && waitingReferenceDate
-      ? differenceInDays(checkDate, waitingReferenceDate)
-      : checkDate && status === "clear" && completeDate
-        ? differenceInDays(checkDate, completeDate)
-        : null;
+      ? calculateDurationDays(checkDate, waitingReferenceDate)
+      : checkDate &&
+          waitingReferenceDate &&
+          (status === "pending" || (completeDate !== null && completeDate > context.snapshotDate))
+        ? calculateDurationDays(checkDate, waitingReferenceDate)
+        : checkDate && status === "clear" && completeDate
+          ? calculateDurationDays(checkDate, completeDate)
+          : null;
   if (
     expectedDays !== null &&
     raw.waitingDaysReported !== null &&
@@ -109,7 +118,7 @@ export function normalizeRawCase(raw: RawCaseInput, context: NormalizeContext): 
     exclusionReason = "out_of_range_date";
   } else if (dataQualityFlags.includes("invalid_date_order")) {
     exclusionReason = "invalid_date";
-  } else if (status === "clear" && !completeDate) {
+  } else if (status !== "pending" && !completeDate) {
     addFlag(dataQualityFlags, "missing_complete_date");
     exclusionReason = "incomplete_record";
   }
@@ -118,6 +127,8 @@ export function normalizeRawCase(raw: RawCaseInput, context: NormalizeContext): 
     sourceRecordKeyInternal: raw.sourceRecordKeyInternal,
     publicId: raw.publicId,
     sourceFileName: raw.sourceFileName ?? null,
+    sourceRowIndex: raw.sourceRowIndex ?? null,
+    rawFields: raw.rawFields ?? null,
     visaTypeRaw: raw.visaTypeRaw,
     visaType,
     visaEntryRaw: raw.visaEntryRaw ?? null,

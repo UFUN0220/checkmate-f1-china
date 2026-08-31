@@ -18,6 +18,7 @@ export type DataQualityFlag =
   | "invalid_check_date"
   | "invalid_complete_date"
   | "future_check_date"
+  | "future_complete_date"
   | "invalid_date_order"
   | "source_month_mismatch"
   | "waiting_days_mismatch"
@@ -50,6 +51,8 @@ export interface NormalizedCase {
   sourceRecordKeyInternal: string;
   publicId: string;
   sourceFileName: string | null;
+  sourceRowIndex: number | null;
+  rawFields: Record<string, string | null> | null;
   visaTypeRaw: string;
   visaType: "F1" | null;
   visaEntryRaw: string | null;

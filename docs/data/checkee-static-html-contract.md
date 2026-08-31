@@ -43,7 +43,7 @@ Status | Check Date | Complete Date | Waiting Day(s) | Details
 
 ## 统计口径
 
-- Pending age 与 Clear resolved duration 是两个不同字段。静态 HTML 的 Pending 优先使用来源 `Waiting Day(s)`，`PublicCase.pendingAgeSource=source_waiting_days`；没有可信来源等待日时才用快照日期减 Check Date。
+- Pending age 与 Clear resolved duration 是两个不同字段。Pending 统一使用固定快照截止日 `2026-08-31 - Check Date`；来源 `Waiting Day(s)` 只做审计对照，不能覆盖固定截止日计算。
 - Clear duration 使用 Complete Date 减 Check Date；Reject 不参与 resolved duration。
 - 页面筛选为同一字段内 OR、不同字段间 AND；支持地点、状态、Check 月份、Degree、Major Group 和 Initial/Renewal，并将筛选状态写回 URL。
 - `n < 5` 不展示分位数结论；`5–9` 标记小样本；所有指标带样本量或分母。
@@ -63,9 +63,9 @@ Status | Check Date | Complete Date | Waiting Day(s) | Details
 | Pending / Clear / Reject |            262 / 209 / 4 |
 | Check 日期范围           | 2026-01-05 至 2026-08-21 |
 
-地点样本为北京 177、上海 34、广州 158、沈阳 55、武汉 51。全国 Pending age 的中位数/P75/最长值为 68/94/230 天；Clear duration 的中位数/P75 为 50/64 天。以上只是该静态公开样本的描述性统计。
+地点样本为北京 177、上海 34、广州 158、沈阳 55、武汉 51。全国及地点指标均由公开案例的 `durationDays` 计算，并持续显示样本量；以上只是该静态公开样本的描述性统计。
 
-`waitingDayMismatchCount=0` 不能解释为来源字段已被实时验证：导入时没有可信的当前页面时间，因此没有用本次导入时间去重算 Pending age；Clear 仍按 Check Date 和 Complete Date 计算。完整质量明细见 `data/generated/checkee-static-ingest-report.json` 和公开 manifest。
+`waitingDayMismatchCount=0` 不能解释为来源字段已被实时验证：来源 `Waiting Day(s)` 只作为审计字段，Pending age 不使用本次导入时间，也不使用该来源值覆盖固定截止日计算；Clear 仍按 Check Date 和 Complete Date 计算。完整质量明细见 `data/generated/checkee-static-ingest-report.json` 和公开 manifest。
 
 ## 未来启用条件
 

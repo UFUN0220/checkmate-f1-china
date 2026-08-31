@@ -59,8 +59,11 @@ describe("ManualCheckeeHtmlAdapter", () => {
       location: "beijing",
       status: "pending",
       completeDate: null,
+      sourceFileName: "2601.html",
+      sourceRowIndex: expect.any(Number),
       dataQualityFlags: [],
     });
+    expect(pending?.rawFields).toMatchObject({ "Visa Type": "F1", Details: "details" });
     expect(
       result.cases.find((item) => item.sourceRecordKeyInternal === "checkee-id:1004")?.eligible,
     ).toBe(false);

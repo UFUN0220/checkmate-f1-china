@@ -69,6 +69,10 @@ function mapExportRow(row: ExportRow, index: number): RawCaseInput {
   return {
     sourceRecordKeyInternal,
     publicId: `export-${index + 1}`,
+    sourceRowIndex: index + 2,
+    rawFields: Object.fromEntries(
+      Object.entries(row).map(([key, value]) => [key, value === null ? null : String(value)]),
+    ),
     visaTypeRaw,
     visaEntryRaw: nullableStringValue(row, ["visaEntryRaw", "visa_entry", "visaEntry"]),
     consulateRaw,
