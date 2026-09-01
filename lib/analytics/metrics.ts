@@ -33,11 +33,13 @@ export function percentile(values: number[], percentileValue: number) {
   return sorted[lower] + (sorted[upper] - sorted[lower]) * (position - lower);
 }
 
-export function calculateWaitStats(records: Pick<PublicCase, "durationDays">[]): WaitStats {
+export function calculateWaitStats(
+  records: Array<{ durationDays?: number | null; waitingDays?: number | null }>,
+): WaitStats {
   const durations = records.flatMap((record) =>
-    record.durationDays === null || !Number.isFinite(record.durationDays)
+    !Number.isFinite(record.waitingDays ?? record.durationDays)
       ? []
-      : [record.durationDays],
+      : [record.waitingDays ?? record.durationDays!],
   );
   return {
     q1: percentile(durations, 0.25),

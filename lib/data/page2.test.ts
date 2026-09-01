@@ -117,6 +117,33 @@ describe("Page2 data normalization", () => {
       waitingDaysTotal: 32,
       waitingDaysSampleSize: 2,
       averageWaitingDays: 16,
+      waitingStats: {
+        q1: 9,
+        median: 16,
+        q3: 23,
+        sampleSize: 2,
+      },
+    });
+  });
+
+  it("uses the shared quartile definition for Page2 waiting days", () => {
+    const cases = normalizePage2Rows(
+      [1, 2, 3, 4].map((waitingDays, index) => ({
+        startDate: `2026-08-0${index + 1}`,
+        endDate: `2026-08-0${index + 1 + waitingDays}`,
+        status: "Approve",
+        mergedValues: [],
+        degree: null,
+        major: null,
+      })),
+      "2026-09-01",
+    ).cases;
+
+    expect(calculatePage2Metrics(cases).waitingStats).toEqual({
+      q1: 1.75,
+      median: 2.5,
+      q3: 3.25,
+      sampleSize: 4,
     });
   });
 });

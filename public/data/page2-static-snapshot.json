@@ -43,7 +43,13 @@
     "pendingOrOtherCases": 86,
     "waitingDaysTotal": 7098,
     "waitingDaysSampleSize": 97,
-    "averageWaitingDays": 73.2
+    "averageWaitingDays": 73.2,
+    "waitingStats": {
+      "q1": 54,
+      "median": 75,
+      "q3": 89,
+      "sampleSize": 97
+    }
   },
   "cases": [
     {

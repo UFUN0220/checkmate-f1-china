@@ -4333,3 +4333,96 @@ a {
     grid-row: 1;
   }
 }
+
+/* Stage 3K: product naming and compact distribution summary */
+.page2-overview-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+
+.page2-overview-heading h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.page2-overview-heading span {
+  color: var(--check-muted);
+  font-size: 10px;
+}
+
+.page2-metrics {
+  grid-template-columns: minmax(170px, 0.72fr) minmax(280px, 1.28fr);
+}
+
+.page2-metric--counts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.page2-metric--counts strong {
+  margin-top: 8px;
+}
+
+.page2-metric--distribution {
+  padding-bottom: 11px;
+}
+
+.page2-quartiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.page2-quartile {
+  min-width: 0;
+}
+
+.page2-quartile small {
+  display: block;
+  color: var(--check-muted);
+  font-size: 9px;
+}
+
+.page2-quartile strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.page2-quartile em {
+  margin-left: 2px;
+  color: var(--check-muted);
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.page2-quartile.is-featured {
+  text-align: center;
+}
+
+.page2-quartile.is-featured strong {
+  font-size: 31px;
+  font-weight: 700;
+}
+
+.page2-hall-heading {
+  margin-top: 18px;
+}
+
+@media (max-width: 560px) {
+  .page2-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .page2-overview-heading {
+    margin-bottom: 7px;
+  }
+}

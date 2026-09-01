@@ -32,9 +32,14 @@
 | G < E rows                |           0 |
 | Total waiting-day sum     |        7098 |
 | Valid waiting-day records |          97 |
+| Q1 waiting days           |          54 |
+| Median waiting days       |          75 |
+| Q3 waiting days           |          89 |
 | Average waiting days      |        73.2 |
 | Date min                  |  2026-04-07 |
 | Date max                  |  2026-08-17 |
+
+UI primary waiting metric: Q1 / Median / Q3. Average waiting days is retained as a secondary audit metric only.
 
 ## Privacy boundary
 

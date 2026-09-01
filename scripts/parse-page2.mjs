@@ -194,6 +194,24 @@ function hash(value) {
   }
   return (result >>> 0).toString(16).padStart(8, "0");
 }
+function percentile(values, percentileValue) {
+  if (values.length === 0) return null;
+  const sorted = [...values].sort((left, right) => left - right);
+  const position = (sorted.length - 1) * percentileValue;
+  const lower = Math.floor(position);
+  const upper = Math.ceil(position);
+  if (lower === upper) return sorted[lower];
+  return sorted[lower] + (sorted[upper] - sorted[lower]) * (position - lower);
+}
+function waitStats(cases) {
+  const values = cases.map((item) => item.waitingDays).filter((value) => Number.isFinite(value));
+  return {
+    q1: percentile(values, 0.25),
+    median: percentile(values, 0.5),
+    q3: percentile(values, 0.75),
+    sampleSize: values.length,
+  };
+}
 function metrics(cases) {
   const total = cases.reduce((sum, item) => sum + item.waitingDays, 0);
   return {
@@ -203,6 +221,7 @@ function metrics(cases) {
     waitingDaysTotal: total,
     waitingDaysSampleSize: cases.length,
     averageWaitingDays: cases.length ? Math.round((total / cases.length) * 10) / 10 : null,
+    waitingStats: waitStats(cases),
   };
 }
 function normalizeRows(rows) {
@@ -347,9 +366,14 @@ function report(snapshot, sheetName) {
 | G < E rows | ${q.endBeforeStartRows} |
 | Total waiting-day sum | ${m.waitingDaysTotal} |
 | Valid waiting-day records | ${m.waitingDaysSampleSize} |
+| Q1 waiting days | ${m.waitingStats.q1 ?? "—"} |
+| Median waiting days | ${m.waitingStats.median ?? "—"} |
+| Q3 waiting days | ${m.waitingStats.q3 ?? "—"} |
 | Average waiting days | ${m.averageWaitingDays ?? "—"} |
 | Date min | ${q.dateMin ?? "—"} |
 | Date max | ${q.dateMax ?? "—"} |
+
+UI primary waiting metric: Q1 / Median / Q3. Average waiting days is retained as a secondary audit metric only.
 
 ## Privacy boundary
 

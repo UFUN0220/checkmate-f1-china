@@ -5,6 +5,7 @@ import type {
   Page2Snapshot,
   Page2Status,
 } from "./models";
+import { calculateWaitStats } from "../analytics/metrics";
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const MS_PER_DAY = 86_400_000;
@@ -119,6 +120,7 @@ export function calculatePage2Metrics(cases: Page2Case[]): Page2Metrics {
     waitingDaysTotal,
     waitingDaysSampleSize: cases.length,
     averageWaitingDays: cases.length ? rounded(waitingDaysTotal / cases.length) : null,
+    waitingStats: calculateWaitStats(cases),
   };
 }
 

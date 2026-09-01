@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  ArrowDown,
-  ArrowRight,
-  CaretLeft,
-  CaretRight,
-  Crown,
-  Info,
-  MapPin,
-  UsersThree,
-} from "@phosphor-icons/react";
+import { ArrowDown, ArrowRight, CaretLeft, CaretRight, Info, MapPin } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { sortByCheckDateDescending } from "../lib/analytics/metrics";
 import { DATA_SNAPSHOT } from "../lib/data/snapshot-config";
@@ -53,8 +44,8 @@ type DisplayCase = PublicCase;
 type AppView = "cities" | "peers";
 
 const VIEW_ITEMS: Array<{ key: AppView; label: string }> = [
-  { key: "cities", label: "城市等待" },
-  { key: "peers", label: "同学样本" },
+  { key: "cities", label: "白宫严选" },
+  { key: "peers", label: "名人堂" },
 ];
 
 function readView() {
@@ -77,10 +68,6 @@ function startDate(record: DisplayCase) {
 
 function endDate(record: DisplayCase) {
   return record.completeDate;
-}
-
-function locationOf(record: DisplayCase) {
-  return record.location;
 }
 
 function caseId(record: DisplayCase) {
@@ -169,7 +156,7 @@ export function EvidenceAtlas() {
             event.preventDefault();
             navigateView("cities");
           }}
-          aria-label="回到城市等待"
+          aria-label="回到白宫严选"
         >
           <span className="checkmate-brand__mark" aria-hidden="true">
             C
@@ -192,13 +179,11 @@ export function EvidenceAtlas() {
             </a>
           ))}
         </nav>
-        <span className="snapshot-badge">
-          {activeView === "cities" ? "STATIC SNAPSHOT" : "PAGE2 STATIC"}
-        </span>
+        <span className="snapshot-badge">{activeView === "cities" ? "公开数据" : "匿名样本"}</span>
       </header>
 
       <main className="checkmate-main">
-        <PageHeader view={activeView} />
+        <PageHeader view={activeView} page2CaseCount={PAGE2_STATIC_SNAPSHOT.metrics.totalCases} />
         {activeView === "cities" && (
           <CitiesView
             selectedCity={selectedCity}
@@ -223,25 +208,11 @@ export function EvidenceAtlas() {
             </summary>
             <div className="methodology-grid">
               <p>
-                城市等待页使用 {DATA_SNAPSHOT.displayTimestamp} 的 Checkee.info
-                静态快照；同学样本使用独立的 page2.xlsx 静态公开产物，名人堂已合并为 Page2
-                的展开列表。
+                白宫严选使用 {DATA_SNAPSHOT.displayTimestamp} 的 Checkee.info F-1
+                公开快照；名人堂使用 page2.xlsx 生成的匿名静态数据。
               </p>
               <p>
-                Pending 案例统一计算到截止日；已结束案例使用原始记录中的合法结束日期。所有 duration
-                使用 calendar day difference，同一天为 0 天。
-              </p>
-              <p>
-                较快 25%、中位数和较慢 25%分别对应
-                Q1、Median、Q3。样本不代表官方签证处理时间，也不能预测个人结果。
-              </p>
-              <p>
-                城市卡片的“公开案例”是该城市全部案例数；“统计样本 n”是实际拥有有效 duration
-                的记录数。 Reject 计入等待分布，但不计入 resolved duration。
-              </p>
-              <p>
-                Checkmate
-                展示的是公开样本的统计情况，不是美国领馆官方处理时间，也无法预测某一个人的签证结果。
+                公开样本统计，仅供参考，不代表官方处理时间或个人结果。学校、备注和联系方式不在公开案例中。
               </p>
             </div>
           </details>
@@ -250,33 +221,33 @@ export function EvidenceAtlas() {
 
       <footer className="checkmate-footer">
         <span>
-          Checkmate · {isStatic ? "公开数据集" : "DEMO DATA"} · {DATA_SNAPSHOT.label}
+          Checkmate · {isStatic ? "公开样本" : "演示数据"} · {DATA_SNAPSHOT.label}
         </span>
         <span>
           {activeView === "cities"
-            ? "Checkee.info · 非实时 snapshot"
-            : "page2.xlsx · 非实时静态数据"}
+            ? "仅供参考，不代表官方处理时间或个人结果"
+            : "仅供参考，不代表官方处理时间或个人结果"}
         </span>
       </footer>
     </div>
   );
 }
 
-function PageHeader({ view }: { view: AppView }) {
+function PageHeader({ view, page2CaseCount }: { view: AppView; page2CaseCount: number }) {
   const copy = {
     cities: {
-      eyebrow: "F-1 CHECK · CHINA SNAPSHOT",
+      eyebrow: "F-1 公开样本",
       title: "2026年度白宫严选中国F1硕博",
       lede: null,
       meta: `截至 ${DATA_SNAPSHOT.displayTimestamp}`,
-      badge: activeDatasetMetadata.isMock ? "DEMO DATA" : "REAL PUBLIC DATA",
+      badge: activeDatasetMetadata.isMock ? "演示数据" : "公开数据",
     },
     peers: {
-      eyebrow: "PAGE2 · 独立数据集",
-      title: "同学样本",
+      eyebrow: "匿名案例",
+      title: "名人堂",
       lede: null,
-      meta: "97 条静态记录 · 2026-09-01",
-      badge: "PAGE2 STATIC",
+      meta: `${page2CaseCount} 个匿名案例 · 截至 2026-09-01`,
+      badge: "匿名样本",
     },
   }[view];
   return (
@@ -460,29 +431,34 @@ function Page2View({
       id="page2-sample"
       aria-labelledby="page2-title"
     >
-      <div className="page2-source-line">
-        <p className="section-kicker">
-          <UsersThree size={17} weight="bold" /> PAGE2 · 独立数据集
-        </p>
-        <span>真实静态数据 · {snapshot.snapshotDate}</span>
+      <div className="page2-overview-heading">
+        <h2>核心统计</h2>
+        <span>截至 {snapshot.snapshotDate}</span>
       </div>
-      <div className="page2-metrics" aria-label="Page2 核心统计">
-        <Page2Metric label="Total Cases" value={metrics.totalCases} detail="合法记录" />
-        <Page2Metric label="Approved Cases" value={metrics.approvedCases} detail="Approve" />
-        <Page2Metric
-          label="Average Waiting Days"
-          value={metrics.averageWaitingDays}
-          detail="calendar days"
-          suffix="天"
-        />
+      <div className="page2-metrics" aria-label="名人堂核心统计">
+        <article className="page2-metric page2-metric--counts">
+          <div>
+            <small>案例</small>
+            <strong>{metrics.totalCases}</strong>
+          </div>
+          <div>
+            <small>Approve</small>
+            <strong>{metrics.approvedCases}</strong>
+          </div>
+        </article>
+        <article className="page2-metric page2-metric--distribution">
+          <small>Waiting distribution</small>
+          <div className="page2-quartiles">
+            <Page2Quartile label="Q1" value={metrics.waitingStats.q1} />
+            <Page2Quartile label="Median" value={metrics.waitingStats.median} featured />
+            <Page2Quartile label="Q3" value={metrics.waitingStats.q3} />
+          </div>
+        </article>
       </div>
       <div className="page2-hall-heading">
         <div>
-          <p className="section-kicker">
-            <Crown size={17} weight="bold" /> PAGE2 CASES
-          </p>
           <h2 id="page2-title" className="page2-hall-title">
-            名人堂
+            案例
           </h2>
         </div>
         <button
@@ -491,7 +467,7 @@ function Page2View({
           onClick={toggleExpanded}
           aria-expanded={expanded}
         >
-          {expanded ? "收起" : "展开"} <ArrowRight size={15} />
+          {expanded ? "收起" : "展开案例"} <ArrowRight size={15} />
         </button>
       </div>
       {expanded && (
@@ -499,7 +475,7 @@ function Page2View({
           <p className="page2-details__note">
             全部 {snapshot.cases.length} 条记录 · 按面签日期升序 · 每页 10 条
           </p>
-          <div className="page2-case-list" aria-label="Page2 案例列表">
+          <div className="page2-case-list" aria-label="名人堂案例列表">
             {visibleCases.map((record) => (
               <Page2CaseRow key={record.id} record={record} />
             ))}
@@ -511,26 +487,23 @@ function Page2View({
   );
 }
 
-function Page2Metric({
+function Page2Quartile({
   label,
   value,
-  detail,
-  suffix = "",
+  featured = false,
 }: {
   label: string;
   value: number | null;
-  detail: string;
-  suffix?: string;
+  featured?: boolean;
 }) {
   return (
-    <article className="page2-metric">
+    <div className={`page2-quartile${featured ? " is-featured" : ""}`}>
       <small>{label}</small>
       <strong>
         {value ?? "—"}
-        <em>{suffix}</em>
+        <em>天</em>
       </strong>
-      <span>{detail}</span>
-    </article>
+    </div>
   );
 }
 
@@ -575,7 +548,7 @@ function Page2Pagination({
 }) {
   if (totalPages <= 1) return null;
   return (
-    <nav className="page2-pagination" aria-label="Page2 案例分页">
+    <nav className="page2-pagination" aria-label="名人堂案例分页">
       <button
         type="button"
         onClick={() => onPageChange(Math.max(1, page - 1))}
@@ -750,7 +723,6 @@ function CaseList({
 }
 
 function CaseCard({ record, mockLabel }: { record: DisplayCase; mockLabel?: string }) {
-  const city = locationOf(record);
   const end = endDate(record);
   return (
     <article className="case-card">
@@ -773,7 +745,6 @@ function CaseCard({ record, mockLabel }: { record: DisplayCase; mockLabel?: stri
         <span>天</span>
       </div>
       <div className="case-card__meta">
-        <span>{city ? LOCATION_NAMES[city] : "匿名样本"}</span>
         <span>{record.majorCategory}</span>
       </div>
     </article>

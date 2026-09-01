@@ -283,6 +283,7 @@ export interface Page2Metrics {
   waitingDaysTotal: number;
   waitingDaysSampleSize: number;
   averageWaitingDays: number | null;
+  waitingStats: WaitStats;
 }
 
 export interface Page2QualityReport {
