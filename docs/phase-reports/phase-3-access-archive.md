@@ -1,7 +1,7 @@
 # 阶段 3：Checkee 访问阻断封存报告
 
 日期：2026-08-22  
-状态：`CHECKEE_ACCESS_BLOCKED`  ︎
+状态：`CHECKEE_ACCESS_BLOCKED`
 
 ## 封存对象
 
