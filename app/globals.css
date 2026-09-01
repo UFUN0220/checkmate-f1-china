@@ -4426,3 +4426,55 @@ a {
     margin-bottom: 7px;
   }
 }
+
+/* Stage 3L: quiet chrome, centered product titles */
+.checkmate-page-header {
+  display: block;
+  padding: 26px 0 16px;
+  text-align: center;
+}
+
+.checkmate-page-header h1 {
+  max-width: 1100px;
+  margin: 0 auto;
+  font-size: clamp(40px, 5.2vw, 76px);
+  letter-spacing: 0;
+  line-height: 1.06;
+}
+
+.checkmate-page-header--peers h1 {
+  font-size: clamp(40px, 4.8vw, 66px);
+}
+
+.checkmate-page-header__meta {
+  display: block;
+  max-width: none;
+  margin: 10px auto 0;
+  padding: 0;
+  border: 0;
+}
+
+.checkmate-page-header__meta strong {
+  font-size: 11px;
+}
+
+.page2-hall-heading {
+  justify-content: center;
+  margin-top: 12px;
+}
+
+@media (max-width: 560px) {
+  .checkmate-page-header {
+    padding: 22px 0 13px;
+  }
+
+  .checkmate-page-header h1,
+  .checkmate-page-header--peers h1 {
+    font-size: clamp(40px, 10.4vw, 56px);
+    line-height: 1.08;
+  }
+
+  .checkmate-page-header__meta {
+    margin-top: 7px;
+  }
+}

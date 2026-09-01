@@ -179,7 +179,6 @@ export function EvidenceAtlas() {
             </a>
           ))}
         </nav>
-        <span className="snapshot-badge">{activeView === "cities" ? "公开数据" : "匿名样本"}</span>
       </header>
 
       <main className="checkmate-main">
@@ -208,10 +207,6 @@ export function EvidenceAtlas() {
             </summary>
             <div className="methodology-grid">
               <p>
-                白宫严选使用 {DATA_SNAPSHOT.displayTimestamp} 的 Checkee.info F-1
-                公开快照；名人堂使用 page2.xlsx 生成的匿名静态数据。
-              </p>
-              <p>
                 公开样本统计，仅供参考，不代表官方处理时间或个人结果。学校、备注和联系方式不在公开案例中。
               </p>
             </div>
@@ -223,11 +218,7 @@ export function EvidenceAtlas() {
         <span>
           Checkmate · {isStatic ? "公开样本" : "演示数据"} · {DATA_SNAPSHOT.label}
         </span>
-        <span>
-          {activeView === "cities"
-            ? "仅供参考，不代表官方处理时间或个人结果"
-            : "仅供参考，不代表官方处理时间或个人结果"}
-        </span>
+        <span>公开样本统计，仅供参考，不代表官方处理时间或个人结果。</span>
       </footer>
     </div>
   );
@@ -236,31 +227,24 @@ export function EvidenceAtlas() {
 function PageHeader({ view, page2CaseCount }: { view: AppView; page2CaseCount: number }) {
   const copy = {
     cities: {
-      eyebrow: "F-1 公开样本",
       title: "2026年度白宫严选中国F1硕博",
-      lede: null,
       meta: `截至 ${DATA_SNAPSHOT.displayTimestamp}`,
-      badge: activeDatasetMetadata.isMock ? "演示数据" : "公开数据",
     },
     peers: {
-      eyebrow: "匿名案例",
       title: "名人堂",
-      lede: null,
-      meta: `${page2CaseCount} 个匿名案例 · 截至 2026-09-01`,
-      badge: "匿名样本",
+      meta: `${page2CaseCount} 个案例 · 截至 2026-09-01`,
     },
   }[view];
   return (
-    <section className="checkmate-page-header" aria-labelledby="page-title">
+    <section
+      className={`checkmate-page-header checkmate-page-header--${view}`}
+      aria-labelledby="page-title"
+    >
       <div>
-        <p className="eyebrow">{copy.eyebrow}</p>
         <h1 id="page-title">{copy.title}</h1>
-        {copy.lede && <p className="checkmate-page-header__lede">{copy.lede}</p>}
       </div>
       <div className="checkmate-page-header__meta">
-        <span>{copy.badge}</span>
         <strong>{copy.meta}</strong>
-        <small>描述性统计 · 非官方处理时间</small>
       </div>
     </section>
   );
@@ -291,17 +275,8 @@ function CitiesView({
     <section
       className="checkmate-view-section city-section"
       id="city-status"
-      aria-labelledby="city-section-title"
+      aria-label="白宫严选城市数据"
     >
-      <div className="city-overview-heading">
-        <div>
-          <p className="section-kicker">
-            <MapPin size={17} weight="bold" /> 五个核心领区
-          </p>
-          <h2 id="city-section-title">五城等待分布</h2>
-        </div>
-        <p>点击城市查看最新 Check Date 的案例。</p>
-      </div>
       <div className="city-grid" aria-label="五个城市的等待时长统计">
         {LOCATIONS.map((city) => (
           <CityCard
@@ -353,14 +328,7 @@ function TrendView({ trends }: { trends: MonthlyF1Trend[] }) {
   );
   const average = summary.waitingCount ? summary.waitingDays / summary.waitingCount : null;
   return (
-    <article className="trend-card" aria-labelledby="trend-title">
-      <div className="section-intro trend-card__intro">
-        <div>
-          <p className="section-kicker">F-1 · 全国月度统计</p>
-          <h2 id="trend-title">月度趋势</h2>
-        </div>
-        <p>按 Check Date；Reject 不计入。</p>
-      </div>
+    <article className="trend-card" aria-label="月度趋势">
       <div className="trend-table" role="table" aria-label="2026 年 F-1 月度等待统计">
         <div className="trend-table__header" role="row">
           <span>月份</span>
@@ -426,15 +394,7 @@ function Page2View({
     setPage(1);
   };
   return (
-    <section
-      className="checkmate-view-section page2-section"
-      id="page2-sample"
-      aria-labelledby="page2-title"
-    >
-      <div className="page2-overview-heading">
-        <h2>核心统计</h2>
-        <span>截至 {snapshot.snapshotDate}</span>
-      </div>
+    <section className="checkmate-view-section page2-section" id="page2-sample" aria-label="名人堂">
       <div className="page2-metrics" aria-label="名人堂核心统计">
         <article className="page2-metric page2-metric--counts">
           <div>
@@ -456,11 +416,6 @@ function Page2View({
         </article>
       </div>
       <div className="page2-hall-heading">
-        <div>
-          <h2 id="page2-title" className="page2-hall-title">
-            案例
-          </h2>
-        </div>
         <button
           type="button"
           className="page2-expand-button"
