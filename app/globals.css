@@ -4087,3 +4087,249 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+/* Stage 3J: Page2 static dataset cards */
+.page2-sample,
+.page2-section {
+  display: block;
+}
+
+.page2-source-line,
+.page2-hall-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.page2-source-line {
+  margin-bottom: 10px;
+  color: var(--check-muted);
+  font-size: 10px;
+}
+
+.page2-source-line .section-kicker,
+.page2-hall-heading .section-kicker {
+  margin: 0;
+}
+
+.page2-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.page2-metric {
+  min-width: 0;
+  padding: 14px 15px 13px;
+  border: 1px solid var(--check-line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 5px 18px rgba(31, 35, 41, 0.04);
+}
+
+.page2-metric small,
+.page2-metric span {
+  display: block;
+  color: var(--check-muted);
+  font-size: 9px;
+}
+
+.page2-metric small {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page2-metric strong {
+  display: block;
+  margin: 7px 0 3px;
+  color: var(--check-ink);
+  font-size: clamp(25px, 3vw, 36px);
+  line-height: 1;
+}
+
+.page2-metric em {
+  margin-left: 3px;
+  color: var(--check-muted);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.page2-hall-heading {
+  margin: 16px 0 9px;
+}
+
+.page2-hall-title {
+  margin: 3px 0 0;
+  font-family: "heishenhua", "HYBlackMythU", sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.page2-expand-button,
+.page2-pagination button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--check-line);
+  border-radius: 999px;
+  background: var(--check-surface);
+  color: var(--check-ink);
+  cursor: pointer;
+  font: inherit;
+}
+
+.page2-expand-button {
+  padding: 7px 10px;
+  font-size: 11px;
+}
+
+.page2-details {
+  padding: 12px;
+  border: 1px solid var(--check-line);
+  border-radius: 14px;
+  background: var(--check-surface-soft);
+}
+
+.page2-details__note {
+  margin: 0 0 9px;
+  color: var(--check-muted);
+  font-size: 10px;
+}
+
+.page2-case-list {
+  display: grid;
+  gap: 6px;
+}
+
+.page2-case-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 72px minmax(140px, 0.8fr);
+  align-items: center;
+  gap: 10px;
+  padding: 10px 11px;
+  border: 1px solid var(--check-line);
+  border-radius: 10px;
+  background: var(--check-surface);
+}
+
+.page2-case-row__dates {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+}
+
+.page2-case-row__dates strong {
+  font-size: 14px;
+}
+
+.page2-case-row__dates span,
+.page2-case-row__info {
+  overflow: hidden;
+  color: var(--check-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page2-status {
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.page2-status--approved {
+  background: #e5f4e8;
+  color: #31763f;
+}
+
+.page2-status--pending {
+  background: #fff0d7;
+  color: #94640c;
+}
+
+.page2-status--other {
+  background: var(--check-line);
+  color: var(--check-muted);
+}
+
+.page2-case-row__days {
+  font-size: 22px;
+  text-align: right;
+}
+
+.page2-case-row__days small {
+  margin-left: 2px;
+  color: var(--check-muted);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.page2-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+  color: var(--check-muted);
+  font-size: 10px;
+}
+
+.page2-pagination button {
+  padding: 5px 9px;
+  font-size: 10px;
+}
+
+.page2-expand-button:hover,
+.page2-pagination button:not(:disabled):hover {
+  border-color: var(--check-ink);
+}
+
+.page2-expand-button:disabled,
+.page2-pagination button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+@media (max-width: 560px) {
+  .page2-source-line,
+  .page2-hall-heading {
+    align-items: flex-start;
+  }
+
+  .page2-source-line {
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .page2-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .page2-metric {
+    padding: 11px 12px;
+  }
+
+  .page2-metric strong {
+    margin-top: 5px;
+    font-size: 28px;
+  }
+
+  .page2-case-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 7px;
+  }
+
+  .page2-case-row__info {
+    grid-column: 1 / -1;
+  }
+
+  .page2-case-row__days {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}

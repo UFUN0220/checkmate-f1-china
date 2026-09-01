@@ -19,8 +19,10 @@
     "data:parse": "node scripts/run-checkee-static.mjs import",
     "data:checkee:validate": "node scripts/validate-checkee-static.mjs",
     "data:manual:validate": "node scripts/run-manual-validation.mjs",
+    "data:page2:import": "node scripts/parse-page2.mjs import",
+    "data:page2:validate": "node scripts/parse-page2.mjs validate",
     "data:mock:generate": "node scripts/generate-stage3d-mock-data.mjs",
-    "check:offline": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run data:checkee:validate && npm run build"
+    "check:offline": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run data:checkee:validate && npm run data:page2:validate && npm run build"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

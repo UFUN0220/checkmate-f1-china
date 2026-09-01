@@ -7,26 +7,22 @@ import {
   CaretRight,
   Crown,
   Info,
-  Medal,
   MapPin,
   UsersThree,
 } from "@phosphor-icons/react";
-import { useEffect, useMemo, useState } from "react";
-import {
-  calculateHallOfFame,
-  calculateWaitStats,
-  sortByCheckDateDescending,
-} from "../lib/analytics/metrics";
+import { useEffect, useState } from "react";
+import { sortByCheckDateDescending } from "../lib/analytics/metrics";
 import { DATA_SNAPSHOT } from "../lib/data/snapshot-config";
 import { activeDatasetMetadata, activeSnapshot } from "../lib/demo-data";
-import { loadHallOfFameDataset, loadPeerDataset } from "../lib/data/manual-datasets";
+import { PAGE2_STATIC_SNAPSHOT } from "../lib/data/page2-static-snapshot";
 import { formatDays } from "../lib/data/presentation";
 import {
-  type CheckCase,
   LOCATIONS,
   type CaseStatus,
   type Location,
   type MonthlyF1Trend,
+  type Page2Case,
+  type Page2Metrics,
   type PublicCase,
   type WaitStats,
 } from "../lib/data/models";
@@ -53,18 +49,17 @@ const CITY_TONES: Record<Location, string> = {
   shenyang: "amber",
 };
 
-type DisplayCase = PublicCase | CheckCase;
-type AppView = "cities" | "peers" | "hall";
+type DisplayCase = PublicCase;
+type AppView = "cities" | "peers";
 
 const VIEW_ITEMS: Array<{ key: AppView; label: string }> = [
   { key: "cities", label: "城市等待" },
   { key: "peers", label: "同学样本" },
-  { key: "hall", label: "Check 名人堂" },
 ];
 
 function readView() {
   const view = new URLSearchParams(window.location.search).get("view");
-  return VIEW_ITEMS.some((item) => item.key === view) ? (view as AppView) : "cities";
+  return view === "peers" || view === "hall" ? "peers" : "cities";
 }
 
 function viewHref(view: AppView) {
@@ -77,19 +72,19 @@ function formatDate(value: string | null) {
 }
 
 function startDate(record: DisplayCase) {
-  return "checkDate" in record ? record.checkDate : record.startDate;
+  return record.checkDate;
 }
 
 function endDate(record: DisplayCase) {
-  return "completeDate" in record ? record.completeDate : record.endDate;
+  return record.completeDate;
 }
 
 function locationOf(record: DisplayCase) {
-  return "location" in record ? record.location : record.city;
+  return record.location;
 }
 
 function caseId(record: DisplayCase) {
-  return "publicId" in record ? record.publicId : record.id;
+  return record.publicId;
 }
 
 function statusLabel(status: Exclude<CaseStatus, "unknown">) {
@@ -105,8 +100,18 @@ export function EvidenceAtlas() {
     const sync = () => {
       const params = new URLSearchParams(window.location.search);
       const city = params.get("city");
-      setActiveView(readView());
-      setSelectedCity(city && LOCATIONS.includes(city as Location) ? (city as Location) : null);
+      const view = readView();
+      if (params.get("view") === "hall") {
+        params.set("view", "peers");
+        params.delete("city");
+        window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
+      }
+      setActiveView(view);
+      setSelectedCity(
+        view === "cities" && city && LOCATIONS.includes(city as Location)
+          ? (city as Location)
+          : null,
+      );
     };
     sync();
     window.addEventListener("popstate", sync);
@@ -145,10 +150,6 @@ export function EvidenceAtlas() {
     setSelectedCity(null);
   };
 
-  const peerDataset = useMemo(() => loadPeerDataset(), []);
-  const hallDataset = useMemo(() => loadHallOfFameDataset(), []);
-  const peerStats = useMemo(() => calculateWaitStats(peerDataset.cases), [peerDataset.cases]);
-  const hallOfFame = useMemo(() => calculateHallOfFame(hallDataset.cases), [hallDataset.cases]);
   const selectedCases = selectedCity
     ? sortByCheckDateDescending(
         activeSnapshot.cases.filter((item) => item.location === selectedCity),
@@ -192,7 +193,7 @@ export function EvidenceAtlas() {
           ))}
         </nav>
         <span className="snapshot-badge">
-          {activeView === "cities" ? "STATIC SNAPSHOT" : "DEMO DATA"}
+          {activeView === "cities" ? "STATIC SNAPSHOT" : "PAGE2 STATIC"}
         </span>
       </header>
 
@@ -211,8 +212,9 @@ export function EvidenceAtlas() {
             trends={activeSnapshot.monthlyF1Trends ?? []}
           />
         )}
-        {activeView === "peers" && <PeerView dataset={peerDataset} stats={peerStats} />}
-        {activeView === "hall" && <HallView dataset={hallDataset} records={hallOfFame} />}
+        {activeView === "peers" && (
+          <Page2View snapshot={PAGE2_STATIC_SNAPSHOT} metrics={PAGE2_STATIC_SNAPSHOT.metrics} />
+        )}
 
         <section className="methodology-section" id="methods" aria-labelledby="methods-title">
           <details>
@@ -222,7 +224,8 @@ export function EvidenceAtlas() {
             <div className="methodology-grid">
               <p>
                 城市等待页使用 {DATA_SNAPSHOT.displayTimestamp} 的 Checkee.info
-                静态快照；同学样本与名人堂使用独立数据入口。
+                静态快照；同学样本使用独立的 page2.xlsx 静态公开产物，名人堂已合并为 Page2
+                的展开列表。
               </p>
               <p>
                 Pending 案例统一计算到截止日；已结束案例使用原始记录中的合法结束日期。所有 duration
@@ -250,7 +253,9 @@ export function EvidenceAtlas() {
           Checkmate · {isStatic ? "公开数据集" : "DEMO DATA"} · {DATA_SNAPSHOT.label}
         </span>
         <span>
-          {activeView === "cities" ? "Checkee.info · 非实时 snapshot" : "开发 mock · 非实时"}
+          {activeView === "cities"
+            ? "Checkee.info · 非实时 snapshot"
+            : "page2.xlsx · 非实时静态数据"}
         </span>
       </footer>
     </div>
@@ -267,18 +272,11 @@ function PageHeader({ view }: { view: AppView }) {
       badge: activeDatasetMetadata.isMock ? "DEMO DATA" : "REAL PUBLIC DATA",
     },
     peers: {
-      eyebrow: "独立匿名样本",
-      title: "身边同学",
-      lede: "一组不按城市划分的样本，用来感受等待时间的分布。",
-      meta: "当前为开发 mock · 可替换手工数据",
-      badge: "DEMO DATA",
-    },
-    hall: {
-      eyebrow: "独立维护的精选案例",
-      title: "Check 名人堂",
-      lede: "把最长的等待时间留档，看看哪些 Check 已经成了长期项目。",
-      meta: "Top 10 · 当前为开发 mock",
-      badge: "DEMO DATA",
+      eyebrow: "PAGE2 · 独立数据集",
+      title: "同学样本",
+      lede: null,
+      meta: "97 条静态记录 · 2026-09-01",
+      badge: "PAGE2 STATIC",
     },
   }[view];
   return (
@@ -440,77 +438,162 @@ function formatMonth(month: string) {
   return `${["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][monthNumber - 1]} ${month.slice(0, 4)}`;
 }
 
-function PeerView({
-  dataset,
-  stats,
+function Page2View({
+  snapshot,
+  metrics,
 }: {
-  dataset: ReturnType<typeof loadPeerDataset>;
-  stats: WaitStats;
+  snapshot: typeof PAGE2_STATIC_SNAPSHOT;
+  metrics: Page2Metrics;
 }) {
+  const [expanded, setExpanded] = useState(false);
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+  const totalPages = Math.max(1, Math.ceil(snapshot.cases.length / pageSize));
+  const visibleCases = snapshot.cases.slice((page - 1) * pageSize, page * pageSize);
+  const toggleExpanded = () => {
+    setExpanded((value) => !value);
+    setPage(1);
+  };
   return (
     <section
-      className="checkmate-view-section peer-section"
-      id="peer-sample"
-      aria-labelledby="peer-title"
+      className="checkmate-view-section page2-section"
+      id="page2-sample"
+      aria-labelledby="page2-title"
     >
-      <div className="section-intro">
+      <div className="page2-source-line">
+        <p className="section-kicker">
+          <UsersThree size={17} weight="bold" /> PAGE2 · 独立数据集
+        </p>
+        <span>真实静态数据 · {snapshot.snapshotDate}</span>
+      </div>
+      <div className="page2-metrics" aria-label="Page2 核心统计">
+        <Page2Metric label="Total Cases" value={metrics.totalCases} detail="合法记录" />
+        <Page2Metric label="Approved Cases" value={metrics.approvedCases} detail="Approve" />
+        <Page2Metric
+          label="Average Waiting Days"
+          value={metrics.averageWaitingDays}
+          detail="calendar days"
+          suffix="天"
+        />
+      </div>
+      <div className="page2-hall-heading">
         <div>
           <p className="section-kicker">
-            <UsersThree size={17} weight="bold" /> 独立匿名样本 ·{" "}
-            {dataset.metadata.isMock ? "DEMO DATA" : "手工数据"}
+            <Crown size={17} weight="bold" /> PAGE2 CASES
           </p>
-          <h2 id="peer-title">身边同学现在等多久？</h2>
+          <h2 id="page2-title" className="page2-hall-title">
+            名人堂
+          </h2>
         </div>
-        <p>
-          {dataset.metadata.isMock
-            ? "当前为开发 mock 数据，可直接替换手工数据文件。"
-            : "当前为手工数据，和公开样本保持独立。"}
-        </p>
+        <button
+          type="button"
+          className="page2-expand-button"
+          onClick={toggleExpanded}
+          aria-expanded={expanded}
+        >
+          {expanded ? "收起" : "展开"} <ArrowRight size={15} />
+        </button>
       </div>
-      <WaitStatsPanel stats={stats} sampleLabel={`统计样本 n = ${stats.sampleSize}`} />
-      <CaseList
-        records={dataset.cases.slice(0, 5)}
-        emptyLabel="暂无同学样本。"
-        mockLabel={dataset.metadata.isMock ? "DEMO DATA" : undefined}
-      />
+      {expanded && (
+        <div className="page2-details">
+          <p className="page2-details__note">
+            全部 {snapshot.cases.length} 条记录 · 按面签日期升序 · 每页 10 条
+          </p>
+          <div className="page2-case-list" aria-label="Page2 案例列表">
+            {visibleCases.map((record) => (
+              <Page2CaseRow key={record.id} record={record} />
+            ))}
+          </div>
+          <Page2Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+        </div>
+      )}
     </section>
   );
 }
 
-function HallView({
-  dataset,
-  records,
+function Page2Metric({
+  label,
+  value,
+  detail,
+  suffix = "",
 }: {
-  dataset: ReturnType<typeof loadHallOfFameDataset>;
-  records: CheckCase[];
+  label: string;
+  value: number | null;
+  detail: string;
+  suffix?: string;
 }) {
   return (
-    <section
-      className="checkmate-view-section hall-section"
-      id="hall-of-fame"
-      aria-labelledby="hall-title"
-    >
-      <div className="section-intro">
-        <div>
-          <p className="section-kicker">
-            <Crown size={17} weight="bold" /> 独立精选案例 ·{" "}
-            {dataset.metadata.isMock ? "DEMO DATA" : "手工数据"}
-          </p>
-          <h2 id="hall-title">最长等待 Top 10</h2>
-        </div>
-        <p>按 duration 从长到短排列。Top 3 先看，#4–10 用更紧凑的方式保留。</p>
+    <article className="page2-metric">
+      <small>{label}</small>
+      <strong>
+        {value ?? "—"}
+        <em>{suffix}</em>
+      </strong>
+      <span>{detail}</span>
+    </article>
+  );
+}
+
+function Page2CaseRow({ record }: { record: Page2Case }) {
+  return (
+    <article className="page2-case-row">
+      <div className="page2-case-row__dates">
+        <strong>{formatDate(record.startDate)}</strong>
+        <span>
+          →{" "}
+          {record.endDate
+            ? formatDate(record.endDate)
+            : `截至 ${formatDate(record.effectiveEndDate)}`}
+        </span>
       </div>
-      <div className="hall-top-three" aria-label="Check 名人堂 Top 3">
-        {records.slice(0, 3).map((record, index) => (
-          <HallRow key={caseId(record)} record={record} rank={index + 1} featured />
-        ))}
-      </div>
-      <div className="hall-list" aria-label="Check 名人堂第 4 至 10 名">
-        {records.slice(3, 10).map((record, index) => (
-          <HallRow key={caseId(record)} record={record} rank={index + 4} />
-        ))}
-      </div>
-    </section>
+      <span className={`page2-status page2-status--${record.status}`}>
+        {record.status === "approved"
+          ? "Approved"
+          : record.status === "pending"
+            ? "Pending"
+            : "Other"}
+      </span>
+      <strong className="page2-case-row__days">
+        {record.waitingDays}
+        <small>天</small>
+      </strong>
+      <span className="page2-case-row__info">
+        {[record.degree, record.major, record.mergedInfo].filter(Boolean).join(" · ") || "—"}
+      </span>
+    </article>
+  );
+}
+
+function Page2Pagination({
+  page,
+  totalPages,
+  onPageChange,
+}: {
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}) {
+  if (totalPages <= 1) return null;
+  return (
+    <nav className="page2-pagination" aria-label="Page2 案例分页">
+      <button
+        type="button"
+        onClick={() => onPageChange(Math.max(1, page - 1))}
+        disabled={page === 1}
+      >
+        上一页
+      </button>
+      <span>
+        {page} / {totalPages}
+      </span>
+      <button
+        type="button"
+        onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+        disabled={page === totalPages}
+      >
+        下一页
+      </button>
+    </nav>
   );
 }
 
@@ -647,39 +730,6 @@ function Pagination({
   );
 }
 
-function WaitStatsPanel({ stats, sampleLabel }: { stats: WaitStats; sampleLabel: string }) {
-  return (
-    <div className="wait-stats-panel" aria-label="Q1、中位数和 Q3 等待时长">
-      <WaitStat label="较快 25%" detail="Q1" value={stats.q1} />
-      <WaitStat label="中位数" detail="Median" value={stats.median} featured />
-      <WaitStat label="较慢 25%" detail="Q3" value={stats.q3} />
-      <small className="wait-stats-panel__sample">{sampleLabel}</small>
-    </div>
-  );
-}
-
-function WaitStat({
-  label,
-  detail,
-  value,
-  featured = false,
-}: {
-  label: string;
-  detail: string;
-  value: number | null;
-  featured?: boolean;
-}) {
-  return (
-    <div className={`wait-stat${featured ? " is-featured" : ""}`}>
-      <small>
-        {label} <i>{detail}</i>
-      </small>
-      <strong>{formatDays(value)}</strong>
-      <span>天</span>
-    </div>
-  );
-}
-
 function CaseList({
   records,
   emptyLabel,
@@ -724,65 +774,7 @@ function CaseCard({ record, mockLabel }: { record: DisplayCase; mockLabel?: stri
       </div>
       <div className="case-card__meta">
         <span>{city ? LOCATION_NAMES[city] : "匿名样本"}</span>
-        <span>
-          {"majorCategory" in record
-            ? record.majorCategory
-            : "visaEntry" in record
-              ? record.visaEntry === "initial"
-                ? "Initial"
-                : record.visaEntry === "renewal"
-                  ? "Renewal"
-                  : "Unknown"
-              : "F-1"}
-        </span>
-      </div>
-    </article>
-  );
-}
-
-function HallRow({
-  record,
-  rank,
-  featured = false,
-}: {
-  record: CheckCase;
-  rank: number;
-  featured?: boolean;
-}) {
-  const treatment = rank <= 3 ? ["gold", "silver", "bronze"][rank - 1] : "standard";
-  const title =
-    record.displayName ??
-    (rank === 1
-      ? "年度耐心奖"
-      : rank === 2
-        ? "长期观察员"
-        : rank === 3
-          ? "耐心值 MAX"
-          : "长期项目候选");
-  const subtitle =
-    record.subtitle ??
-    `${record.city ? LOCATION_NAMES[record.city] : "匿名案例"} · ${statusLabel(record.status)}`;
-  return (
-    <article className={`hall-row hall-row--${treatment}${featured ? " hall-row--featured" : ""}`}>
-      <div className="hall-row__rank">
-        {rank <= 3 ? <Medal size={23} weight="fill" aria-hidden="true" /> : "#" + rank}
-      </div>
-      <div className="hall-row__body">
-        <div>
-          <strong>{title}</strong>
-          <span>{subtitle}</span>
-        </div>
-        <p>
-          {formatDate(record.startDate)} <span>→</span>{" "}
-          {record.status === "pending"
-            ? `截至 ${formatDate(record.effectiveEndDate)}`
-            : formatDate(record.endDate)}
-        </p>
-      </div>
-      <div className="hall-row__duration">
-        <strong>{formatDays(record.durationDays)}</strong>
-        <span>天</span>
-        {rank === 1 && <Crown size={18} aria-label="第一名" />}
+        <span>{record.majorCategory}</span>
       </div>
     </article>
   );

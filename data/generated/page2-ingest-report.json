@@ -1,0 +1,34 @@
+{
+  "rawRows": 197,
+  "parsedRows": 97,
+  "includedRows": 97,
+  "invalidRows": 0,
+  "blankRows": 100,
+  "formulaRows": 0,
+  "missingStartDateRows": 0,
+  "invalidStartDateRows": 0,
+  "invalidEndDateRows": 0,
+  "endBeforeStartRows": 0,
+  "unknownStatusRows": 0,
+  "missingEndDateRows": 88,
+  "mergedInfoRows": 71,
+  "privacySuppressedInfoRows": 71,
+  "dateMin": "2026-04-07",
+  "dateMax": "2026-08-17",
+  "approveSourceColumn": "F · 状态",
+  "approveSourceValuesAccepted": ["Approve", "Approved"],
+  "statusNormalization": {
+    "Approve": "approved",
+    "Approved": "approved",
+    "Check": "pending",
+    "Pending": "pending"
+  },
+  "columnMapping": {
+    "E": "面签日期 → startDate",
+    "F": "状态 → status",
+    "G": "结束日期 → endDate/effectiveEndDate",
+    "H": "学校（原始字段，仅合并审计，不公开）",
+    "I": "备注（原始字段，仅合并审计，不公开）",
+    "J": "无表头备注（mapping ambiguity；仅合并审计，不公开）"
+  }
+}

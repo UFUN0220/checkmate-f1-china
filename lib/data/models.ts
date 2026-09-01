@@ -261,3 +261,59 @@ export interface PublicSnapshot {
   cases: PublicCase[];
   qualityReport: DataQualityReport;
 }
+
+export type Page2Status = "approved" | "pending" | "other";
+
+export interface Page2Case {
+  id: string;
+  startDate: string;
+  endDate: string | null;
+  effectiveEndDate: string;
+  waitingDays: number;
+  status: Page2Status;
+  degree: string | null;
+  major: string | null;
+  mergedInfo: string | null;
+}
+
+export interface Page2Metrics {
+  totalCases: number;
+  approvedCases: number;
+  pendingOrOtherCases: number;
+  waitingDaysTotal: number;
+  waitingDaysSampleSize: number;
+  averageWaitingDays: number | null;
+}
+
+export interface Page2QualityReport {
+  rawRows: number;
+  parsedRows: number;
+  includedRows: number;
+  invalidRows: number;
+  blankRows: number;
+  formulaRows: number;
+  missingStartDateRows: number;
+  invalidStartDateRows: number;
+  invalidEndDateRows: number;
+  endBeforeStartRows: number;
+  unknownStatusRows: number;
+  missingEndDateRows: number;
+  mergedInfoRows: number;
+  privacySuppressedInfoRows: number;
+  dateMin: string | null;
+  dateMax: string | null;
+  approveSourceColumn: string;
+  approveSourceValuesAccepted: string[];
+  statusNormalization: Record<string, Page2Status>;
+  columnMapping: Record<string, string>;
+}
+
+export interface Page2Snapshot {
+  sourceName: "page2.xlsx";
+  snapshotDate: string;
+  sourceMode: "page2-xlsx-static";
+  isMock: false;
+  metadata: Page2QualityReport;
+  metrics: Page2Metrics;
+  cases: Page2Case[];
+}
