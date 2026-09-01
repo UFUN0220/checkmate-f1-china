@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { sortByCheckDateDescending } from "../lib/analytics/metrics";
 import { DATA_SNAPSHOT } from "../lib/data/snapshot-config";
 import { activeDatasetMetadata, activeSnapshot } from "../lib/demo-data";
-import { PAGE2_STATIC_SNAPSHOT } from "../lib/data/page2-static-snapshot";
+import { loadPage2Snapshot } from "../lib/data/loaders";
 import { formatDays } from "../lib/data/presentation";
 import {
   LOCATIONS,
@@ -14,7 +14,9 @@ import {
   type MonthlyF1Trend,
   type Page2Case,
   type Page2Metrics,
+  type Page2Snapshot,
   type PublicCase,
+  type PublicSnapshot,
   type WaitStats,
 } from "../lib/data/models";
 
@@ -41,7 +43,7 @@ const CITY_TONES: Record<Location, string> = {
 };
 
 type DisplayCase = PublicCase;
-type AppView = "cities" | "peers";
+export type AppView = "cities" | "peers";
 
 const VIEW_ITEMS: Array<{ key: AppView; label: string }> = [
   { key: "cities", label: "白宫严选" },
@@ -81,7 +83,6 @@ function statusLabel(status: Exclude<CaseStatus, "unknown">) {
 export function EvidenceAtlas() {
   const [activeView, setActiveView] = useState<AppView>("cities");
   const [selectedCity, setSelectedCity] = useState<Location | null>(null);
-  const [cityPage, setCityPage] = useState(1);
 
   useEffect(() => {
     const sync = () => {
@@ -104,10 +105,6 @@ export function EvidenceAtlas() {
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);
   }, []);
-
-  useEffect(() => {
-    setCityPage(1);
-  }, [selectedCity]);
 
   const navigateView = (view: AppView) => {
     const params = new URLSearchParams(window.location.search);
@@ -137,17 +134,10 @@ export function EvidenceAtlas() {
     setSelectedCity(null);
   };
 
-  const selectedCases = selectedCity
-    ? sortByCheckDateDescending(
-        activeSnapshot.cases.filter((item) => item.location === selectedCity),
-      )
-    : [];
-  const cityPageCount = Math.max(1, Math.ceil(selectedCases.length / 10));
-  const visibleSelectedCases = selectedCases.slice((cityPage - 1) * 10, cityPage * 10);
   const isStatic = !activeDatasetMetadata.isMock;
 
   return (
-    <div className="checkmate-app">
+    <div className="checkmate-standalone">
       <header className="checkmate-header">
         <a
           className="checkmate-brand"
@@ -163,42 +153,18 @@ export function EvidenceAtlas() {
           </span>
           <span>Checkmate</span>
         </a>
-        <nav className="checkmate-nav" aria-label="页面导航">
-          {VIEW_ITEMS.map((item) => (
-            <a
-              key={item.key}
-              href={viewHref(item.key)}
-              className={activeView === item.key ? "is-active" : undefined}
-              aria-current={activeView === item.key ? "page" : undefined}
-              onClick={(event) => {
-                event.preventDefault();
-                navigateView(item.key);
-              }}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+        <CheckmateNavigation activeView={activeView} onNavigate={navigateView} />
       </header>
 
-      <main className="checkmate-main">
-        <PageHeader view={activeView} page2CaseCount={PAGE2_STATIC_SNAPSHOT.metrics.totalCases} />
+      <main className="checkmate-main checkmate-feature">
         {activeView === "cities" && (
-          <CitiesView
+          <WhiteHouseSelection
+            data={activeSnapshot}
             selectedCity={selectedCity}
-            selectedCases={visibleSelectedCases}
-            totalCaseCount={selectedCases.length}
-            cityPage={cityPage}
-            cityPageCount={cityPageCount}
-            onCityPageChange={setCityPage}
-            selectCity={selectCity}
-            clearCity={clearCity}
-            trends={activeSnapshot.monthlyF1Trends ?? []}
+            onSelectedCityChange={(city) => (city ? selectCity(city) : clearCity())}
           />
         )}
-        {activeView === "peers" && (
-          <Page2View snapshot={PAGE2_STATIC_SNAPSHOT} metrics={PAGE2_STATIC_SNAPSHOT.metrics} />
-        )}
+        {activeView === "peers" && <HallOfFame />}
 
         <section className="methodology-section" id="methods" aria-labelledby="methods-title">
           <details>
@@ -224,7 +190,102 @@ export function EvidenceAtlas() {
   );
 }
 
-function PageHeader({ view, page2CaseCount }: { view: AppView; page2CaseCount: number }) {
+export function CheckmateNavigation({
+  activeView,
+  onNavigate,
+}: {
+  activeView?: AppView;
+  onNavigate?: (view: AppView) => void;
+}) {
+  return (
+    <nav className="checkmate-nav" aria-label="页面导航">
+      {VIEW_ITEMS.map((item) => (
+        <a
+          key={item.key}
+          href={viewHref(item.key)}
+          className={activeView === item.key ? "is-active" : undefined}
+          aria-current={activeView === item.key ? "page" : undefined}
+          onClick={(event) => {
+            if (!onNavigate) return;
+            event.preventDefault();
+            onNavigate(item.key);
+          }}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+export interface WhiteHouseSelectionProps {
+  data?: PublicSnapshot;
+  initialCity?: Location | null;
+  selectedCity?: Location | null;
+  onSelectedCityChange?: (city: Location | null) => void;
+}
+
+export function WhiteHouseSelection({
+  data = activeSnapshot,
+  initialCity = null,
+  selectedCity: controlledCity,
+  onSelectedCityChange,
+}: WhiteHouseSelectionProps) {
+  const [internalCity, setInternalCity] = useState<Location | null>(initialCity);
+  const [cityPage, setCityPage] = useState(1);
+  const isControlled = controlledCity !== undefined;
+  const selectedCity = isControlled ? controlledCity : internalCity;
+  const selectCity = (city: Location) => {
+    if (!isControlled) setInternalCity(city);
+    onSelectedCityChange?.(city);
+  };
+  const clearCity = () => {
+    if (!isControlled) setInternalCity(null);
+    onSelectedCityChange?.(null);
+  };
+  const selectedCases = selectedCity
+    ? sortByCheckDateDescending(data.cases.filter((item) => item.location === selectedCity))
+    : [];
+  const cityPageCount = Math.max(1, Math.ceil(selectedCases.length / 10));
+  const visibleSelectedCases = selectedCases.slice((cityPage - 1) * 10, cityPage * 10);
+
+  useEffect(() => {
+    setCityPage(1);
+  }, [selectedCity]);
+
+  return (
+    <>
+      <PageHeader view="cities" />
+      <CitiesView
+        snapshot={data}
+        selectedCity={selectedCity}
+        selectedCases={visibleSelectedCases}
+        totalCaseCount={selectedCases.length}
+        cityPage={cityPage}
+        cityPageCount={cityPageCount}
+        onCityPageChange={setCityPage}
+        selectCity={selectCity}
+        clearCity={clearCity}
+        trends={data.monthlyF1Trends ?? []}
+      />
+    </>
+  );
+}
+
+export interface HallOfFameProps {
+  data?: Page2Snapshot;
+}
+
+export function HallOfFame({ data = loadPage2Snapshot() }: HallOfFameProps) {
+  return (
+    <>
+      <PageHeader view="peers" page2CaseCount={data.metrics.totalCases} />
+      <Page2View snapshot={data} metrics={data.metrics} />
+    </>
+  );
+}
+
+function PageHeader({ view, page2CaseCount = 0 }: { view: AppView; page2CaseCount?: number }) {
   const copy = {
     cities: {
       title: "2026年度白宫严选中国F1硕博",
@@ -251,6 +312,7 @@ function PageHeader({ view, page2CaseCount }: { view: AppView; page2CaseCount: n
 }
 
 function CitiesView({
+  snapshot,
   selectedCity,
   selectedCases,
   totalCaseCount,
@@ -261,6 +323,7 @@ function CitiesView({
   clearCity,
   trends,
 }: {
+  snapshot: PublicSnapshot;
   selectedCity: Location | null;
   selectedCases: PublicCase[];
   totalCaseCount: number;
@@ -282,8 +345,8 @@ function CitiesView({
           <CityCard
             key={city}
             city={city}
-            stats={activeSnapshot.locations[city].waitStats}
-            sampleCount={activeSnapshot.locations[city].sampleCount}
+            stats={snapshot.locations[city].waitStats}
+            sampleCount={snapshot.locations[city].sampleCount}
             selected={selectedCity === city}
             onClick={() => selectCity(city)}
           />
@@ -295,6 +358,7 @@ function CitiesView({
           {selectedCity ? (
             <CityDetail
               city={selectedCity}
+              snapshot={snapshot}
               cases={selectedCases}
               totalCaseCount={totalCaseCount}
               page={cityPage}
@@ -377,13 +441,7 @@ function formatMonth(month: string) {
   return `${["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][monthNumber - 1]} ${month.slice(0, 4)}`;
 }
 
-function Page2View({
-  snapshot,
-  metrics,
-}: {
-  snapshot: typeof PAGE2_STATIC_SNAPSHOT;
-  metrics: Page2Metrics;
-}) {
+function Page2View({ snapshot, metrics }: { snapshot: Page2Snapshot; metrics: Page2Metrics }) {
   const [expanded, setExpanded] = useState(false);
   const [page, setPage] = useState(1);
   const pageSize = 10;
@@ -575,6 +633,7 @@ function CityCard({
 
 function CityDetail({
   city,
+  snapshot,
   cases,
   totalCaseCount,
   page,
@@ -583,6 +642,7 @@ function CityDetail({
   onClose,
 }: {
   city: Location;
+  snapshot: PublicSnapshot;
   cases: PublicCase[];
   totalCaseCount: number;
   page: number;
@@ -590,7 +650,7 @@ function CityDetail({
   onPageChange: (page: number) => void;
   onClose: () => void;
 }) {
-  const metrics = activeSnapshot.locations[city];
+  const metrics = snapshot.locations[city];
   const stats = metrics.waitStats;
   return (
     <div className="city-detail" aria-labelledby="city-detail-title">

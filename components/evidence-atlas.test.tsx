@@ -2,7 +2,7 @@
 
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { EvidenceAtlas } from "./evidence-atlas";
+import { EvidenceAtlas, HallOfFame, WhiteHouseSelection } from "./checkmate";
 
 describe("EvidenceAtlas", () => {
   afterEach(() => cleanup());
@@ -93,5 +93,23 @@ describe("EvidenceAtlas", () => {
     expect(screen.getByRole("link", { name: "白宫严选" }).getAttribute("aria-current")).toBe(
       "page",
     );
+  });
+
+  it("renders feature modules without the standalone shell or URL state", () => {
+    window.history.replaceState({}, "", "/?view=hall&city=guangzhou");
+    render(<WhiteHouseSelection initialCity="beijing" />);
+
+    expect(screen.getByRole("heading", { name: "2026年度白宫严选中国F1硕博" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /北京 183/ }).getAttribute("aria-pressed")).toBe(
+      "true",
+    );
+    expect(screen.queryByRole("navigation", { name: "页面导航" })).toBeNull();
+    expect(window.location.search).toBe("?view=hall&city=guangzhou");
+
+    cleanup();
+    render(<HallOfFame />);
+    expect(screen.getByRole("heading", { name: "名人堂" })).toBeTruthy();
+    expect(screen.getByText("97 个案例 · 截至 2026-09-01")).toBeTruthy();
+    expect(screen.queryByRole("navigation", { name: "页面导航" })).toBeNull();
   });
 });

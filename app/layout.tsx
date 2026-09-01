@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
-      <body>{children}</body>
+    <html lang="zh-CN" className="checkmate-standalone-html">
+      <body className="checkmate-standalone-body">{children}</body>
     </html>
   );
 }

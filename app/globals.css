@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-:root {
+.checkmate-standalone-html {
   color-scheme: light;
   --ink: #0d1724;
   --ink-muted: #566171;
@@ -18,16 +18,17 @@
   --candy-violet: #9a86d0;
 }
 
-* {
+.checkmate-standalone-body *,
+.checkmate-feature * {
   box-sizing: border-box;
 }
 
-html {
+.checkmate-standalone-html {
   scroll-behavior: smooth;
   overflow-x: hidden;
 }
 
-body {
+.checkmate-standalone-body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
@@ -35,21 +36,26 @@ body {
   overflow-x: hidden;
 }
 
-button,
-a {
+.checkmate-standalone-body button,
+.checkmate-standalone-body a,
+.checkmate-feature button,
+.checkmate-feature a {
   color: inherit;
   font: inherit;
 }
 
-button {
+.checkmate-standalone-body button,
+.checkmate-feature button {
   cursor: pointer;
 }
 
-button:disabled {
+.checkmate-standalone-body button:disabled,
+.checkmate-feature button:disabled {
   cursor: not-allowed;
 }
 
-a {
+.checkmate-standalone-body a,
+.checkmate-feature a {
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
@@ -1297,20 +1303,23 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  .checkmate-standalone-html {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
+  .checkmate-standalone-body *,
+  .checkmate-standalone-body *::before,
+  .checkmate-standalone-body *::after,
+  .checkmate-feature *,
+  .checkmate-feature *::before,
+  .checkmate-feature *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
 }
 
 /* Stage 3D product surface */
-.checkmate-app {
+.checkmate-standalone {
   width: 100%;
   min-height: 100vh;
   background: #f8f6f0;
@@ -2235,7 +2244,7 @@ a {
 }
 
 /* Stage 3G: UFun-informed shell and independent views */
-.checkmate-app {
+.checkmate-standalone {
   --check-ink: #25241f;
   --check-ink-soft: #4f4d45;
   --check-muted: #77746b;
@@ -3312,7 +3321,7 @@ a {
   font-weight: 400;
 }
 
-.checkmate-app {
+.checkmate-standalone {
   --check-paper: #f5f5f7;
   --check-surface: #ffffff;
   --check-surface-soft: #ececef;
@@ -4477,4 +4486,43 @@ a {
   .checkmate-page-header__meta {
     margin-top: 7px;
   }
+}
+
+/* Stage 3M: integration boundary. The standalone shell owns the viewport;
+   feature modules own only their content tokens and never reset the host. */
+.checkmate-standalone,
+.checkmate-feature {
+  --checkmate-paper: #f5f5f7;
+  --checkmate-surface: #ffffff;
+  --checkmate-surface-soft: #ececef;
+  --checkmate-ink: #202126;
+  --checkmate-ink-soft: #555760;
+  --checkmate-muted: #858893;
+  --checkmate-line: #dedfe4;
+  --checkmate-accent: #ee5d47;
+  --check-paper: var(--checkmate-paper);
+  --check-surface: var(--checkmate-surface);
+  --check-surface-soft: var(--checkmate-surface-soft);
+  --check-ink: var(--checkmate-ink);
+  --check-ink-soft: var(--checkmate-ink-soft);
+  --check-muted: var(--checkmate-muted);
+  --check-line: var(--checkmate-line);
+  --check-accent: var(--checkmate-accent);
+  color: var(--checkmate-ink);
+}
+
+.checkmate-standalone {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(255, 255, 255, 0.95), transparent 32rem),
+    var(--checkmate-paper);
+}
+
+.checkmate-standalone-body {
+  background: transparent;
+  color: inherit;
+}
+
+.checkmate-feature {
+  color: var(--checkmate-ink);
 }
